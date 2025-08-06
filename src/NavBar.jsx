@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 
-export default function Navbar() {
+export default function NavBar() {
   const [hoveredMenu, setHoveredMenu] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const timeoutRef = useRef(null);
