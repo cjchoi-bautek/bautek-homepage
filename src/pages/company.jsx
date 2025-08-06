@@ -127,7 +127,7 @@ export default function Company() {
               title: "신뢰 기반 납품 실적",
               desc: (
                 <>
-                  1군 건설사와의 납품 및 공동 프로젝트를 통해 축적된 경험으로, <br />
+                  여러 건설사와의 납품 및 공동 프로젝트를 통해 축적된 경험으로, <br />
                   <strong className="font-semibold text-[#003A70]">납기·품질·시공성에서 높은 평가</strong>를 받고 있습니다.
                 </>
               ),
