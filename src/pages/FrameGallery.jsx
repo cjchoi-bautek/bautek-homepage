@@ -1,7 +1,7 @@
 // src/pages/FrameGallery.jsx
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import FramePopup from "./FramePopup"; // 팝업 컴포넌트 import
+import FramePopUp from "./FramePopUp"; // 팝업 컴포넌트 import
 
 const frames = [
   { id: "BPF130", src: "/Products/BPF130.png", alt: "BPF130 Frame" },
@@ -69,7 +69,7 @@ export default function FrameGallery() {
       </div>
 
       {/* 팝업 연결 */}
-      <FramePopup
+      <FramePopUp
         isOpen={isPopupOpen}
         onClose={() => setPopupOpen(false)}
         activeFrameId={activeFrame}
