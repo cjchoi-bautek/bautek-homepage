@@ -1,0 +1,153 @@
+import React, { useState, useCallback } from "react";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { Particles } from "@tsparticles/react";
+import { loadAll } from "@tsparticles/all";
+
+export default function HeroSection() {
+  const [videoIndex, setVideoIndex] = useState(0);
+  const [fadeState, setFadeState] = useState("visible"); // 'visible', 'fading-out', 'hidden', 'fading-in'
+
+  const videoList = [
+    { id: "video-main-1", src: "/HeroSection/video/video1.mp4" },
+  ];
+
+  const particlesInit = useCallback(async (engine) => {
+    await loadAll(engine);
+  }, []);
+
+  const handleVideoEnd = () => {
+    setFadeState("fading-out");
+
+    setTimeout(() => {
+      setFadeState("hidden");
+      setVideoIndex(null); // 비디오 제거
+
+      setTimeout(() => {
+        setVideoIndex(0);
+        setFadeState("fading-in");
+
+        setTimeout(() => {
+          setFadeState("visible"); // fade-in 완료
+        }, 2000);
+      }, 2000); // fade-out 끝난 후 잠시 대기
+    }, 2000); // fade-out 시간
+  };
+
+  const getOpacity = () => {
+    switch (fadeState) {
+      case "fading-out":
+        return 0;
+      case "fading-in":
+        return 1;
+      case "hidden":
+        return 0;
+      default:
+        return 1;
+    }
+  };
+
+  return (
+    <section
+      id="hero-section"
+      className="snap-start h-[100dvh] relative flex flex-col justify-center items-center bg-black overflow-hidden transition-transform duration-700 ease-in-out"
+    >
+      {/* 인터랙티브 입자 배경 */}
+      <Particles
+        id="tsparticles"
+        init={particlesInit}
+        className="absolute inset-0 z-0"
+        options={{
+          fullScreen: { enable: false },
+          background: { color: "transparent" },
+          particles: {
+            number: { value: 80, density: { enable: true, area: 800 } },
+            color: { value: "#ffffff" },
+            links: {
+              enable: true,
+              color: "#ffffff",
+              distance: 120,
+              opacity: 0.3,
+              width: 1,
+            },
+            move: { enable: true, speed: 1 },
+            opacity: { value: 0.5 },
+            size: { value: 2 },
+          },
+          interactivity: {
+            events: {
+              onHover: { enable: true, mode: "repulse" },
+            },
+            modes: {
+              repulse: { distance: 100 },
+            },
+          },
+          detectRetina: true,
+        }}
+      />
+
+      {/* 비디오 */}
+      {videoIndex !== null && (
+        <video
+          key={videoList[videoIndex].id}
+          className="absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-1000"
+          style={{ opacity: getOpacity() }}
+          src={videoList[videoIndex].src}
+          autoPlay
+          muted
+          playsInline
+          onEnded={handleVideoEnd}
+        />
+      )}
+
+      {/* 어두운 반투명 오버레이 */}
+      <div className="absolute inset-0 bg-black bg-opacity-40 z-10" />
+
+      {/* 헤드라인 */}
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+        className="relative z-20 text-center px-4 mt-60"
+      >
+        <h1 className="text-4xl md:text-6xl font-bold mb-4 text-white drop-shadow-lg">
+          Built For Your Comfort
+        </h1>
+        <p className="text-lg md:text-xl text-white/60">
+          더 조용하고, 더 따뜻하게. 바우텍과 함께
+        </p>
+      </motion.div>
+
+      {/* CTA 버튼 */}
+      <motion.div
+        className="absolute bottom-6 md:bottom-10 z-20"
+        animate={{ y: [0, -5, 0] }}
+        transition={{ repeat: Infinity, duration: 2 }}
+      >
+        <Link to="/products">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="border border-white text-white px-6 py-3 rounded-full font-semibold hover:bg-white hover:text-blue-900 transition duration-300"
+          >
+            제품 보러가기
+          </motion.button>
+        </Link>
+      </motion.div>
+
+      {/* 스크롤 아이콘 */}
+      <motion.div
+        initial={{ opacity: 0, y: -5 }}
+        animate={{ opacity: 1, y: 5 }}
+        transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse" }}
+        className="absolute bottom-4 left-6 z-20"
+      >
+        <img
+          src="/HeroSection/scroll down.png"
+          alt="scroll down icon"
+          className="w-16 opacity-80"
+        />
+      </motion.div>
+    </section>
+  );
+}
