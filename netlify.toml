@@ -1,3 +1,3 @@
 [build]
   command = "npm install --legacy-peer-deps && npm run build"
-  publish = "dist"  # 또는 build ← package.json에 따라
+  publish = "dist"
