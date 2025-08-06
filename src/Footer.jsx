@@ -24,7 +24,7 @@ export default function Footer() {
               <address className="not-italic text-xs text-white/70 space-y-0.5">
                 <p>대표이사: 백기한</p>
                 <p>사업자등록번호: 124-86-03952</p>
-				<p>이메일: business@greenbautek.com</p>
+				
               </address>
             </div>
 
@@ -37,6 +37,7 @@ export default function Footer() {
   &nbsp;|&nbsp;  ☎ 031-351-0178</p>
                 <p>서울 사무소: 서울시 서초구 서초대로42길 71 (거림빌딩 3층) <br className="md:hidden" />
   &nbsp;|&nbsp;  ☎ 02-585-0178 </p>
+                <p>이메일: business@greenbautek.com</p>
               </address>
             </div>
 

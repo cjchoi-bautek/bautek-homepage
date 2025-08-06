@@ -1,13 +1,13 @@
 // App.jsx
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Navbar from "./Navbar";
+import NavBar from "./NavBar";
 import HeroSection from "./HeroSection";
 import ProductSlider from "./ProductSlider";
 import KeyClient from "./KeyClient";
 import MapSection from "./map";
 import Footer from "./Footer";
-import Company from "./pages/Company";
+import Company from "./pages/company";
 import Products from "./pages/Products";
 import FrameGallery from "./pages/FrameGallery";
 import SupportPage from "./pages/SupportPage";
@@ -17,7 +17,7 @@ export default function App() {
     <Router>
       <div className="font-pretendard">
         {/* 공통 네비게이션 바 */}
-        <Navbar />
+        <NavBar />
 
         <Routes>
           {/* 랜딩 페이지 */}
