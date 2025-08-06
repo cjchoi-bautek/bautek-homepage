@@ -137,8 +137,7 @@ export default function Company() {
               title: "품질 및 연구개발 시스템",
               desc: (
                 <>
-                  자체 공장 및 연구소 운영을 통해 <br />생산 공정 전반에 걸친 철저한 품질 관리와 <br />
-                  <strong className="font-semibold text-[#003A70]">지속적인 기술개발</strong>을 이어가고 있습니다.
+                  자체 공장 및 연구소 운영을 통해 <br />생산 공정 전반에 걸친 철저한 품질 관리와 <strong className="font-semibold text-[#003A70]">지속적인 기술개발</strong>을 이어가고 있습니다.
                 </>
               ),
             },
@@ -227,7 +226,7 @@ export default function Company() {
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-2">Mission</h3>
             <p className="text-base text-gray-700 leading-relaxed max-w-sm mx-auto text-wrap break-keep">
-              <strong className="text-bautek-blue font-semibold">기술력과 품질 경쟁력</strong>을 바탕으로, <strong className="font-semibold"><br />고객의 신뢰를 받는</strong> 고성능 건축자재를 생산하고 공급합니다.
+              <strong className="text-bautek-blue font-semibold">기술력과 품질 경쟁력</strong>을 바탕으로, <strong className="font-semibold"><br />고객의 신뢰</strong>를 받는 고성능 건축자재를 생산하고 공급합니다.
             </p>
           </motion.div>
 
@@ -252,7 +251,7 @@ export default function Company() {
             {[
               {
                 title: <span className="font-bold text-bautek-blue">기술 기반의 완성도</span>,
-                desc: "기능성, 시공성, 디자인을 모두 고려한 제품 설계",
+                desc: <><strong className="font-semibold">기능성, 시공성, 디자인</strong>을 모두 고려한 제품 설계</>,
               },
               {
                 title: <span className="font-bold text-bautek-blue">고객 중심 설계 대응력</span>,
