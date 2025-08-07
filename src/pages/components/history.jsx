@@ -111,7 +111,7 @@ const renderTimeline = (data) => {
                         </span>
                       </div>
                     )}
-                    <div className={`border border-gray-300 shadow-sm p-1.5 text-xs leading-tight rounded-md group-hover:bg-white group-hover:text-white group-hover:scale-[1.03] transform transition duration-300 ${item.text.includes("설립") || item.text.includes("인증") || item.text.includes("출시") || item.text.includes("개발") || item.text.includes("대상") ? 'bg-[#e0f2f7]' : 'bg-white'}`}>
+                    <div className={`border border-gray-300 shadow-sm p-1.5 text-xs leading-tight rounded-md group-hover:bg-white group-hover:text-white group-hover:scale-[1.03] transform transition duration-300 ${item.text.includes("설립") || item.text.includes("인증") || item.text.includes("출시") || item.text.includes("개발") || item.text.includes("대상") ? 'bg-white' : 'bg-white'}`}>
                       <span>
                         {item.text.includes("설립") || item.text.includes("인증") || item.text.includes("출시") || item.text.includes("개발") || item.text.includes("대상")
                           ? <strong>{item.text}</strong>
