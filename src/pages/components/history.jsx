@@ -40,12 +40,21 @@ const leftData = [
     year: "2012년",
     items: [
       { month: "01월", text: "INNOBIZ 기술혁신형 인증기업" },
-      { month: "07월", text: "유망중소기업 선정 (경기도)" },
+      { month: "07월", text: "유망중소기업 선정 (경기 중소기업청)" },
+	  { month: "12월", text: "우수벤처기업 수상 (경기 중소기업청) 
     ],
   },
   {
     year: "2013년",
     items: [{ month: "01월", text: "글로벌 리딩 중소기업 대상 선정 (뉴스메이커)" }],
+  },
+  {
+    year: "2015년",
+    items: [{ month: "10월", text: "단열차음터닝도어 개발" }],
+  },
+{
+    year: "2016년",
+    items: [{ month: "01월", text: "건출설계사 협회 우수 건축자제 업체" }],
   },
 ];
 
@@ -66,9 +75,12 @@ const rightData = [
     subtitle: "제품 다각화 및 품질 경쟁력 강화",
     year: "2020년",
     items: [
-      { month: "02월", text: "외기형도어 개발 및 상품 출시" },
+      { month: "02월", text: "결로방지도어 인증 흭득" },
+	  { month: "02월", text: "외기형도어 개발 및 상품 출시" },
       { month: "02월", text: "KS인증 (창세트 KSF3117 및 문세트 KSF3109)" },
       { month: "04월", text: "BBG (Blind Between Glass) 개발 및 상품 출시" },
+      { month: "08월", text: "터닝도어 고효율 에너지 기자재 등록" },
+	  { month: "11월", text: "화성시청 모밤상공인 표창" },
     ],
   },
   {
