@@ -12,15 +12,16 @@ import Products from "./pages/Products";
 import FrameGallery from "./pages/FrameGallery";
 import SupportPage from "./pages/SupportPage";
 
-function AppContent() {
+// 라우터 내부에 위치하여 useLocation 훅을 사용할 수 있는 컴포넌트
+function AppLayout() {
   const location = useLocation();
 
-  // 회사연혁(#history) 섹션일 때만 네비게이션 바를 숨깁니다.
+  // /company 페이지의 #history 섹션일 때만 네비게이션 바를 숨깁니다.
   const isHistorySection = location.pathname === "/company" && location.hash === "#history";
 
   return (
     <div className="font-pretendard">
-      {/* isHistorySection이 false일 때만 NavBar를 렌더링 */}
+      {/* isHistorySection이 아닐 때만 NavBar를 렌더링합니다. */}
       {!isHistorySection && <NavBar />}
 
       <Routes>
@@ -58,7 +59,7 @@ function AppContent() {
 export default function App() {
   return (
     <Router>
-      <AppContent />
+      <AppLayout />
     </Router>
   );
 }
