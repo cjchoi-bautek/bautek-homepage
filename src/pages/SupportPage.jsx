@@ -413,10 +413,7 @@ export default function SupportPage() {
             <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-2">
               카카오톡을 통한 편하고 빠른 A/S 접수가 가능합니다.
             </h3>
-            <p className="text-sm md:text-base text-gray-600 mb-1">
-              사진이나 동영상을 첨부하여 문의하시면 <span className="font-extrabold text-[#004A91]">더욱 빠르고 정확한 상담</span>을 받을 수 있습니다.  
-            </p>
-      <p className="text-xs md:text-base text-gray-600 mb-4">
+            <p className="text-xs md:text-base text-gray-600 mb-4">
               자사 쇼핑몰에서 제품을 구매하신 후 제공되는 셀프 시공 영상을 참고하여 직접 설치하실 수도 있습니다.
             </p>
       <p className="text-[11px] text-gray-600 mb-4">
@@ -468,7 +465,7 @@ export default function SupportPage() {
             <div className="text-[9px] md:text-[9px] font-bold text-[#004A91]">
               대표번호: 031-351-0178
             </div>
-            <div className="text-[8px] md:text-[8px] text-gray-500 mt-2">
+            <div className="text-[9px] md:text-[9px] text-gray-500 mt-2">
               운영 시간: <span className="font-semibold">평일 09:00 ~ 17:30</span> (점심시간 12:30 ~ 13:30 제외) | 토,일요일 및 공휴일 휴무
             </div>
           </div>

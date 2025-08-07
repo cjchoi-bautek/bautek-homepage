@@ -21,16 +21,13 @@ export default function HeroSection() {
     setIsFading(true); // 페이드 아웃 시작
 
     setTimeout(() => {
-      // 1초 후 비디오 인덱스 변경
       const nextIndex = (videoIndex + 1) % videoList.length;
       setVideoIndex(nextIndex);
-      // setIsFading(false); // 비디오가 로드될 때까지 페이드 상태 유지
     }, 1000); // CSS transition 시간과 동일하게 설정
   };
-  
-  // 새로운 비디오가 로드될 준비가 되면 페이드 아웃 상태 해제 (페이드 인)
+
   const handleVideoCanPlay = () => {
-    setIsFading(false);
+    setIsFading(false); // 페이드 인 시작
   };
 
   return (
@@ -38,7 +35,7 @@ export default function HeroSection() {
       id="hero-section"
       className="snap-start h-[100dvh] relative flex flex-col justify-center items-center bg-black overflow-hidden transition-transform duration-700 ease-in-out"
     >
-      {/* 인터랙티브 입자 배경 */}
+      {/* 입자 배경 */}
       <Particles
         id="tsparticles"
         init={particlesInit}
@@ -72,7 +69,7 @@ export default function HeroSection() {
         }}
       />
 
-      {/* 비디오 */}
+      {/* 배경 비디오 */}
       <video
         key={videoList[videoIndex].src}
         className="absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-1000"
@@ -82,7 +79,7 @@ export default function HeroSection() {
         muted
         playsInline
         onEnded={handleVideoEnd}
-        onCanPlay={handleVideoCanPlay} // 수정된 부분
+        onCanPlay={handleVideoCanPlay}
       />
 
       {/* 어두운 반투명 오버레이 */}
@@ -103,21 +100,20 @@ export default function HeroSection() {
         </p>
       </motion.div>
 
-      
-
       {/* 스크롤 아이콘 */}
-      <motion.div
-			initial={{ opacity: 0, y: -5 }}
-			animate={{ opacity: 1, y: 5 }}
-			transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse" }}
-			className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20"
-	  >
-		<img
-			src="/HeroSection/scroll down.png"
-			alt="scroll down icon"
-			className="w-24 opacity-80"
-		/>
-		</motion.div>
+      <div className="absolute bottom-4 w-full z-20 flex justify-center">
+        <motion.div
+          initial={{ opacity: 0, y: -5 }}
+          animate={{ opacity: 1, y: 5 }}
+          transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse" }}
+        >
+          <img
+            src="/HeroSection/scroll down.png"
+            alt="scroll down icon"
+            className="w-16 md:w-20 lg:w-24 opacity-80"
+          />
+        </motion.div>
+      </div>
     </section>
   );
 }
