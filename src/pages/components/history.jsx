@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 // 소제목을 포함한 연혁 데이터
 const leftData = [
@@ -98,74 +98,79 @@ const rightData = [
   },
 ];
 
-const renderTimeline = (data) => {
-  return (
-    <div className="relative">
-      <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-blue-200 hidden md:block" />
-      <div className="flex flex-col gap-y-4">
-        {data.map((entry, idx) => {
-          // PC 화면에서는 홀수/짝수에 따라 좌우로 배치
-          const isLeft = idx % 2 === 0;
-          return (
-            <div key={idx} className={`relative w-full flex ${isLeft ? "md:justify-start" : "md:justify-end"}`}>
-              <div className="w-full md:w-[calc(50%-20px)] px-2">
-                {entry.subtitle && (
-                  <h4 className="text-base md:text-lg font-semibold text-[#004A91] mb-1">
-                    {entry.subtitle}
-                  </h4>
-                )}
-                <div className="mb-2">
-                  <div className="flex items-center text-sm font-bold text-[#004A91] mb-1">
-                    <span>{entry.year}</span>
-                  </div>
-                  {entry.items.map((item, i) => (
-                    <div key={i} className="mb-0.5">
-                      <div className={`border border-gray-300 shadow-sm p-1.5 text-xs leading-tight rounded-md group-hover:bg-white group-hover:text-white group-hover:scale-[1.03] transform transition duration-300`}>
-                        <span>
-                          <span className="text-[11px] font-semibold text-gray-700 bg-gray-200 px-2 py-0.5 rounded mr-1">
-                            {item.month}
-                          </span>
-                          {item.text.includes("설립") || item.text.includes("인증") || item.text.includes("출시") || item.text.includes("개발") || item.text.includes("대상")
-                            ? <strong>{item.text}</strong>
-                            : item.text}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="absolute top-0 md:top-2 left-1/2 transform -translate-x-1/2 w-3 h-3 bg-[#004A91] rounded-full border-2 border-white shadow hidden md:block" />
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-};
+const combinedData = [...leftData, ...rightData].sort((a, b) =>
+  parseInt(a.year) - parseInt(b.year)
+);
 
 export default function HistoryTimeline() {
+  const [openItems, setOpenItems] = useState({});
+
+  const toggleOpen = (year) => {
+    setOpenItems(prev => ({
+      ...prev,
+      [year]: !prev[year],
+    }));
+  };
+
   return (
     <section
       id="history"
-      className="snap-start min-h-screen pt-24 pb-12 px-4 bg-white"
+      className="snap-start pt-24 pb-12 px-4 bg-white"
     >
       <h2 className="text-2xl md:text-3xl font-bold text-center text-[#004A91] mb-6">
         회사연혁
       </h2>
 
-      <div className="max-w-screen-xl mx-auto md:grid md:grid-cols-2 md:gap-x-16">
-        <div className="col-span-1 mb-20 md:mb-0">
-          <h3 className="text-xl md:text-2xl font-semibold text-[#004A91] mb-8 text-center">
-            2002년 – 2012년
-          </h3>
-          {renderTimeline(leftData)}
-        </div>
-        <div className="col-span-1">
-          <h3 className="text-xl md:text-2xl font-semibold text-[#004A91] mb-8 text-center">
-            2013년 – 현재
-          </h3>
-          {renderTimeline(rightData)}
-        </div>
+      <div className="max-w-3xl mx-auto space-y-4">
+        {combinedData.map((entry) => (
+          <div key={entry.year} className="border-b border-gray-200 last:border-b-0">
+            <button
+              onClick={() => toggleOpen(entry.year)}
+              className="w-full flex justify-between items-center py-4 px-4 text-left bg-white hover:bg-gray-50 transition-colors duration-200"
+            >
+              <h3 className="text-xl font-bold text-[#004A91] tracking-wide">
+                {entry.year}
+                {entry.subtitle && (
+                  <span className="ml-4 text-sm text-gray-600 font-normal">
+                    {entry.subtitle}
+                  </span>
+                )}
+              </h3>
+              <svg
+                className={`w-5 h-5 text-[#004A91] transform transition-transform duration-200 ${
+                  openItems[entry.year] ? 'rotate-180' : 'rotate-0'
+                }`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </button>
+            <div
+              className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                openItems[entry.year] ? 'max-h-96' : 'max-h-0'
+              }`}
+            >
+              <div className="py-4 px-4 bg-gray-50">
+                {entry.items.map((item, i) => (
+                  <div key={i} className="mb-2 last:mb-0">
+                    <p className="text-sm">
+                      <span className="font-bold mr-2 text-gray-700">{item.month}</span>
+                      {item.text}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   );
