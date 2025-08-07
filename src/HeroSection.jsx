@@ -115,7 +115,7 @@ export default function HeroSection() {
 		<img
 			src="/HeroSection/scroll down.png"
 			alt="scroll down icon"
-			className="w-16 opacity-80"
+			className="w-24 opacity-80"
 		/>
 		</motion.div>
     </section>

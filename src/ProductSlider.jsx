@@ -73,7 +73,7 @@ export default function ProductSlider() {
   }, []);
 
   return (
-    <section className="snap-start min-h-screen flex flex-col relative overflow-hidden bg-gradient-to-br from-white via-gray-200 to-gray-500 font-Pretendard">
+    <section className="snap-start min-h-screen flex flex-col relative overflow-hidden bg-white font-Pretendard">
       <style>{`
         .swiper-button-prev::after,
         .swiper-button-next::after { display: none !important; }
