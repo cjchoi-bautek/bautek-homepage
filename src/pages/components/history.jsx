@@ -98,16 +98,16 @@ const renderTimeline = (data) => {
             <div key={idx} className={`relative w-full flex ${isLeft ? "justify-start" : "justify-end"}`}>
               <div className="w-[calc(50%-20px)] px-2">
                 {entry.subtitle && (
-                  <h4 className="text-base md:text-lg font-semibold text-[#004A91] mb-1">
+                  <h4 className="text-sm md:text-lg font-semibold text-[#004A91] mb-1">
                     {entry.subtitle}
                   </h4>
                 )}
                 {entry.items.map((item, i) => (
-                  <div key={i} className="mb-1 group transition-all duration-300">
+                  <div key={i} className="mb-0.5 group transition-all duration-300">
                     {i === 0 && (
-                      <div className="flex items-center text-sm font-bold text-[#004A91] mb-2">
+                      <div className="flex items-center text-sm font-bold text-[#004A91] mb-1">
                         <span>{entry.year}</span>
-                        <span className="ml-2 text-xs font-semibold text-gray-700 bg-gray-200 px-2 py-1 rounded">
+                        <span className="ml-1 text-[11px] font-semibold text-gray-700 bg-gray-200 px-2 py-0.5 rounded">
                           {item.month}
                         </span>
                       </div>
