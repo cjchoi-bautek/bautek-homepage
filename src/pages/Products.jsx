@@ -222,7 +222,7 @@ const productCategories = {
       {
         icon: "/Products/bbg/icon4.png",
         title: "뛰어난 안정성",
-        description: "끼임 없는 구조로 아이나 반려동물을 안전하게 보호하며, \n스크래치나 파손 위험이 없는 안전한 구조입니다.",
+        description: "끼임 위험 없이 아이나 반려동물을 안전하게 보호하며, \n스크래치나 파손 위험이 없는 안전한 구조입니다.",
         descriptionHighlights: [
           { text: "아이나 반려동물을 안전하게 보호", color: true },
           { text: "안전한 구조", color: true },
