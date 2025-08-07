@@ -6,7 +6,7 @@ import { loadAll } from "@tsparticles/all";
 
 export default function HeroSection() {
   const [videoIndex, setVideoIndex] = useState(0);
-  const [fadeState, setFadeState] = useState("visible"); // 'visible', 'fading-out', 'hidden', 'fading-in'
+  const [isFading, setIsFading] = useState(false); // 페이드 전환 상태 관리
 
   const videoList = [
     { id: "video-main-1", src: "/HeroSection/video/video1.mp4" },
@@ -18,35 +18,19 @@ export default function HeroSection() {
   }, []);
 
   const handleVideoEnd = () => {
-    setFadeState("fading-out");
+    setIsFading(true); // 페이드 아웃 시작
 
     setTimeout(() => {
-      setFadeState("hidden");
-
-      setTimeout(() => {
-        const nextIndex = (videoIndex + 1) % videoList.length;
-        setVideoIndex(nextIndex);
-        setFadeState("fading-in");
-
-        // fallback: 일정 시간 후 visible
-        setTimeout(() => {
-          setFadeState("visible");
-        }, 1000);
-      }, 1000);
-    }, 1000);
+      // 1초 후 비디오 인덱스 변경
+      const nextIndex = (videoIndex + 1) % videoList.length;
+      setVideoIndex(nextIndex);
+      // setIsFading(false); // 비디오가 로드될 때까지 페이드 상태 유지
+    }, 1000); // CSS transition 시간과 동일하게 설정
   };
-
-  const getOpacity = () => {
-    switch (fadeState) {
-      case "fading-out":
-        return 0;
-      case "fading-in":
-        return 1;
-      case "hidden":
-        return 0;
-      default:
-        return 1;
-    }
+  
+  // 새로운 비디오가 로드될 준비가 되면 페이드 아웃 상태 해제 (페이드 인)
+  const handleVideoCanPlay = () => {
+    setIsFading(false);
   };
 
   return (
@@ -92,13 +76,13 @@ export default function HeroSection() {
       <video
         key={videoList[videoIndex].src}
         className="absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-1000"
-        style={{ opacity: getOpacity() }}
+        style={{ opacity: isFading ? 0 : 1 }}
         src={videoList[videoIndex].src}
         autoPlay
         muted
         playsInline
         onEnded={handleVideoEnd}
-        onCanPlay={() => setFadeState("visible")} // 비디오 로드된 후 fade-in 안전하게 적용
+        onCanPlay={handleVideoCanPlay} // 수정된 부분
       />
 
       {/* 어두운 반투명 오버레이 */}
