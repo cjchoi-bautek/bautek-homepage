@@ -54,14 +54,25 @@ const leftData = [
   },
 {
     year: "2016년",
-    items: [{ month: "01월", text: "건출설계사 협회 우수 건축자제 업체" }],
+    items: [{ month: "01월", text: "건출설계사 협회 우수 건축자제 업체 선정" }],
   },
 ];
 
 const rightData = [
   {
     subtitle: "기술 경쟁력 확보",
-    year: "2017년",
+        year: "2013년",
+    items: [{ month: "01월", text: "글로벌 리딩 중소기업 대상 선정 (뉴스메이커)" }],
+  },
+  {
+    year: "2015년",
+    items: [{ month: "10월", text: "단열차음터닝도어 개발" }],
+  },
+  {
+    year: "2016년",
+    items: [{ month: "01월", text: "건출설계사 협회 우수 건축자제 업체 선정" }],
+  },
+    year: "2017년",
     items: [
       { month: "05월", text: "중소벤처기업부 장관 - 대한민국 중소기업대상 기술혁신부문 대상" },
       { month: "09월", text: "LH 신자재 선정" },
@@ -156,7 +167,7 @@ export default function HistoryTimeline() {
         {/* 왼쪽 타임라인 */}
         <div className="w-full md:w-1/2 mb-20 md:mb-0">
           <h3 className="text-xl md:text-2xl font-semibold text-[#004A91] mb-8 text-center">
-            2002년 – 2016년
+            2002년 – 2012년
           </h3>
           {renderTimeline(leftData)}
         </div>
@@ -164,7 +175,7 @@ export default function HistoryTimeline() {
         {/* 오른쪽 타임라인 */}
         <div className="w-full md:w-1/2">
           <h3 className="text-xl md:text-2xl font-semibold text-[#004A91] mb-8 text-center">
-            2017년 – 현재
+            2013년 – 현재
           </h3>
           {renderTimeline(rightData)}
         </div>
