@@ -39,7 +39,6 @@ function AppLayout() {
               </section>
               <section className="min-h-[100dvh] md:h-screen md:snap-start bg-[#F4F4F4]">
                 <MapSection />
-				<Footer />
               </section>
 			   
             </main>
