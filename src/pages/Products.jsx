@@ -410,7 +410,7 @@ export default function Products() {
             />
             <div className="absolute inset-0 bg-black bg-opacity-30 text-white px-6 flex flex-col justify-center items-center z-10">
               <motion.div
-                className="flex-1 flex flex-col justify-center items-center text-center px-6"
+                className="flex-1 flex flex-col justify-center items-center text-center px-6 mt-8 md:mt-16"
                 initial={{ opacity: 0, y: -30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, ease: "easeOut", delay: 0.5 }}
