@@ -1,29 +1,26 @@
 // App.jsx
-import React from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import React, { useState } from "react"; // useState 임포트
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom"; // useLocation 임포트
 import NavBar from "./NavBar";
 import HeroSection from "./HeroSection";
 import ProductSlider from "./ProductSlider";
 import KeyClient from "./KeyClient";
 import MapSection from "./map";
 import Footer from "./Footer";
-import Company from "./pages/company";
+import Company from "./pages/company"; // Company 컴포넌트 임포트 확인
 import Products from "./pages/Products";
 import FrameGallery from "./pages/FrameGallery";
 import SupportPage from "./pages/SupportPage";
 
 // 라우터 내부에 위치하여 useLocation 훅을 사용할 수 있는 컴포넌트
 function AppLayout() {
-  const location = useLocation();
-
-  // /company 페이지의 #history 섹션일 때만 네비게이션 바를 숨깁니다.
-  // URL 해시(#history)가 정확히 일치해야 합니다.
-  const isHistorySection = location.pathname === "/company" && location.hash === "#history";
+  // 내비게이션 바의 상태를 관리합니다. 기본값은 true(보임)
+  const [isNavbarVisible, setIsNavbarVisible] = useState(true);
 
   return (
     <div className="font-pretendard">
-      {/* isHistorySection이 false일 때만 NavBar를 렌더링합니다. */}
-      {!isHistorySection && <NavBar />}
+      {/* isNavbarVisible 상태에 따라 NavBar를 조건부 렌더링 */}
+      {isNavbarVisible && <NavBar />}
 
       <Routes>
         {/* 랜딩 페이지 */}
@@ -48,7 +45,11 @@ function AppLayout() {
         />
 
         {/* 서브 페이지 */}
-        <Route path="/company" element={<Company />} />
+        {/* Company 라우트에 내비게이션 바 상태를 변경하는 함수를 props로 전달 */}
+        <Route
+          path="/company"
+          element={<Company setNavbarVisible={setIsNavbarVisible} />}
+        />
         <Route path="/products" element={<Products />} />
         <Route path="/frame-gallery" element={<FrameGallery />} />
         <Route path="/support" element={<SupportPage />} />

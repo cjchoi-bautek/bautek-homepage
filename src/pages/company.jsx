@@ -1,5 +1,5 @@
 // src/Company.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import HistoryTimeline from './components/history';
 
@@ -22,10 +22,13 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
 };
 
-export default function Company() {
+// App.jsx에서 내비게이션 바 상태를 변경할 함수를 prop으로 받습니다.
+export default function Company({ setNavbarVisible }) {
   const [videoKey, setVideoKey] = useState(0);
+  const historyRef = useRef(null); // history 섹션의 ref를 생성합니다.
 
   useEffect(() => {
+    // URL 해시(#)로 스크롤 이동하는 기존 로직
     const hash = window.location.hash;
     if (hash) {
       const target = document.querySelector(hash);
@@ -35,7 +38,35 @@ export default function Company() {
         }, 100);
       }
     }
-  }, []);
+
+    // Intersection Observer 설정
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // history 섹션이 뷰포트 안에 들어왔을 때
+        if (entry.isIntersecting) {
+          setNavbarVisible(false); // 내비게이션 바 숨김
+        } else {
+          setNavbarVisible(true); // 내비게이션 바 표시
+        }
+      },
+      {
+        root: null, // 뷰포트를 기준으로 관찰
+        threshold: 0.5, // 요소의 50%가 보이면 감지
+      }
+    );
+
+    // historyRef가 현재 존재하면, observer를 연결합니다.
+    if (historyRef.current) {
+      observer.observe(historyRef.current);
+    }
+
+    // 컴포넌트가 언마운트될 때 observer를 정리합니다.
+    return () => {
+      if (historyRef.current) {
+        observer.unobserve(historyRef.current);
+      }
+    };
+  }, [setNavbarVisible]); // setNavbarVisible이 변경될 때만 useEffect를 다시 실행
 
   const handleVideoEnd = () => {
     setTimeout(() => {
@@ -285,8 +316,11 @@ export default function Company() {
         </motion.div>
       </section>
 
-      {/* History Timeline Block (HistoryTimeline 컴포넌트) - 기존 유지 */}
-      <HistoryTimeline />
+      {/* History Timeline Block (HistoryTimeline 컴포넌트) - ref와 id를 추가합니다. */}
+      {/* 이 div에 ref와 id를 연결하여 Observer가 감지하고, 기존 해시(#) 스크롤이 작동하도록 합니다. */}
+      <div ref={historyRef} id="history">
+        <HistoryTimeline />
+      </div>
 
       {/* CI Section (CI / BI) - ELIV 로고 크기 재조정 */}
       <section
