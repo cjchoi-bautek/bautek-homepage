@@ -72,6 +72,7 @@ const rightData = [
     year: "2016년",
     items: [{ month: "01월", text: "건출설계사 협회 우수 건축자제 업체 선정" }],
   },
+  {
     year: "2017년",
     items: [
       { month: "05월", text: "중소벤처기업부 장관 - 대한민국 중소기업대상 기술혁신부문 대상" },
