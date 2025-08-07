@@ -384,7 +384,7 @@ export default function Products() {
   const productCategoryArray = Object.values(productCategories);
 
     return (
-      <main className="lg:h-screen lg:snap-y lg:snap-mandatory lg:overflow-y-scroll scroll-smooth font-Pretendard">
+      <main className="lg:h-screen lg:snap-y lg:snap-proximity lg:overflow-y-scroll scroll-smooth font-Pretendard">
         {/* Hero Section */}
         <section
           id="hero-section"

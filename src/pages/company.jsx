@@ -44,7 +44,7 @@ export default function Company() {
   };
 
   return (
-    <main className="h-screen overflow-y-auto snap-y snap-mandatory font-Pretendard">
+    <main className="h-screen overflow-y-auto snap-y snap-proximity font-Pretendard">
       {/* Greeting Section (인사말) - 최종 버전 */}
       <section
         id="greeting"
