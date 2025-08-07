@@ -227,7 +227,7 @@ export default function SupportPage() {
       {/* 🔵 문의하기 Section */}
       <section
         id="contact"
-        className="min-h-screen bg-white py-8 px-2 flex flex-col justify-center items-center md:snap-start"
+        className="min-h-screen bg-white py-8 px-2 flex flex-col pt-20 items-center md:snap-start"
       >
         <motion.div
           className="max-w-4xl w-full"

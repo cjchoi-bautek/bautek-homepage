@@ -1,6 +1,6 @@
 // App.jsx
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom"; // useLocation 임포트
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import NavBar from "./NavBar";
 import HeroSection from "./HeroSection";
 import ProductSlider from "./ProductSlider";
@@ -17,11 +17,12 @@ function AppLayout() {
   const location = useLocation();
 
   // /company 페이지의 #history 섹션일 때만 네비게이션 바를 숨깁니다.
+  // URL 해시(#history)가 정확히 일치해야 합니다.
   const isHistorySection = location.pathname === "/company" && location.hash === "#history";
 
   return (
     <div className="font-pretendard">
-      {/* isHistorySection이 아닐 때만 NavBar를 렌더링합니다. */}
+      {/* isHistorySection이 false일 때만 NavBar를 렌더링합니다. */}
       {!isHistorySection && <NavBar />}
 
       <Routes>
@@ -52,6 +53,7 @@ function AppLayout() {
         <Route path="/frame-gallery" element={<FrameGallery />} />
         <Route path="/support" element={<SupportPage />} />
       </Routes>
+      <Footer />
     </div>
   );
 }
