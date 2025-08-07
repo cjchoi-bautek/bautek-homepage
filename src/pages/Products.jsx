@@ -410,12 +410,12 @@ export default function Products() {
             />
             <div className="absolute inset-0 bg-black bg-opacity-30 text-white px-6 flex flex-col justify-center items-center z-10">
               <motion.div
-                className="flex-1 flex flex-col justify-center items-center text-center px-6 mt-8 md:mt-16"
+                className="flex-1 flex flex-col justify-center items-center text-center px-6"
                 initial={{ opacity: 0, y: -30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, ease: "easeOut", delay: 0.5 }}
               >
-                <h2 className="text-lg md:text-2xl font-semibold mb-10 md:mb-20 leading-relaxed">
+                <h2 className="text-lg md:text-2xl font-semibold mb-10 md:mb-20 leading-relaxed mt-10 md:mt-16">
                   프레임 금형부터 제작까지, <span className="text-[#004A91]"><br/>바우텍</span>은<br className="md:hidden" /> 독자적인 생산 기술로 다양한 폭의 프레임을 구현합니다.
                 </h2>
               </motion.div>
