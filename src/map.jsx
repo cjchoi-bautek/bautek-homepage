@@ -11,7 +11,7 @@ function FactoryMap() {
     "본사/공장",
     `
       <div style="padding:10px; font-size:14px; color: #333;">
-        <strong>바우텍 본사/공장</strong><br/>
+        <strong>본사/공장</strong><br/>
         경기도 화성시 팔탄면 온천로165번길 67
       </div>
     `
@@ -35,7 +35,7 @@ function OfficeMap() {
     "서울사무소",
     `
       <div style="padding:10px; font-size:14px; color: #333;">
-        <strong>바우텍 서울사무소</strong><br/>
+        <strong>서울사무소</strong><br/>
         서울시 서초구 서초대로42길 71<br/>
         거림빌딩 3층
       </div>
