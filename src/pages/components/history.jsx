@@ -102,7 +102,6 @@ const renderTimeline = (data) => {
   return (
     <div className="relative">
       <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-blue-200 hidden md:block" />
-      {/* 텍스트 간격을 최소화하기 위해 gap-y-1로 변경 */}
       <div className="flex flex-col gap-y-1">
         {data.map((entry, idx) => {
           const isLeft = idx % 2 === 0;
@@ -110,23 +109,18 @@ const renderTimeline = (data) => {
             <div key={idx} className={`relative w-full flex ${isLeft ? "md:justify-start" : "md:justify-end"}`}>
               <div className="w-full md:w-[calc(50%-20px)] px-2">
                 {entry.subtitle && (
-                  // 소제목 폰트 크기 및 마진 축소
                   <h4 className="text-sm font-semibold text-[#004A91] mb-0.5">
                     {entry.subtitle}
                   </h4>
                 )}
                 <div className="mb-1">
-                  {/* 연도 폰트 크기 및 마진 축소 */}
                   <div className="flex items-center text-xs font-bold text-[#004A91] mb-0.5">
                     <span>{entry.year}</span>
                   </div>
                   {entry.items.map((item, i) => (
-                    // 항목 간 간격 축소
                     <div key={i} className="mb-0.5">
-                      {/* 카드 패딩 및 텍스트 크기 축소 */}
                       <div className={`border border-gray-300 shadow-sm p-1 text-xs leading-tight rounded-md`}>
                         <span>
-                          {/* 월 폰트 크기 및 패딩 축소 */}
                           <span className="text-[10px] font-semibold text-gray-700 bg-gray-200 px-1 py-0.5 rounded mr-1">
                             {item.month}
                           </span>
@@ -137,7 +131,6 @@ const renderTimeline = (data) => {
                   ))}
                 </div>
               </div>
-              {/* 타임라인 점 위치 및 크기 조절 */}
               <div className="absolute top-1 md:top-1.5 left-1/2 transform -translate-x-1/2 w-2.5 h-2.5 bg-[#004A91] rounded-full border-2 border-white shadow hidden md:block" />
             </div>
           );
@@ -151,25 +144,21 @@ export default function HistoryTimeline() {
   return (
     <section
       id="history"
-      // 최소 높이 속성(min-h-screen) 제거 및 상하 패딩 축소
-      className="snap-start pt-12 pb-6 px-4 bg-white"
+      // min-h-screen 클래스 추가
+      className="snap-start min-h-screen pt-12 pb-6 px-4 bg-white"
     >
-      {/* 제목 폰트 크기 및 마진 축소 */}
       <h2 className="text-2xl font-bold text-center text-[#004A91] mb-4">
         회사연혁
       </h2>
 
-      {/* 전체 그리드 간격 축소 */}
       <div className="max-w-screen-xl mx-auto md:grid md:grid-cols-2 md:gap-x-8">
         <div className="col-span-1 mb-10 md:mb-0">
-          {/* 부제목 폰트 크기 및 마진 축소 */}
           <h3 className="text-xl font-semibold text-[#004A91] mb-4 text-center">
             2002년 – 2012년
           </h3>
           {renderTimeline(leftData)}
         </div>
         <div className="col-span-1">
-          {/* 부제목 폰트 크기 및 마진 축소 */}
           <h3 className="text-xl font-semibold text-[#004A91] mb-4 text-center">
             2013년 – 현재
           </h3>
