@@ -10,6 +10,7 @@ export default function HeroSection() {
 
   const videoList = [
     { id: "video-main-1", src: "/HeroSection/video/video1.mp4" },
+    { id: "video-main-2", src: "/HeroSection/video/video2.mp4" },
   ];
 
   const particlesInit = useCallback(async (engine) => {
@@ -21,16 +22,17 @@ export default function HeroSection() {
 
     setTimeout(() => {
       setFadeState("hidden");
-      setVideoIndex(null); // 비디오 제거
 
       setTimeout(() => {
-        setVideoIndex(0);
+        // 다음 비디오로 전환 (순환)
+        setVideoIndex((prevIndex) => (prevIndex + 1) % videoList.length);
+
         setFadeState("fading-in");
 
         setTimeout(() => {
-          setFadeState("visible"); // fade-in 완료
-        }, 2000);
-      }, 2000); // fade-out 끝난 후 잠시 대기
+          setFadeState("visible");
+        }, 2000); // fade-in 시간
+      }, 2000); // hidden 대기 시간
     }, 2000); // fade-out 시간
   };
 
