@@ -459,16 +459,16 @@ export default function SupportPage() {
             
           {/* 전화 문의 섹션 */}
           <div className="p-6">
-            <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-2">
+            <h3 className="text-sm md:text-md font-bold text-gray-900 mb-2">
               <span className="font-extrabold text-[#004A91]">전화 문의</span>
             </h3>
-            <p className="text-sm md:text-base text-gray-600 mb-2">
+            <p className="text-[11px] md:text-base text-gray-600 mb-2">
               긴급한 문의사항이나 전화 상담을 원하시면 아래 번호로 연락 주시기 바랍니다.
             </p>
-            <div className="text-xl md:text-2xl font-bold text-[#004A91]">
+            <div className="text-[11px] md:text-2xl font-bold text-[#004A91]">
               대표번호: 031-351-0178
             </div>
-            <div className="text-xs md:text-sm text-gray-500 mt-2">
+            <div className="text-[10px] md:text-sm text-gray-500 mt-2">
               운영 시간: <span className="font-semibold">평일 09:00 ~ 17:30</span> (점심시간 12:30 ~ 13:30 제외) | 토,일요일 및 공휴일 휴무
             </div>
           </div>
