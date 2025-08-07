@@ -12,7 +12,7 @@ export default function Footer() {
         <div className="max-w-screen-xl mx-auto flex flex-col md:flex-row justify-center items-center gap-y-6 md:gap-x-10"> {/* ✅ justify-center로 수평 중앙 정렬, items-center로 수직 중앙 정렬, md:gap-x-10으로 로고와 정보 그룹 사이 간격 추가 */}
           {/* 로고 */}
           <div className="flex-shrink-0">
-            <img src="/Footer/logo2.png" alt="BAUTEK 로고" className="h-6" />
+            <img src="/Footer/color.png" alt="BAUTEK 로고" className="h-6" />
           </div>
 
           {/* 회사 정보, 연락처, 주소, 법적 고지 그룹 */}
