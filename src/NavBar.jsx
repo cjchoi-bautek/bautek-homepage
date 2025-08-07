@@ -128,7 +128,7 @@ export default function NavBar() {
         <img
           src="/logo2.png"
           alt="BAUTEK Logo"
-          className="h-8 md:h-14 object-contain"
+          className="h-4 md:h-14 object-contain"
         />
       </div>
 
