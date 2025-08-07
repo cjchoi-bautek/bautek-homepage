@@ -44,7 +44,7 @@ export default function Footer() {
 
         {/* 저작권 정보 */}
         <div className="border-t border-white/10 mt-6 pt-3 text-center text-xs text-white/50">
-          ⓒ 2025 BAUTEK. All rights reserved. |{" "}
+          ⓒ 2025 (주)바우텍. All rights reserved. |{" "}
           <button
             onClick={() => setPrivacyOpen(true)}
             className="underline hover:text-white transition"
