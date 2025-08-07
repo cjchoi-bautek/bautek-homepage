@@ -102,39 +102,43 @@ const renderTimeline = (data) => {
   return (
     <div className="relative">
       <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-blue-200 hidden md:block" />
-      <div className="flex flex-col gap-y-4">
+      {/* 텍스트 간격을 최소화하기 위해 gap-y-1로 변경 */}
+      <div className="flex flex-col gap-y-1">
         {data.map((entry, idx) => {
-          // PC 화면에서는 홀수/짝수에 따라 좌우로 배치
           const isLeft = idx % 2 === 0;
           return (
             <div key={idx} className={`relative w-full flex ${isLeft ? "md:justify-start" : "md:justify-end"}`}>
               <div className="w-full md:w-[calc(50%-20px)] px-2">
                 {entry.subtitle && (
-                  <h4 className="text-base md:text-lg font-semibold text-[#004A91] mb-1">
+                  // 소제목 폰트 크기 및 마진 축소
+                  <h4 className="text-sm font-semibold text-[#004A91] mb-0.5">
                     {entry.subtitle}
                   </h4>
                 )}
-                <div className="mb-2">
-                  <div className="flex items-center text-sm font-bold text-[#004A91] mb-1">
+                <div className="mb-1">
+                  {/* 연도 폰트 크기 및 마진 축소 */}
+                  <div className="flex items-center text-xs font-bold text-[#004A91] mb-0.5">
                     <span>{entry.year}</span>
                   </div>
                   {entry.items.map((item, i) => (
+                    // 항목 간 간격 축소
                     <div key={i} className="mb-0.5">
-                      <div className={`border border-gray-300 shadow-sm p-1.5 text-xs leading-tight rounded-md group-hover:bg-white group-hover:text-white group-hover:scale-[1.03] transform transition duration-300`}>
+                      {/* 카드 패딩 및 텍스트 크기 축소 */}
+                      <div className={`border border-gray-300 shadow-sm p-1 text-xs leading-tight rounded-md`}>
                         <span>
-                          <span className="text-[11px] font-semibold text-gray-700 bg-gray-200 px-2 py-0.5 rounded mr-1">
+                          {/* 월 폰트 크기 및 패딩 축소 */}
+                          <span className="text-[10px] font-semibold text-gray-700 bg-gray-200 px-1 py-0.5 rounded mr-1">
                             {item.month}
                           </span>
-                          {item.text.includes("설립") || item.text.includes("인증") || item.text.includes("출시") || item.text.includes("개발") || item.text.includes("대상")
-                            ? <strong>{item.text}</strong>
-                            : item.text}
+                          {item.text}
                         </span>
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
-              <div className="absolute top-0 md:top-2 left-1/2 transform -translate-x-1/2 w-3 h-3 bg-[#004A91] rounded-full border-2 border-white shadow hidden md:block" />
+              {/* 타임라인 점 위치 및 크기 조절 */}
+              <div className="absolute top-1 md:top-1.5 left-1/2 transform -translate-x-1/2 w-2.5 h-2.5 bg-[#004A91] rounded-full border-2 border-white shadow hidden md:block" />
             </div>
           );
         })}
@@ -147,21 +151,26 @@ export default function HistoryTimeline() {
   return (
     <section
       id="history"
-      className="snap-start min-h-screen pt-24 pb-12 px-4 bg-white"
+      // 최소 높이 속성(min-h-screen) 제거 및 상하 패딩 축소
+      className="snap-start pt-12 pb-6 px-4 bg-white"
     >
-      <h2 className="text-2xl md:text-3xl font-bold text-center text-[#004A91] mb-6">
+      {/* 제목 폰트 크기 및 마진 축소 */}
+      <h2 className="text-2xl font-bold text-center text-[#004A91] mb-4">
         회사연혁
       </h2>
 
-      <div className="max-w-screen-xl mx-auto md:grid md:grid-cols-2 md:gap-x-16">
-        <div className="col-span-1 mb-20 md:mb-0">
-          <h3 className="text-xl md:text-2xl font-semibold text-[#004A91] mb-8 text-center">
+      {/* 전체 그리드 간격 축소 */}
+      <div className="max-w-screen-xl mx-auto md:grid md:grid-cols-2 md:gap-x-8">
+        <div className="col-span-1 mb-10 md:mb-0">
+          {/* 부제목 폰트 크기 및 마진 축소 */}
+          <h3 className="text-xl font-semibold text-[#004A91] mb-4 text-center">
             2002년 – 2012년
           </h3>
           {renderTimeline(leftData)}
         </div>
         <div className="col-span-1">
-          <h3 className="text-xl md:text-2xl font-semibold text-[#004A91] mb-8 text-center">
+          {/* 부제목 폰트 크기 및 마진 축소 */}
+          <h3 className="text-xl font-semibold text-[#004A91] mb-4 text-center">
             2013년 – 현재
           </h3>
           {renderTimeline(rightData)}
