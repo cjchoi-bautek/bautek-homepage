@@ -103,36 +103,21 @@ export default function HeroSection() {
         </p>
       </motion.div>
 
-      {/* CTA 버튼 */}
-      <motion.div
-        className="absolute bottom-6 md:bottom-10 z-20"
-        animate={{ y: [0, -5, 0] }}
-        transition={{ repeat: Infinity, duration: 2 }}
-      >
-        <Link to="/products">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="border border-white text-white px-6 py-3 rounded-full font-semibold hover:bg-white hover:text-blue-900 transition duration-300"
-          >
-            제품 보러가기
-          </motion.button>
-        </Link>
-      </motion.div>
+      
 
       {/* 스크롤 아이콘 */}
       <motion.div
-        initial={{ opacity: 0, y: -5 }}
-        animate={{ opacity: 1, y: 5 }}
-        transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse" }}
-        className="absolute bottom-4 left-6 z-20"
-      >
-        <img
-          src="/HeroSection/scroll down.png"
-          alt="scroll down icon"
-          className="w-16 opacity-80"
-        />
-      </motion.div>
+			initial={{ opacity: 0, y: -5 }}
+			animate={{ opacity: 1, y: 5 }}
+			transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse" }}
+			className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20"
+	  >
+		<img
+			src="/HeroSection/scroll down.png"
+			alt="scroll down icon"
+			className="w-16 opacity-80"
+		/>
+		</motion.div>
     </section>
   );
 }
