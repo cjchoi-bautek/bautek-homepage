@@ -124,7 +124,10 @@ const renderTimeline = (data) => {
                           <span className="text-[10px] font-semibold text-gray-700 bg-gray-200 px-1 py-0.5 rounded mr-1">
                             {item.month}
                           </span>
-                          {item.text}
+                          {/* 볼드 처리 로직 재추가 */}
+                          {item.text.includes("설립") || item.text.includes("인증") || item.text.includes("출시") || item.text.includes("개발") || item.text.includes("대상")
+                            ? <strong>{item.text}</strong>
+                            : item.text}
                         </span>
                       </div>
                     </div>
@@ -144,7 +147,6 @@ export default function HistoryTimeline() {
   return (
     <section
       id="history"
-      // min-h-screen 클래스 추가
       className="snap-start min-h-screen pt-12 pb-6 px-4 bg-white"
     >
       <h2 className="text-2xl font-bold text-center text-[#004A91] mb-4">
