@@ -157,7 +157,7 @@ export default function SupportPage() {
   return (
     <main className="font-Pretendard overflow-y-scroll h-screen md:snap-y md:snap-proximity md:scroll-smooth">
       {/* 🔵 Hero Landing Section */}
-      <section className="min-h-screen bg-gradient-to-br from-white via-gray-200 to-gray-500 flex flex-col justify-center items-center px-4 py-10 md:py-20 md:snap-start">
+      <section className="min-h-screen bg-white flex flex-col justify-center items-center px-4 py-10 md:py-20 md:snap-start">
         <motion.div
           className="text-center mb-8 md:mb-16"
           variants={fadeInVariants}
@@ -227,7 +227,7 @@ export default function SupportPage() {
       {/* 🔵 문의하기 Section */}
       <section
         id="contact"
-        className="min-h-screen bg-gradient-to-br from-gray-400 to-white py-8 px-2 flex flex-col justify-center items-center md:snap-start"
+        className="min-h-screen bg-white py-8 px-2 flex flex-col justify-center items-center md:snap-start"
       >
         <motion.div
           className="max-w-4xl w-full"
@@ -397,7 +397,7 @@ export default function SupportPage() {
       {/* 🔵 A/S 문의 Section */}
       <section
         id="service"
-        className="min-h-screen bg-gradient-to-br from-white via-gray-200 to-gray-500 py-10 px-4 flex flex-col justify-center items-center md:snap-start"
+        className="min-h-screen bg-white py-10 px-4 flex flex-col justify-center items-center md:snap-start"
       >
         <motion.div
           className="max-w-4xl w-full text-center space-y-8"
@@ -623,7 +623,7 @@ export default function SupportPage() {
       {/* 🔵 자사 쇼핑몰 Section */}
       <section
         id="shoppingmall"
-        className="min-h-screen bg-gradient-to-br from-white via-gray-200 to-gray-500 py-10 px-4 flex flex-col justify-center items-center md:snap-start"
+        className="min-h-screen bg-white py-10 px-4 flex flex-col justify-center items-center md:snap-start"
       >
         <motion.div
           className="max-w-4xl w-full text-center"

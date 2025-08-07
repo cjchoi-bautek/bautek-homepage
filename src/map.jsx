@@ -58,7 +58,7 @@ export default function MapSection() {
   return (
     <section
       id="map-section"
-      className="snap-start min-h-screen bg-gradient-to-br from-white via-gray-200 to-gray-500 flex flex-col justify-between"
+      className="snap-start min-h-screen bg-white flex flex-col justify-between"
     >
       <div className="flex-grow pt-24 px-4">
         {/* 섹션 제목 */}

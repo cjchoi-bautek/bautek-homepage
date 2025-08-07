@@ -23,7 +23,7 @@ export default function FrameGallery() {
 
   return (
     <>
-      <div className="py-16 px-4 sm:px-8 lg:px-16 min-h-screen bg-gradient-to-br from-white via-slate-100 to-slate-200">
+      <div className="py-16 px-4 sm:px-8 lg:px-16 min-h-screen bg-white">
         <motion.h2
           id="frame-section"
           className="text-center text-xl sm:text-2xl font-extrabold text-[#004A91] mb-10 sm:mb-16 scroll-mt-24"

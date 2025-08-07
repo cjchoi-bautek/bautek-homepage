@@ -60,7 +60,7 @@ export default function KeyClient() {
   ].sort((a, b) => b.length - a.length);
 
   return (
-    <section className="snap-start relative w-full min-h-screen overflow-hidden flex flex-col justify-center bg-gradient-to-br from-gray-400 to-white via-gray-200">
+    <section className="snap-start relative w-full min-h-screen overflow-hidden flex flex-col justify-center bg-white">
       {/* 상단 영역 */}
       <div className="relative z-10 flex flex-col items-center justify-center pt-24 pb-8 px-4">
         <h2 className="text-3xl font-bold text-[#004A91] mb-2">주요 고객</h2>

@@ -446,9 +446,9 @@ export default function Products() {
 
           let sectionBgClass;
           if (category.id === 'section-1') {
-            sectionBgClass = 'bg-gradient-to-br from-gray-400 to-white';
+            sectionBgClass = 'bg-white';
           } else {
-            sectionBgClass = index % 2 === 0 ? 'bg-gradient-to-br from-white via-gray-200 to-gray-500' : 'bg-gray-50';
+            sectionBgClass = index % 2 === 0 ? 'bg-white';
           }
 
           return (

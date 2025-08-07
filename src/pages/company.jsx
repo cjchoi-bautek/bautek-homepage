@@ -103,7 +103,7 @@ export default function Company() {
       {/* Core Capabilities Section (핵심역량) */}
       <section
         id="core"
-        className="snap-start min-h-screen px-6 py-16 md:px-20 bg-gradient-to-br from-gray-500 to-white flex flex-col items-center justify-center text-gray-800"
+        className="snap-start min-h-screen px-6 py-16 md:px-20 bg-white flex flex-col items-center justify-center text-gray-800"
       >
         <motion.h2
           className="text-2xl md:text-4xl font-bold text-bautek-blue mb-10 md:mb-16"
@@ -184,7 +184,7 @@ export default function Company() {
       {/* Vision & Mission Section */}
       <section
         id="vision"
-        className="snap-start min-h-screen px-6 py-16 md:px-20 bg-gradient-to-br from-white via-gray-200 to-gray-500 flex flex-col items-center justify-center text-gray-800"
+        className="snap-start min-h-screen px-6 py-16 md:px-20 bg-white flex flex-col items-center justify-center text-gray-800"
       >
         <motion.h2
           className="text-2xl md:text-4xl font-bold text-bautek-blue mb-10 md:mb-16"
@@ -291,7 +291,7 @@ export default function Company() {
       {/* CI Section (CI / BI) - ELIV 로고 크기 재조정 */}
       <section
         id="CI"
-        className="snap-start relative min-h-screen px-6 py-16 md:px-20 bg-gradient-to-br from-white via-slate-100 to-blue-100 flex flex-col items-center justify-center overflow-hidden"
+        className="snap-start relative min-h-screen px-6 py-16 md:px-20 bg-white flex flex-col items-center justify-center overflow-hidden"
       >
         <motion.video
           key={videoKey}
