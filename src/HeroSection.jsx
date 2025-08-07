@@ -9,8 +9,8 @@ export default function HeroSection() {
   const [isFading, setIsFading] = useState(false); // 페이드 전환 상태 관리
 
   const videoList = [
-    { id: "video-main-1", src: "/HeroSection/video/video3.mp4" },
-    { id: "video-main-2", src: "/HeroSection/video/video4.mp4" },
+    { id: "video-main-1", src: "/HeroSection/video/video5.mp4" },
+    { id: "video-main-2", src: "/HeroSection/video/video6.mp4" },
   ];
 
   const particlesInit = useCallback(async (engine) => {
