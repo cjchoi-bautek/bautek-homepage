@@ -37,22 +37,22 @@ const productList = [
 
 const featuresByProduct = {
   "터닝도어": [
-    { id: 'door-f1', icon: "/ProductSlider/turningdooricon1.png", title: "단열/기밀성", subtitle: ["열 손실을 줄이는 고기밀 설계"] },
-    { id: 'door-f2', icon: "/ProductSlider/turningdooricon2.png", title: "차음성", subtitle: ["소음을 차단하는 구조"] },
-    { id: 'door-f3', icon: "/ProductSlider/turningdooricon3.png", title: "마감성", subtitle: ["완성도를 높이는 정돈된 디자인"] },
-    { id: 'door-f4', icon: "/ProductSlider/turningdooricon4.png", title: "유틸성", subtitle: ["다양한 현장에 유연한 설치"] },
+    { id: 'door-f1', icon: "/ProductSlider/turningdooricon1.png", title: "에너지효율", subtitle: ["열 손실을 줄이는 고기밀 설계"] },
+    { id: 'door-f2', icon: "/ProductSlider/turningdooricon2.png", title: "소음 차단", subtitle: ["소음을 차단하는 구조"] },
+    { id: 'door-f3', icon: "/ProductSlider/turningdooricon3.png", title: "디테일 완성도", subtitle: ["완성도를 높이는 정돈된 디자인"] },
+    { id: 'door-f4', icon: "/ProductSlider/turningdooricon4.png", title: "현장 대응력", subtitle: ["다양한 현장에 유연한 설치"] },
   ],
   "시스템 루버": [
     { id: 'louver-f1', icon: "/ProductSlider/turningdooricon1.png", title: "단열/기밀성", subtitle: ["결로 완화와 냉·난방 효율을 높인 구조 설계"] },
-    { id: 'louver-f2', icon: "/ProductSlider/louvericon2.png", title: "유지관리 / 청소 용이성", subtitle: ["오염·부식에 강한 고내구성 소재 적용"] },
+    { id: 'louver-f2', icon: "/ProductSlider/louvericon2.png", title: "청소 및 유지관리", subtitle: ["오염·부식에 강한 고내구성 소재 적용"] },
     { id: 'louver-f3', icon: "/ProductSlider/louvericon3.png", title: "구조 안정성 / 제품 내구성", subtitle: ["날개 결속 기술로 개폐 시 흔들림 및 소음 최소화"] },
     { id: 'louver-f4', icon: "/ProductSlider/louvericon4.png", title: "설계 완성도", subtitle: ["기능성과 구조 안정성을 함께 고려한 기술 설계"] },
   ],
   "블라인드 내장형 복층유리 (BBG)": [
-    { id: 'bbg-f1', icon: "/ProductSlider/turningdooricon1.png", title: "절감효율", subtitle: ["냉난방 에너지 절감"] },
-    { id: 'bbg-f2', icon: "/ProductSlider/bbgicon2.png", title: "사용편의성", subtitle: ["무전원 간편 조작"] },
-    { id: 'bbg-f3', icon: "/ProductSlider/louvericon2.png", title: "청결관리", subtitle: ["청소/세탁 없는 간편 관리"] },
-    { id: 'bbg-f4', icon: "/ProductSlider/bbgicon4.png", title: "안전성", subtitle: ["줄꼬임·파손 방지"] },
+    { id: 'bbg-f1', icon: "/ProductSlider/turningdooricon1.png", title: "에너지 절감", subtitle: ["냉난방 에너지 절감"] },
+    { id: 'bbg-f2', icon: "/ProductSlider/bbgicon2.png", title: "사용편의", subtitle: ["무전원 간편 조작"] },
+    { id: 'bbg-f3', icon: "/ProductSlider/louvericon2.png", title: "위생적 유지", subtitle: ["청소/세탁 없는 간편 관리"] },
+    { id: 'bbg-f4', icon: "/ProductSlider/bbgicon4.png", title: "사용 안전", subtitle: ["줄꼬임·파손 방지"] },
   ],
 };
 
