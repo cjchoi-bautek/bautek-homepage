@@ -227,7 +227,7 @@ export default function SupportPage() {
       {/* 🔵 문의하기 Section */}
       <section
         id="contact"
-        className="min-h-screen bg-gradient-to-br from-gray-400 to-white py-10 px-4 flex flex-col justify-center items-center md:snap-start"
+        className="min-h-screen bg-gradient-to-br from-gray-400 to-white py-8 px-2 flex flex-col justify-center items-center md:snap-start"
       >
         <motion.div
           className="max-w-4xl w-full"
@@ -236,17 +236,17 @@ export default function SupportPage() {
           whileInView="animate"
           viewport={{ once: true }}
         >
-          <h2 className="text-2xl sm:text-3xl font-bold text-[#004A91] mb-4 text-center">
+          <h2 className="text-2xl sm:text-3xl font-bold text-[#004A91] mb-2 text-center">
             문의하기
           </h2>
           <form
             onSubmit={handleFormSubmit}
             action="https://formspree.io/f/xjkoawed"
             method="POST"
-            className="w-full max-w-2xl space-y-4 mx-auto bg-white p-4 md:p-8 rounded-xl shadow-lg"
+            className="w-full max-w-2xl space-y-4 mx-auto bg-white p-2 md:p-4 rounded-xl shadow-lg"
           >
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-xs font-medium text-gray-700">
                 이름 <span className="text-red-500">*</span>
               </label>
               <input
@@ -258,7 +258,7 @@ export default function SupportPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-xs font-medium text-gray-700">
                 회사명
               </label>
               <input
@@ -269,7 +269,7 @@ export default function SupportPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-xs font-medium text-gray-700">
                 이메일 <span className="text-red-500">*</span>
               </label>
               <input
@@ -281,7 +281,7 @@ export default function SupportPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-xs font-medium text-gray-700">
                 연락처 <span className="text-red-500">*</span>
               </label>
               <input
@@ -293,7 +293,7 @@ export default function SupportPage() {
             </div>
               
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-xs font-medium text-gray-700">
                 제목 <span className="text-red-500">*</span>
               </label>
               <input
@@ -305,7 +305,7 @@ export default function SupportPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-xs font-medium text-gray-700">
                 문의 내용 <span className="text-red-500">*</span>
               </label>
               <textarea
