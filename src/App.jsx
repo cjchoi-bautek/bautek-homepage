@@ -39,7 +39,9 @@ function AppLayout() {
               </section>
               <section className="min-h-[100dvh] md:h-screen md:snap-start bg-[#F4F4F4]">
                 <MapSection />
+				<Footer />
               </section>
+			   
             </main>
           }
         />
@@ -54,7 +56,7 @@ function AppLayout() {
         <Route path="/frame-gallery" element={<FrameGallery />} />
         <Route path="/support" element={<SupportPage />} />
       </Routes>
-      <Footer />
+      
     </div>
   );
 }
