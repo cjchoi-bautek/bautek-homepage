@@ -35,7 +35,12 @@ export default function NavBar() {
       const element = document.getElementById(id);
       if (element) {
         requestAnimationFrame(() => {
-          element.scrollIntoView({ behavior: "smooth" });
+          const yOffset = -80; // 고정된 네비게이션 바 높이에 맞게 보정
+          const y =
+            element.getBoundingClientRect().top +
+            window.pageYOffset +
+            yOffset;
+          window.scrollTo({ top: y, behavior: "smooth" });
         });
       }
     } else if (!isHome) {
@@ -108,7 +113,15 @@ export default function NavBar() {
 
       if (location.pathname === pathname) {
         if (hash) {
-          document.getElementById(hash)?.scrollIntoView({ behavior: "smooth" });
+          const element = document.getElementById(hash);
+          if (element) {
+            const yOffset = -80;
+            const y =
+              element.getBoundingClientRect().top +
+              window.pageYOffset +
+              yOffset;
+            window.scrollTo({ top: y, behavior: "smooth" });
+          }
         } else {
           window.scrollTo({ top: 0, behavior: "smooth" });
         }
