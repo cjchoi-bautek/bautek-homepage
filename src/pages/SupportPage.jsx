@@ -462,13 +462,13 @@ export default function SupportPage() {
             <h3 className="text-sm md:text-md font-bold text-gray-900 mb-2">
               <span className="font-extrabold text-[#004A91]">전화 문의</span>
             </h3>
-            <p className="text-[9px] md:text-base text-gray-600 mb-2">
+            <p className="text-[9px] md:text-[9px] text-gray-600 mb-2">
               긴급한 문의사항이나 전화 상담을 원하시면 아래 번호로 연락 주시기 바랍니다.
             </p>
-            <div className="text-[9px] md:text-base font-bold text-[#004A91]">
+            <div className="text-[9px] md:text-[9px] font-bold text-[#004A91]">
               대표번호: 031-351-0178
             </div>
-            <div className="text-[8px] md:text-sm text-gray-500 mt-2">
+            <div className="text-[8px] md:text-[8px] text-gray-500 mt-2">
               운영 시간: <span className="font-semibold">평일 09:00 ~ 17:30</span> (점심시간 12:30 ~ 13:30 제외) | 토,일요일 및 공휴일 휴무
             </div>
           </div>
