@@ -155,7 +155,7 @@ export default function SupportPage() {
   };
 
   return (
-    <main className="font-Pretendard overflow-y-scroll h-screen md:snap-y md:snap-mandatory md:scroll-smooth">
+    <main className="font-Pretendard overflow-y-scroll h-screen md:snap-y md:snap-proximity md:scroll-smooth">
       {/* 🔵 Hero Landing Section */}
       <section className="min-h-screen bg-gradient-to-br from-white via-gray-200 to-gray-500 flex flex-col justify-center items-center px-4 py-10 md:py-20 md:snap-start">
         <motion.div
