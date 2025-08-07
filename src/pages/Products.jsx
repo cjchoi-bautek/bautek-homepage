@@ -448,7 +448,7 @@ export default function Products() {
           if (category.id === 'section-1') {
             sectionBgClass = 'bg-white';
           } else {
-            sectionBgClass = index % 2 === 0 ? 'bg-white';
+            sectionBgClass = index % 2 === 0 ? 'bg-white', 'bg-gray-50';
           }
 
           return (
