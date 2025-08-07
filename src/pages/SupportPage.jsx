@@ -310,11 +310,11 @@ export default function SupportPage() {
               </label>
               <textarea
                 name="message"
-                rows="3"
+                rows="2"
                 className="w-full p-1 border border-gray-300 rounded-md shadow-sm text-sm"
                 required
               ></textarea>
-              <p className="mt-1 text-xs text-gray-500">
+              <p className="mt-1 text-[11px] text-gray-500">
                 <span className="text-red-500">*</span> 필수값입니다.
               </p>
             </div>
@@ -364,7 +364,7 @@ export default function SupportPage() {
                   name="privacy_consent_required"
                   className="mr-2 h-4 w-4 text-[#004A91] border-gray-300 rounded"
                 />
-                <label htmlFor="privacy_consent_required" className="text-sm font-medium text-gray-700">
+                <label htmlFor="privacy_consent_required" className="text-xs font-medium text-gray-700">
                   개인정보 수집 및 이용 필수사항에 동의합니다. <span className="text-red-500">*</span>
                 </label>
               </div>
@@ -377,7 +377,7 @@ export default function SupportPage() {
                   name="marketing_consent_optional"
                   className="mr-2 h-4 w-4 text-[#004A91] border-gray-300 rounded"
                 />
-                <label htmlFor="marketing_consent_optional" className="text-sm font-medium text-gray-700">
+                <label htmlFor="marketing_consent_optional" className="text-xs font-medium text-gray-700">
                   마케팅 정보 수신에 동의합니다. (선택)
                 </label>
               </div>
