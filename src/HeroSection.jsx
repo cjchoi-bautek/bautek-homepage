@@ -10,7 +10,7 @@ export default function HeroSection() {
 
   const videoList = [
     { id: "video-main-1", src: "/HeroSection/video/video3.mp4" },
-    { id: "video-main-2", src: "/HeroSection/video/video2.mp4" },
+    { id: "video-main-2", src: "/HeroSection/video/video4.mp4" },
   ];
 
   const particlesInit = useCallback(async (engine) => {
