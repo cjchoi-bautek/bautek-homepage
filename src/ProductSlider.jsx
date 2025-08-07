@@ -128,13 +128,13 @@ export default function ProductSlider() {
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ duration: 0.8, delay: 0.2 }}
                 >
-                  <p className="text-xs md:text-sm tracking-widest text-bautek-blue uppercase mb-2">
+                  <p className="text-sm md:text-base tracking-widest text-bautek-blue uppercase mb-2">
                     {item.category}
                   </p>
-                  <h2 className="text-2xl md:text-3xl font-bold text-bautek-blue mb-3">
+                  <h2 className="text-3xl md:text-4xl font-bold text-bautek-blue mb-3">
                     {item.name}
                   </h2>
-                  <p className="text-sm md:text-base text-gray-700 mb-6 whitespace-pre-line leading-relaxed">
+                  <p className="text-base md:text-lg text-gray-700 mb-6 whitespace-pre-line leading-relaxed">
                     {item.desc}
                   </p>
 
@@ -163,11 +163,11 @@ export default function ProductSlider() {
                             className="w-7 h-7 flex-shrink-0 mt-1"
                           />
                           <div>
-                            <h4 className="text-base md:text-lg font-bold text-bautek-blue mb-1">
+                            <h4 className="text-lg md:text-xl font-bold text-bautek-blue mb-1">
                               {feature.title}
                             </h4>
                             {feature.subtitle.map((line, i) => (
-                              <p key={`subtitle-${feature.id}-${i}`} className="text-sm md:text-base text-gray-700 leading-relaxed">
+                              <p key={`subtitle-${feature.id}-${i}`} className="text-base md:text-lg text-gray-700 leading-relaxed">
                                 {line}
                               </p>
                             ))}
