@@ -1,4 +1,3 @@
-// src/ProductSlider.jsx
 import React, { useRef, useCallback, useMemo } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
@@ -107,18 +106,31 @@ export default function ProductSlider() {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.6 }}
               >
-                {/* 이미지 */}
+                {/* 이미지 + 모바일 버튼 */}
                 <motion.div
-                  className="w-full md:w-1/2 flex justify-center py-4"
+                  className="w-full md:w-1/2 flex justify-center items-center relative py-4"
                   initial={{ x: 100, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
                   transition={{ duration: 0.8 }}
                 >
+                  {/* 모바일 버튼 (좌우) */}
+                  <div
+                    ref={prevRef}
+                    className="md:hidden absolute left-0 top-1/2 -translate-y-1/2 z-10 cursor-pointer bg-white/70 backdrop-blur p-1 rounded-full shadow-md hover:scale-105 transition w-8 h-8 flex items-center justify-center"
+                  >
+                    <img src="/ProductSlider/arrowleft.png" alt="이전" className="w-4 h-4" />
+                  </div>
                   <img
                     src={item.image}
                     alt={item.alt}
                     className="max-h-[45vh] md:max-h-[70vh] object-contain rounded-xl shadow-2xl"
                   />
+                  <div
+                    ref={nextRef}
+                    className="md:hidden absolute right-0 top-1/2 -translate-y-1/2 z-10 cursor-pointer bg-white/70 backdrop-blur p-1 rounded-full shadow-md hover:scale-105 transition w-8 h-8 flex items-center justify-center"
+                  >
+                    <img src="/ProductSlider/arrowright.png" alt="다음" className="w-4 h-4" />
+                  </div>
                 </motion.div>
 
                 {/* 텍스트 */}
@@ -182,10 +194,10 @@ export default function ProductSlider() {
           );
         })}
 
-        {/* 내비게이션 버튼 */}
+        {/* 데스크탑 내비게이션 버튼 */}
         <div
           ref={prevRef}
-          className="swiper-button-prev absolute top-1/2 left-4 -translate-y-1/2 z-20 cursor-pointer bg-white/70 backdrop-blur p-2 rounded-full shadow-md hover:scale-105 transition flex items-center justify-center w-10 h-10"
+          className="swiper-button-prev hidden md:flex absolute top-1/2 left-4 -translate-y-1/2 z-20 cursor-pointer bg-white/70 backdrop-blur p-2 rounded-full shadow-md hover:scale-105 transition flex items-center justify-center w-10 h-10"
           role="button"
           aria-label="이전 제품 보기"
         >
@@ -193,7 +205,7 @@ export default function ProductSlider() {
         </div>
         <div
           ref={nextRef}
-          className="swiper-button-next absolute top-1/2 right-4 -translate-y-1/2 z-20 cursor-pointer bg-white/70 backdrop-blur p-2 rounded-full shadow-md hover:scale-105 transition flex items-center justify-center w-10 h-10"
+          className="swiper-button-next hidden md:flex absolute top-1/2 right-4 -translate-y-1/2 z-20 cursor-pointer bg-white/70 backdrop-blur p-2 rounded-full shadow-md hover:scale-105 transition flex items-center justify-center w-10 h-10"
           role="button"
           aria-label="다음 제품 보기"
         >
