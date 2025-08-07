@@ -416,7 +416,7 @@ export default function Products() {
                 transition={{ duration: 0.7, ease: "easeOut", delay: 0.5 }}
               >
                 <h2 className="text-lg md:text-2xl font-semibold mb-10 md:mb-20 leading-relaxed">
-                  프레임 금형부터 제작까지, <span className="text-[#004A91]"><br/>바우텍</span>은<br className="md:hidden" /> 독자적인 생산 기술로 다양한 폭의 Frame을 구현합니다.
+                  프레임 금형부터 제작까지, <span className="text-[#004A91]"><br/>바우텍</span>은<br className="md:hidden" /> 독자적인 생산 기술로 다양한 폭의 프레임을 구현합니다.
                 </h2>
               </motion.div>
 

@@ -9,7 +9,7 @@ export default function HeroSection() {
   const [isFading, setIsFading] = useState(false); // 페이드 전환 상태 관리
 
   const videoList = [
-    { id: "video-main-1", src: "/HeroSection/video/video1.mp4" },
+    { id: "video-main-1", src: "/HeroSection/video/video3.mp4" },
     { id: "video-main-2", src: "/HeroSection/video/video2.mp4" },
   ];
 
