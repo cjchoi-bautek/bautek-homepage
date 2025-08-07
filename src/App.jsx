@@ -24,7 +24,7 @@ export default function App() {
           <Route
             path="/"
             element={
-              <main className="overflow-y-auto md:snap-y md:snap-mandatory md:h-screen">
+              <main className="overflow-y-auto md:snap-y md:snap-proximity md:h-screen">
                 <section className="min-h-[100dvh] md:h-screen md:snap-start">
                   <HeroSection />
                 </section>
