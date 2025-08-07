@@ -24,16 +24,16 @@ export default function HeroSection() {
       setFadeState("hidden");
 
       setTimeout(() => {
-        // 다음 비디오로 전환 (순환)
-        setVideoIndex((prevIndex) => (prevIndex + 1) % videoList.length);
-
+        const nextIndex = (videoIndex + 1) % videoList.length;
+        setVideoIndex(nextIndex);
         setFadeState("fading-in");
 
+        // fallback: 일정 시간 후 visible
         setTimeout(() => {
           setFadeState("visible");
-        }, 2000); // fade-in 시간
-      }, 2000); // hidden 대기 시간
-    }, 2000); // fade-out 시간
+        }, 1000);
+      }, 1000);
+    }, 1000);
   };
 
   const getOpacity = () => {
@@ -89,18 +89,17 @@ export default function HeroSection() {
       />
 
       {/* 비디오 */}
-      {videoIndex !== null && (
-        <video
-          key={videoList[videoIndex].id}
-          className="absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-1000"
-          style={{ opacity: getOpacity() }}
-          src={videoList[videoIndex].src}
-          autoPlay
-          muted
-          playsInline
-          onEnded={handleVideoEnd}
-        />
-      )}
+      <video
+        key={videoList[videoIndex].src}
+        className="absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-1000"
+        style={{ opacity: getOpacity() }}
+        src={videoList[videoIndex].src}
+        autoPlay
+        muted
+        playsInline
+        onEnded={handleVideoEnd}
+        onCanPlay={() => setFadeState("visible")} // 비디오 로드된 후 fade-in 안전하게 적용
+      />
 
       {/* 어두운 반투명 오버레이 */}
       <div className="absolute inset-0 bg-black bg-opacity-40 z-10" />
