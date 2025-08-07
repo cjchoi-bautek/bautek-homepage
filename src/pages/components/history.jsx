@@ -149,7 +149,7 @@ export default function HistoryTimeline() {
       id="history"
       className="snap-start min-h-screen pt-12 pb-6 px-4 bg-white"
     >
-      <h2 className="text-2xl font-bold text-center text-[#004A91] mb-4">
+      <h2 className="text-2xl md:text-4xl font-bold text-center text-[#004A91] mb-4">
         회사연혁
       </h2>
 

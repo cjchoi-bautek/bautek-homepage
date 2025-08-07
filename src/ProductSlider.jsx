@@ -83,7 +83,7 @@ export default function ProductSlider() {
 
       {/* div에 있던 패딩을 제거하고, h2에 마진을 추가 */}
       <div className="w-full text-center relative z-10">
-        <h2 className="text-2xl md:text-3xl font-bold text-bautek-blue mt-10 md:mt-20 mb-4">주요 제품</h2>
+        <h2 className="text-2xl md:text-3xl font-bold text-bautek-blue mt-14 md:mt-24 mb-4">주요 제품</h2>
       </div>
 
       <Swiper
