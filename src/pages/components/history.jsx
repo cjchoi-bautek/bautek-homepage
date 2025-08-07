@@ -9,7 +9,7 @@ const leftData = [
   },
   {
     year: "2003년",
-    items: [{ month: "01월", text: "KCC PVC 창호 협력업체 등록" }],
+    items: [{ month: "01월", text: "KCC 창호 협력업체 등록" }],
   },
   {
     year: "2007년",
@@ -24,7 +24,7 @@ const leftData = [
     year: "2010년",
     items: [
       { month: "03월", text: "화성 신축공장 확장 이전" },
-      { month: "07월", text: "전략제품 'PVC-기어 시스템루버' 개발" },
+      { month: "07월", text: "전략제품 '기어 시스템루버' 개발" },
       { month: "07월", text: "루버 및 루버 관련 디자인 출원" },
       { month: "12월", text: "루버 모듈과 시스템 특허 등록" },
     ],
@@ -32,7 +32,7 @@ const leftData = [
   {
     year: "2011년",
     items: [
-      { month: "03월", text: "루버 통합브랜드 '엘리브' 개발/상표출원" },
+      { month: "03월", text: "통합브랜드 '엘리브' 개발/상표출원" },
       { month: "06월", text: "ISO 9001/14001 인증 획득" },
     ],
   },
@@ -40,7 +40,7 @@ const leftData = [
     year: "2012년",
     items: [
       { month: "01월", text: "INNOBIZ 기술혁신형 인증기업" },
-      { month: "07월", text: "유망중소기업 선정 (IBK기업은행)" },
+      { month: "07월", text: "유망중소기업 선정 (경기도)" },
     ],
   },
   {
@@ -54,13 +54,13 @@ const rightData = [
     subtitle: "기술 경쟁력 확보",
     year: "2017년",
     items: [
-      { month: "05월", text: "대한민국 중소기업대상 기술혁신부문 대상" },
+      { month: "05월", text: "중소벤처기업부 장관 - 대한민국 중소기업대상 기술혁신부문 대상" },
       { month: "09월", text: "LH 신자재 선정" },
     ],
   },
   {
     year: "2019년",
-    items: [{ month: "01월", text: "패밀리기업 선정 (IBK기업은행)" }],
+    items: [{ month: "01월", text: "패밀리기업 선정 (IBK 기업은행)" }],
   },
   {
     subtitle: "제품 다각화 및 품질 경쟁력 강화",
@@ -82,7 +82,6 @@ const rightData = [
     year: "2023년",
     items: [
       { month: "02월", text: "전동시스템루버 개발 및 상품 출시" },
-      { month: "10월", text: "외기형도어 단열성능시험 완료" },
     ],
   },
 ];

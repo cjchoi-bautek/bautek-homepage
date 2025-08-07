@@ -15,8 +15,8 @@ const frames = [
         ],
         specs: [
             ["프레임폭", "130mm"],
-            ["패널두께", "27mm / 47mm"],
-            ["열관류율", "1.170 W/㎡·K / 0.759 W/㎡·K"],
+            ["패널두께", "27mm ~ 47mm"],
+            ["열관류율", "1.170 W/㎡·K ~ 0.759 W/㎡·K"],
             ["기밀성", "1등급"],
             ["차음재", "유"],
         ],
@@ -30,8 +30,8 @@ const frames = [
         ],
         specs: [
             ["프레임폭", "150mm"],
-            ["패널두께", "27mm"],
-            ["열관류율", "1.196 W/㎡·K"],
+            ["패널두께", "27mm ~ 47mm"],
+            ["열관류율", "1.196 W/㎡·K (27mm 기준) "],
             ["기밀성", "1등급"],
             ["차음재", "유"],
         ],
@@ -45,8 +45,8 @@ const frames = [
         ],
         specs: [
             ["프레임폭", "180mm"],
-            ["패널두께", "47mm"],
-            ["열관류율", "0.625 W/㎡·K"],
+            ["패널두께", "27mm ~ 47mm"],
+            ["열관류율", "0.625 W/㎡·K (47mm 기준)"],
             ["기밀성", "1등급"],
             ["차음재", "유"],
         ],
@@ -60,8 +60,8 @@ const frames = [
         ],
         specs: [
             ["프레임폭", "3면 180mm / 하부 100mm"],
-            ["패널두께", "27mm / 47mm"],
-            ["열관류율", "1.063 W/㎡·K / 0.732 W/㎡·K"],
+            ["패널두께", "27mm ~ 47mm"],
+            ["열관류율", "1.063 W/㎡·K ~ 0.732 W/㎡·K"],
             ["기밀성", "1등급"],
             ["차음재", "유"],
         ],
@@ -75,8 +75,8 @@ const frames = [
         ],
         specs: [
             ["프레임폭", "180mm"],
-            ["패널두께", "37mm / 47mm"],
-            ["열관류율", "0.846 W/㎡·K / 0.753 W/㎡·K"],
+            ["패널두께", "27mm ~ 47mm"],
+            ["열관류율", "0.846 W/㎡·K ~ 0.753 W/㎡·K"],
             ["기밀성", "1등급"],
             ["차음재", "유"],
         ],
@@ -149,7 +149,7 @@ export default function FramePopup({ isOpen, onClose, activeFrameId }) {
     const [selectedBigImage, setSelectedBigImage] = useState('');
 
     const watermarkText = "Confidential";
-    const legalText = "Copyright © 2023. (주)바우텍. All Rights Reserved.\n본 이미지는 저작권법의 보호를 받으며 무단 사용 시 법적 처벌을 받을 수 있습니다.";
+    const legalText = "Copyright © 2025. (주)바우텍. All Rights Reserved.\n본 이미지는 저작권법의 보호를 받으며 무단 사용 시 법적 처벌을 받을 수 있습니다.";
 
     useEffect(() => {
         const found = frames?.find((f) => f.id === activeFrameId);

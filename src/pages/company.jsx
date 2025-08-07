@@ -146,7 +146,7 @@ export default function Company() {
               title: "기술력 & 생산 기반",
               desc: (
                 <>
-                  <strong className="font-semibold text-[#003A70]">20년 이상 업력의 생산 기반</strong>과<br />고기능 PVC 시스템 창호 대응력으로 <br />
+                  <strong className="font-semibold text-[#003A70]">20년 이상 업력의 생산 기반</strong>과<br />고기능 시스템 창호 대응력으로 <br />
                   <strong className="font-semibold text-[#003A70]">다양한 제품을 안정적으로 공급</strong>합니다.
                 </>
               ),

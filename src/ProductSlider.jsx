@@ -90,7 +90,7 @@ export default function ProductSlider() {
         spaceBetween={30}
         slidesPerView={1}
         loop={true}
-        autoplay={{ delay: 8000, disableOnInteraction: false }}
+        autoplay={{ delay: 15000, disableOnInteraction: false }}
         pagination={{ clickable: true }}
         navigation={swiperNavigation}
         onBeforeInit={handleSwiperBeforeInit}
