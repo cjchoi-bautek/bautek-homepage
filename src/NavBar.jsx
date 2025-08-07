@@ -126,7 +126,7 @@ export default function NavBar() {
       {/* 로고 */}
       <div onClick={handleLogoClick} className="cursor-pointer flex items-center">
         <img
-          src="/logo1.png"
+          src="/logo2.png"
           alt="BAUTEK Logo"
           className="h-8 md:h-14 object-contain"
         />

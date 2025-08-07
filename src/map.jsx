@@ -8,7 +8,7 @@ import useNaverMap from "./utils/useNaverMap";
 function FactoryMap() {
   const mapRef = useNaverMap(
     { lat: 37.139708, lng: 126.857125 },
-    "바우텍 본사/공장",
+    "본사/공장",
     `
       <div style="padding:10px; font-size:14px; color: #333;">
         <strong>바우텍 본사/공장</strong><br/>
@@ -32,7 +32,7 @@ function FactoryMap() {
 function OfficeMap() {
   const mapRef = useNaverMap(
     { lat: 37.488897, lng: 127.010051 },
-    "바우텍 서울사무소",
+    "서울사무소",
     `
       <div style="padding:10px; font-size:14px; color: #333;">
         <strong>바우텍 서울사무소</strong><br/>
