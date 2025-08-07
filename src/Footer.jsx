@@ -31,12 +31,10 @@ export default function Footer() {
             
             {/* 주소 */}
             <div className="text-center"> {/* ✅ 텍스트 자체도 가운데 정렬 */}
-              <h3 className="text-sm font-bold text-white mb-2">주소 및 연락처</h3>
+              <h3 className="text-sm font-bold text-white mb-2">연락처</h3>
               <address className="not-italic text-xs text-white/70 space-y-0.5 break-words">
-                <p>본사/공장: 경기도 화성시 팔탄면 온천로165번길 67 <br className="md:hidden" />
-  &nbsp;|&nbsp;  ☎ 031-351-0178</p>
-                <p>서울 사무소: 서울시 서초구 서초대로42길 71 (거림빌딩 3층) <br className="md:hidden" />
-  &nbsp;|&nbsp;  ☎ 02-585-0178 </p>
+                <p>본사/공장: ☎ 031-351-0178</p>
+                <p>서울 사무소: ☎ 02-585-0178 </p>
                 <p>이메일: business@greenbautek.com</p>
               </address>
             </div>
