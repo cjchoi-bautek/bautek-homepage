@@ -168,7 +168,7 @@ export default function SupportPage() {
             고객지원
           </h1>
           <p className="text-sm sm:text-lg text-gray-700 max-w-3xl mx-auto">
-            바우텍 제품에 대한 문의, A/S 문의, 자사 쇼핑몰까지 필요한 모든 정보를 한 곳에서 확인하세요.
+            제품 상담부터 견적 요청, A/S 문의, 자사 쇼핑몰이용까지 필요한 모든 정보를 한 곳에서 확인하세요.
           </p>
         </motion.div>
 
