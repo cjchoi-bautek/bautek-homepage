@@ -81,7 +81,7 @@ export default function ProductSlider() {
         .swiper-pagination-bullet-active { background: #2563eb; }
       `}</style>
 
-      <div className="w-full text-center pt-10 pb-4 md:pt-16 md:pb-8 relative z-10">
+      <div className="w-full text-center pt-20 pb-4 md:pt-32 md:pb-8 relative z-10">
         <h2 className="text-2xl md:text-3xl font-bold text-bautek-blue">주요 제품</h2>
       </div>
 
