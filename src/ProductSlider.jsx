@@ -160,7 +160,7 @@ export default function ProductSlider() {
                           <img
                             src={feature.icon}
                             alt={`${item.name}의 ${feature.title} 아이콘`}
-                            className="w-7 h-7 flex-shrink-0 mt-1"
+                            className="w-10 h-10 flex-shrink-0 mt-1"
                           />
                           <div>
                             <h4 className="text-lg md:text-xl font-bold text-bautek-blue mb-1">
