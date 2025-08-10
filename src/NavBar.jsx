@@ -214,7 +214,7 @@ export default function NavBar() {
   return (
     <nav
       id="site-nav"
-      className={`fixed top-0 left-0 w-full px-3 py-5 flex justify-between items-center z-50 transition-all duration-300 ${textColorClass} ${bgClass}`}
+      className={`fixed top-0 left-0 w-full px-3 py-3 md:py-5 flex justify-between items-center z-50 transition-all duration-300 ${textColorClass} ${bgClass}`}
     >
       {/* 로고 */}
       <div onClick={handleLogoClick} className="cursor-pointer flex items-center">
