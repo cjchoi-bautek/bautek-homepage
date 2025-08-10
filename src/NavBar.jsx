@@ -30,8 +30,7 @@ export default function NavBar() {
   /** ---------------- 스냅 일시 해제 (컨테이너 대상) ---------------- */
   const disableSnapTemporarily = useCallback((container) => {
     if (!container) return () => {};
-    // 기존 inline 값 백업(클래스는 건드리지 않고 inline만 덮어씀)
-    const prev = container.style.scrollSnapType;
+    const prev = container.style.scrollSnapType; // 클래스는 유지, inline만 조절
     container.style.scrollSnapType = "none";
     return () => {
       container.style.scrollSnapType = prev;
@@ -62,6 +61,42 @@ export default function NavBar() {
     [getScrollParent]
   );
 
+  /** ---------------- 전체 컨테이너를 맨 위로 ---------------- */
+  const getScrollContainers = useCallback(() => {
+    const containers = [];
+    const win = document.scrollingElement || document.documentElement;
+    if (win) containers.push(win);
+
+    // 화면 내 주요 컨테이너에서 스크롤 가능한 것만 수집 (과도한 탐색 방지)
+    document.querySelectorAll("main, section, div").forEach((el) => {
+      const cs = getComputedStyle(el);
+      const canScrollY =
+        /(auto|scroll|overlay)/.test(cs.overflowY) && el.scrollHeight > el.clientHeight;
+      if (canScrollY) containers.push(el);
+    });
+    return containers;
+  }, []);
+
+  const scrollAllToTop = useCallback(() => {
+    const containers = getScrollContainers();
+    const win = document.scrollingElement || document.documentElement;
+
+    // 스냅 잠시 해제
+    const prevSnap = containers.map((c) => c.style.scrollSnapType);
+    containers.forEach((c) => (c.style.scrollSnapType = "none"));
+
+    // 윈도우는 부드럽게, 내부 컨테이너는 즉시 0으로 (주소창/스냅 간섭 최소화)
+    if (win) window.scrollTo({ top: 0, behavior: "smooth" });
+    containers.forEach((c) => {
+      if (c !== win) c.scrollTo({ top: 0, behavior: "auto" });
+    });
+
+    // 복원
+    setTimeout(() => {
+      containers.forEach((c, i) => (c.style.scrollSnapType = prevSnap[i] || ""));
+    }, 300);
+  }, [getScrollContainers]);
+
   /** ---------------- 해시로 이동(재시도 + 컨테이너 스냅 임시 해제) ---------------- */
   const tryScrollToHash = useCallback(
     (hash) => {
@@ -79,13 +114,10 @@ export default function NavBar() {
         if (el) {
           const container = getScrollParent(el);
           if (!restoreSnap) {
-            // 스냅으로 앵커 스크롤이 끌려가지 않게 컨테이너 스냅 잠시 해제
             restoreSnap = disableSnapTemporarily(container);
           }
-          // 레이아웃/이미지 로딩 타이밍 고려해 다음 프레임에 스크롤
           requestAnimationFrame(() => {
             scrollToElWithHeader(el);
-            // 스크롤 안정화 후 스냅 복원
             setTimeout(() => restoreSnap && restoreSnap(), 300);
           });
           return;
@@ -93,7 +125,6 @@ export default function NavBar() {
         if (attempts < maxAttempts) {
           setTimeout(tryOnce, interval);
         } else {
-          // 실패해도 스냅은 복원
           if (restoreSnap) restoreSnap();
         }
       };
@@ -125,9 +156,10 @@ export default function NavBar() {
     if (location.hash) {
       tryScrollToHash(location.hash);
     } else if (!isHome) {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      // 해시 없는 경우에도 실제 스크롤 컨테이너까지 0으로
+      scrollAllToTop();
     }
-  }, [location.pathname, location.hash, isHome, tryScrollToHash]);
+  }, [location.pathname, location.hash, isHome, tryScrollToHash, scrollAllToTop]);
 
   /** ---------------- 스타일 클래스 ---------------- */
   const textColorClass = isHeroVisible ? "text-white" : "text-gray-900";
@@ -201,20 +233,21 @@ export default function NavBar() {
         if (hash) {
           tryScrollToHash(`#${hash}`);
         } else {
-          window.scrollTo({ top: 0, behavior: "smooth" });
+          // 해시가 없을 땐 모든 컨테이너 최상단 정렬
+          scrollAllToTop();
         }
       } else {
-        // 라우팅 후 useEffect에서 tryScrollToHash가 동작
+        // 라우팅 후 useEffect에서 tryScrollToHash/scrollAllToTop 동작
         navigate(`${pathname}${hash ? `#${hash}` : ""}`);
       }
     },
-    [location.pathname, navigate, tryScrollToHash]
+    [location.pathname, navigate, tryScrollToHash, scrollAllToTop]
   );
 
   return (
     <nav
       id="site-nav"
-      className={`fixed top-0 left-0 w-full px-3 py-3 md:py-5 flex justify-between items-center z-50 transition-all duration-300 ${textColorClass} ${bgClass}`}
+      className={`fixed top-0 left-0 w-full px-3 py-2 md:py-5 flex justify-between items-center z-50 transition-all duration-300 ${textColorClass} ${bgClass}`}
     >
       {/* 로고 */}
       <div onClick={handleLogoClick} className="cursor-pointer flex items-center">
