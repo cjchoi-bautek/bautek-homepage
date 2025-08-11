@@ -86,7 +86,8 @@ const rightData = [
   {
     year: "2022년",
     items: [
-      { month: "05월", text: "성과공유기업 인증 (중소벤처기업부장관)" },
+      { month: "04월", text: "소재부품 장비 전문 기업 - 한국산업기술평가관리원" },
+	  { month: "05월", text: "성과공유기업 인증 (중소벤처기업부장관)" },
       { month: "05월", text: "MAIN-BIZ 기업 인증" },
     ],
   },
