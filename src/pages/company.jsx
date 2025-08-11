@@ -207,8 +207,8 @@ export default function Company({ setNavbarVisible }) {
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-2">Vision</h3>
             <p className="text-base text-gray-700 leading-relaxed max-w-sm mx-auto">
-              <strong className="text-bautek-blue font-semibold">정밀한 설계, 우수한 품질, 유연한 대응력</strong>을 기반으로{" "}
-              <strong className="font-semibold"><br />최고의 프리미엄 건축자재 브랜드로 도약</strong>합니다.
+              <strong className="text-bautek-blue font-semibold">정밀한 설계와 품질로</strong>{" "}
+              <strong className="font-semibold"><br />공간의 가치를 선도하는 기업</strong>이 됩니다.
             </p>
           </motion.div>
 
