@@ -1,27 +1,33 @@
-import React, { useMemo, useState } from "react";
+import React, { memo, useMemo } from "react";
+import { MapContainer, TileLayer, Marker, Tooltip, Popup } from "react-leaflet";
+import MarkerClusterGroup from "react-leaflet-cluster";
+import L from "leaflet";
 
-/**
- * 이미지 한 장 위에 마커 찍는 섹션
- */
-export default function RunningProjectsSection({
-  imageSrc = "/maps/korea.svg",                     // public/maps/korea.svg
-  sites = [],                                       // [{ id, contractor, contractorLogo?, name, units, lat, lng }]
-  bounds = [[33.0, 124.5], [39.6, 132.0]],          // [남서][북동] (이미지 외곽에 맞게 필요시 조정)
+/** 클러스터 뱃지 */
+const createClusterCustomIcon = (cluster) => {
+  const count = cluster.getChildCount();
+  const size = count < 10 ? 30 : count < 50 ? 36 : 42;
+  return L.divIcon({
+    html: `<div class="cluster-badge">${count}</div>`,
+    className: "cluster-icon",
+    iconSize: L.point(size, size, true),
+  });
+};
+
+const SAMPLE_SITES = [
+  // { id:'s1', contractor:'GS건설', contractorLogo:'/logos/gs.png', name:'송도 A단지', units:1243, lat:37.382, lng:126.643 },
+];
+
+function RunningProjectsSection({
+  sites = SAMPLE_SITES,
   height = "70vh",
   title = "공사/납품 진행중인 현장",
+  lockZoom = false,               // true면 줌 고정
 }) {
-  const [[south, west], [north, east]] = bounds;
-  const [openId, setOpenId] = useState(null);
-
-  const toPercent = (lat, lng) => {
-    const x = ((lng - west) / (east - west)) * 100;     // left%
-    const y = ((north - lat) / (north - south)) * 100;  // top%
-    return { left: `${x}%`, top: `${y}%` };
-  };
-
-  const markers = useMemo(
-    () => sites.map((s) => ({ ...s, pos: toPercent(s.lat, s.lng) })),
-    [sites]
+  const center = useMemo(() => [36.5, 127.8], []);
+  const koreaBounds = useMemo(
+    () => L.latLngBounds([[33.0, 124.5], [39.6, 132.0]]), // 제주~독도 포함 대략 경계
+    []
   );
 
   return (
@@ -30,56 +36,88 @@ export default function RunningProjectsSection({
         <h2 className="text-2xl md:text-3xl font-extrabold text-[#004A91] mb-2 text-center">
           {title}
         </h2>
-        <p className="text-gray-600 text-center mb-8">
-          전국 진행 중인 현장을 지도에서 확인하세요.
-        </p>
+        <p className="text-gray-600 text-center mb-8">전국 진행 중인 현장을 지도에서 확인하세요.</p>
 
-        <div className="relative w-full overflow-hidden rounded-xl shadow" style={{ height }}>
-          {/* 지도 이미지 */}
-          <img
-            src={imageSrc}
-            alt="대한민국 지도"
-            className="absolute inset-0 w-full h-full object-contain bg-[#F2F4F7]"
-            draggable={false}
-          />
+        <div className="w-full" style={{ height }}>
+          <MapContainer
+            center={center}
+            zoom={7}
+            minZoom={lockZoom ? 7 : 6}
+            maxZoom={lockZoom ? 7 : 12}
+            scrollWheelZoom={!lockZoom}
+            doubleClickZoom={!lockZoom}
+            touchZoom={!lockZoom}
+            boxZoom={!lockZoom}
+            zoomControl={!lockZoom}
+            maxBounds={koreaBounds}
+            maxBoundsViscosity={1.0}
+            preferCanvas
+            style={{ height: "100%", width: "100%" }}
+          >
+            {/* 라벨 없는 밝은 베이스맵 */}
+            <TileLayer
+              attribution="&copy; OpenStreetMap & CARTO"
+              url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
+              noWrap={true}
+              bounds={koreaBounds}
+            />
 
-          {/* 마커 레이어 */}
-          <div className="absolute inset-0">
-            {markers.map((m) => (
-              <button
-                key={m.id}
-                className="absolute -translate-x-1/2 -translate-y-1/2"
-                style={m.pos}
-                onClick={() => setOpenId((id) => (id === m.id ? null : m.id))}
-                onMouseEnter={() => setOpenId(m.id)}
-                onMouseLeave={() => setOpenId(null)}
-                onTouchStart={() => setOpenId(m.id)}
-                aria-label={m.name}
-              >
-                {/* 점 마커 */}
-                <span className="block w-3 h-3 rounded-full bg-[#004A91] ring-2 ring-white shadow" />
-
-                {/* 툴팁 */}
-                {openId === m.id && (
-                  <div className="absolute left-1/2 -translate-x-1/2 -translate-y-full mt-[-10px] whitespace-nowrap">
-                    <div className="rounded-lg bg-white/95 shadow-lg px-3 py-2 text-xs text-gray-900 border border-gray-200">
-                      {m.contractorLogo ? (
-                        <img src={m.contractorLogo} alt={m.contractor} className="h-4 mb-1" />
+            <MarkerClusterGroup
+              chunkedLoading
+              iconCreateFunction={createClusterCustomIcon}
+              showCoverageOnHover={false}
+              spiderfyOnEveryZoom={false}
+            >
+              {sites.map((s) => (
+                <Marker key={s.id} position={[s.lat, s.lng]}>
+                  <Tooltip direction="top" offset={[0, -10]} opacity={0.95}>
+                    <div className="text-[12px] leading-tight">
+                      {s.contractorLogo ? (
+                        <img src={s.contractorLogo} alt={s.contractor} className="h-4 mb-1" />
                       ) : (
-                        <div className="font-semibold mb-0.5">{m.contractor}</div>
+                        <div className="font-semibold">{s.contractor}</div>
                       )}
-                      <div className="font-semibold">{m.name}</div>
+                      <div className="font-medium">{s.name}</div>
                       <div className="text-gray-600">
-                        세대수: {Number(m.units).toLocaleString()}세대
+                        세대수: {Number(s.units).toLocaleString()}세대
                       </div>
                     </div>
-                  </div>
-                )}
-              </button>
-            ))}
-          </div>
+                  </Tooltip>
+                  <Popup>
+                    <div className="text-sm leading-tight">
+                      {s.contractorLogo ? (
+                        <img src={s.contractorLogo} alt={s.contractor} className="h-5 mb-2" />
+                      ) : (
+                        <div className="font-semibold mb-1">{s.contractor}</div>
+                      )}
+                      <div className="font-bold">{s.name}</div>
+                      <div className="text-gray-600">
+                        세대수: {Number(s.units).toLocaleString()}세대
+                      </div>
+                    </div>
+                  </Popup>
+                </Marker>
+              ))}
+            </MarkerClusterGroup>
+          </MapContainer>
+
+          {/* 클러스터 뱃지 스타일 */}
+          <style>{`
+            .cluster-icon { background: transparent; }
+            .cluster-badge {
+              display: grid; place-items: center;
+              width: 100%; height: 100%;
+              border-radius: 9999px;
+              background: rgba(0,74,145,0.9);
+              color: #fff; font-weight: 700; font-size: 12px;
+              box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+              border: 2px solid #fff;
+            }
+          `}</style>
         </div>
       </div>
     </section>
   );
 }
+
+export default memo(RunningProjectsSection);
