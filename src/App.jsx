@@ -54,7 +54,7 @@ function AppLayout() {
                     전국 진행 중인 현장을 지도에서 확인하세요.
                   </p>
 
-                  <RunningProjectsImageMap
+                  <RunningProjectsSection
                     imageSrc="/maps/korea.svg"                // public/maps/korea.svg 에 파일 넣기
                     bounds={[[33.0, 124.5], [39.6, 132.0]]}   // 필요시 조정
                     height="70vh"
