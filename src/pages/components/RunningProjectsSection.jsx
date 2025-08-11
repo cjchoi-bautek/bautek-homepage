@@ -17,6 +17,7 @@ const createClusterCustomIcon = (cluster) => {
 
 const SAMPLE_SITES = [
   { id:'s1', contractor:'GS건설', contractorLogo:'/KeyClient/GS.png', name:'송도 A단지', units:1243, lat:37.382, lng:126.643 },
+  { id:'s2', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
 ];
 
 function RunningProjectsSection({
