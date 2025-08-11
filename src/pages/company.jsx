@@ -135,8 +135,8 @@ export default function Company({ setNavbarVisible }) {
               title: "품질 및 연구개발 시스템",
               desc: (
                 <>
-                  자체 공장 및 연구소 운영을 통해 <br />
-                  생산 공정 전반에 걸친 철저한 품질 관리와 <strong className="font-semibold text-[#003A70]">지속적인 기술개발</strong>을 이어가고 있습니다.
+                  자체 공장 및 연구소 운영을 통해 <br />생산 공정 전반에 걸친 철저한 품질 관리와{" "}
+                  <strong className="font-semibold text-[#003A70]">지속적인 기술개발</strong>을 이어가고 있습니다.
                 </>
               ),
             },
@@ -309,12 +309,19 @@ export default function Company({ setNavbarVisible }) {
         </motion.div>
       </section>
 
-      {/* History — 바깥 래퍼만 id와 snap-none 보유 (내부 컴포넌트에는 snap/id 없음) */}
-      <section id="history" ref={historySectionRef} className="snap-none min-h-screen bg-white">
-        <HistoryTimeline />
+      {/* History — 이 섹션 자체는 main의 snap 대상이 되지 않고, 내부 div가 스크롤을 담당합니다. */}
+      {/* 이 섹션은 스냅을 제거하여 내부 스크롤 컨테이너가 자유롭게 스크롤 되도록 합니다. */}
+      <section id="history" ref={historySectionRef} className="min-h-screen bg-white">
+        {/*
+          ✅ 이 div가 HistoryTimeline의 내용을 감싸고 스크롤을 처리합니다.
+          섹션의 전체 높이를 차지하면서 오버플로우를 처리합니다.
+        */}
+        <div className="w-full h-full overflow-y-auto overscroll-y-contain">
+          <HistoryTimeline />
+        </div>
       </section>
 
-      {/* CI / BI */}
+      {/* CI / BI — 이 섹션은 main의 snap 대상이 됩니다. */}
       <section
         id="CI"
         className="snap-start relative min-h-screen px-6 py-16 md:px-20 bg-white flex flex-col items-center justify-center overflow-hidden"
