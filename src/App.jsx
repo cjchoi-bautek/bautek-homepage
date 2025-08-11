@@ -47,8 +47,8 @@ function AppLayout() {
               <RunningProjectsFromXLSX
 			    src="/data/sites.xlsx"
                 height="70vh"
-                lockZoom={true}
-				lockDrag={true}
+                //lockZoom={true}
+				//lockDrag={true}
                 
               />
 
