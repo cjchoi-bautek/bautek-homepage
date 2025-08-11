@@ -1,6 +1,6 @@
 // src/pages/components/RunningProjectsSection.jsx
-import React, { memo, useMemo } from "react";
-import { MapContainer, TileLayer, Marker, Tooltip, Popup } from "react-leaflet";
+import React, { memo, useMemo, useEffect } from "react";
+import { MapContainer, TileLayer, Marker, Tooltip, Popup, useMap } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import L from "leaflet";
 
@@ -22,9 +22,71 @@ const createClusterCustomIcon = (cluster) => {
 };
 
 const SAMPLE_SITES = [
-  { id:'s1', contractor:'GS건설', contractorLogo:'/KeyClient/GS.png',  name:'송도 A단지', units:1243, lat:37.382, lng:126.643 },
+  { id:'s1', contractor:'GS건설', contractorLogo:'/KeyClient/GS.png',  name:'송도자이풍경채 그라노블 2단지 ', units:548, lat:37.378969, lng:127.680836},
   { id:'s2', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
+  { id:'s3', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
+  { id:'s4', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
+  { id:'s5', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
+  { id:'s6', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
+  { id:'s7', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
+  { id:'s8', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
+  { id:'s9', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
+  { id:'s10', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
+  { id:'s11', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
+  { id:'s12', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
+  { id:'s13', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
+  { id:'s14', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
+  { id:'s15', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
+  { id:'s16', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
+  { id:'s17', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
+  { id:'s18', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
+  { id:'s19', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
+  { id:'s20', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
+  { id:'s21', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
+  { id:'s22', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
+  { id:'s23', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
+  { id:'s24', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
+  { id:'s25', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
+  { id:'s26', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
+  { id:'s27', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
+  { id:'s28', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
+  { id:'s29', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
+  { id:'s30', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
+  { id:'s31', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
+  { id:'s32', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
+  { id:'s33', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
+  { id:'s34', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
 ];
+
+/** ✅ 줌이 minZoom 이상일 때만 지명 라벨을 보이게 하는 오버레이 */
+function LabelsOnZoom({ minZoom = 9 }) {
+  const map = useMap();
+
+  useEffect(() => {
+    // 라벨 전용 pane 생성 (타일 위, 마커 아래)
+    if (!map.getPane("labels")) {
+      const pane = map.createPane("labels");
+      pane.style.zIndex = 450;            // tile(200)보다 높고, marker(600)/tooltip(650)보다 낮게
+      pane.style.pointerEvents = "none";  // 인터랙션 방해 금지
+    }
+
+    const labels = L.tileLayer(
+      "https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png",
+      { pane: "labels", opacity: 0, attribution: "&copy; OpenStreetMap & CARTO" }
+    ).addTo(map);
+
+    const update = () => labels.setOpacity(map.getZoom() >= minZoom ? 1 : 0);
+    update();
+    map.on("zoomend", update);
+
+    return () => {
+      map.off("zoomend", update);
+      map.removeLayer(labels);
+    };
+  }, [map, minZoom]);
+
+  return null;
+}
 
 function RunningProjectsSection({
   sites = SAMPLE_SITES,
@@ -45,7 +107,6 @@ function RunningProjectsSection({
     <section id="running-projects" className="bg-white">
       <div className={`${fullBleed ? "max-w-none px-0" : "max-w-6xl px-4"} mx-auto py-10 md:py-16`}>
         <h2 className="text-2xl md:text-3xl font-extrabold text-[#004A91] mb-2 text-center">{title}</h2>
-        <p className="text-gray-600 text-center mb-8">전국 진행 중인 현장을 지도에서 확인하세요.</p>
 
         <div className="relative z-0 w-full" style={{ height }}>
           <MapContainer
@@ -64,10 +125,14 @@ function RunningProjectsSection({
             preferCanvas
             style={{ height: "100%", width: "100%", background: mapBg }}
           >
+            {/* 베이스: 라벨 없는 밝은 타일 */}
             <TileLayer
               attribution="&copy; OpenStreetMap & CARTO"
               url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
             />
+
+            {/* ✅ 줌 9 이상에서만 지명 라벨 표시 */}
+            <LabelsOnZoom minZoom={9} />
 
             <MarkerClusterGroup
               chunkedLoading
