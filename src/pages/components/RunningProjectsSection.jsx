@@ -1,9 +1,10 @@
+// src/pages/components/RunningProjectsSection.jsx
 import React, { memo, useMemo } from "react";
 import { MapContainer, TileLayer, Marker, Tooltip, Popup } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import L from "leaflet";
 
-/** 클러스터 뱃지 */
+/* 클러스터 뱃지 */
 const createClusterCustomIcon = (cluster) => {
   const count = cluster.getChildCount();
   const size = count < 10 ? 30 : count < 50 ? 36 : 42;
@@ -22,44 +23,51 @@ function RunningProjectsSection({
   sites = SAMPLE_SITES,
   height = "70vh",
   title = "진행 현장",
-  lockZoom = false,               // true면 줌 고정
+  lockZoom = false,          // true면 줌 고정
+  lockDrag = false,          // true면 패닝도 잠금
+  fullBleed = false,         // true면 좌우 여백 없이 풀브리드
+  mapBg = "transparent",     // 지도 컨테이너 배경색: "transparent" | "#fff" 등
 }) {
   const center = useMemo(() => [36.5, 127.8], []);
+
+  // 가운데 정렬 안정화를 위해 '여유' 있는 경계(보이는 영역, panning 제한용)
   const koreaBounds = useMemo(
-    () => L.latLngBounds([[33.0, 124.5], [39.6, 130.0]]), // 제주~독도 포함 대략 경계
+    () => L.latLngBounds([[31.0, 121.0], [41.5, 134.5]]),
     []
   );
 
   return (
     <section id="running-projects" className="bg-white">
-      <div className="max-w-6xl mx-auto px-4 py-10 md:py-16">
+      <div className={`${fullBleed ? "max-w-none px-0" : "max-w-6xl px-4"} mx-auto py-10 md:py-16`}>
         <h2 className="text-2xl md:text-3xl font-extrabold text-[#004A91] mb-2 text-center">
           {title}
         </h2>
-        <p className="text-gray-600 text-center mb-8">전국 진행 중인 현장을 지도에서 확인하세요.</p>
+        <p className="text-gray-600 text-center mb-8">
+          전국 진행 중인 현장을 지도에서 확인하세요.
+        </p>
 
-        <div className="w-full" style={{ height }}>
+        <div className="relative z-0 w-full" style={{ height }}>
           <MapContainer
             center={center}
             zoom={7}
-            minZoom={lockZoom ? 7 : 6}
+            minZoom={lockZoom ? 7 : 7}           // 줌아웃 방지(7 아래로 안내림)
             maxZoom={lockZoom ? 7 : 12}
             scrollWheelZoom={!lockZoom}
             doubleClickZoom={!lockZoom}
             touchZoom={!lockZoom}
             boxZoom={!lockZoom}
+            dragging={!lockDrag}
             zoomControl={!lockZoom}
             maxBounds={koreaBounds}
-            maxBoundsViscosity={1.0}
+            maxBoundsViscosity={0.85}
             preferCanvas
-            style={{ height: "100%", width: "100%" }}
+            /* ⬇️ 회색 배경 제거: 컨테이너 배경을 직접 지정 */
+            style={{ height: "100%", width: "100%", background: mapBg }}
           >
-            {/* 라벨 없는 밝은 베이스맵 */}
+            {/* 라벨 없는 밝은 베이스맵 (bounds/noWrap 제거해 회색 띠 방지) */}
             <TileLayer
               attribution="&copy; OpenStreetMap & CARTO"
               url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
-              noWrap={true}
-              bounds={koreaBounds}
             />
 
             <MarkerClusterGroup
