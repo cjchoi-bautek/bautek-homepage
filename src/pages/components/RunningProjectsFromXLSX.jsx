@@ -1,14 +1,21 @@
 // src/pages/components/RunningProjectsFromXLSX.jsx
 import React, { useEffect, useMemo, useState, memo } from "react";
-import { MapContainer, TileLayer, Marker, Tooltip, Popup } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Tooltip,
+  Popup,
+  Pane,
+} from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import * as XLSX from "xlsx";
 import L from "leaflet";
 
 /** ---------- 튜닝 포인트(길이/기준) ---------- */
 const KOREA_CENTER_LON = 127.8;
-const CARD_OFFSET_PX   = 110;
-const CONNECTOR_LEN_PX = 90;
+const CARD_OFFSET_PX   = 130;   // 카드-마커 간격(조절 가능)
+const CONNECTOR_LEN_PX = 110;   // 카드에서 마커로 나가는 선 길이
 const DOT_OUT_PX       = CONNECTOR_LEN_PX + 10;
 
 /** 클러스터 뱃지 */
@@ -34,7 +41,7 @@ function mapRowToSite(row, idx) {
     contractorLogo: row.contractorLogo ?? row.로고 ?? "",
     name: row.name ?? row.현장명 ?? "",
     units: Number(row.units ?? row.세대수 ?? 0),
-    lat, lng
+    lat, lng,
   };
 }
 
@@ -47,6 +54,7 @@ function RunningProjectsFromXLSX({
   lockDrag = false,
   fullBleed = false,
   mapBg = "transparent",
+  note = "※ 25년 8월 기준",   // 하단 주석 문구
 }) {
   const [sites, setSites] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -68,9 +76,7 @@ function RunningProjectsFromXLSX({
         if (!ws) throw new Error("시트를 찾을 수 없습니다.");
 
         const rows = XLSX.utils.sheet_to_json(ws, { defval: "" });
-        const parsed = rows
-          .map((row, i) => mapRowToSite(row, i))
-          .filter(Boolean);
+        const parsed = rows.map((row, i) => mapRowToSite(row, i)).filter(Boolean);
 
         if (mounted) setSites(parsed);
       } catch (e) {
@@ -93,10 +99,17 @@ function RunningProjectsFromXLSX({
 
   return (
     <section id="running-projects" className="bg-white">
-      <div className={`${fullBleed ? "max-w-none px-0" : "max-w-6xl px-4"} mx-auto py-10 md:py-16`}>
-        <h2 className="text-2xl md:text-3xl font-extrabold text-[#004A91] mb-2 text-center">
+      {/* 제목을 약간 위로, 지도와는 간격 확보 */}
+      <div className={`${fullBleed ? "max-w-none px-0" : "max-w-6xl px-4"} mx-auto pt-6 md:pt-8 pb-12 md:pb-16`}>
+        <h2
+          className="text-2xl md:text-3xl font-extrabold text-[#004A91] text-center animate-fadeDown"
+          style={{ letterSpacing: "-0.02em" }}
+        >
           {title}
         </h2>
+        <p className="text-gray-600 text-center mt-2 mb-6 md:mb-8 opacity-90">
+          전국 진행 중인 현장을 지도에서 확인하세요.
+        </p>
 
         {loading && (
           <div className="text-center text-gray-500 py-8">현장 데이터를 불러오는 중…</div>
@@ -121,20 +134,25 @@ function RunningProjectsFromXLSX({
               maxBounds={koreaBounds}
               maxBoundsViscosity={0.85}
               preferCanvas
-              style={{ height: "100%", width: "100%", background: mapBg }}
+              style={{ height: "100%", width: "100%", background: mapBg, borderRadius: 14 }}
+              className="shadow-lg hover:shadow-xl transition-shadow duration-300"
             >
+              {/* 베이스맵(라벨 없는 타일) */}
               <TileLayer
                 attribution="&copy; OpenStreetMap & CARTO"
                 url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
               />
+              {/* 라벨 오버레이(확대 시 지명 보이게) */}
+              <Pane name="labels" style={{ zIndex: 650, pointerEvents: "none" }}>
+                <TileLayer url="https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png" />
+              </Pane>
 
               <MarkerClusterGroup
                 chunkedLoading
                 iconCreateFunction={createClusterCustomIcon}
                 showCoverageOnHover={false}
                 spiderfyOnEveryZoom={false}
-                // 줌 조금만 올려도 개별 마커로 보고 싶다면:
-                // disableClusteringAtZoom={9}
+                // disableClusteringAtZoom={9} // 필요시 주석 해제
               >
                 {sites.map((s) => {
                   const side = s.lng < KOREA_CENTER_LON ? "left" : "right";
@@ -142,14 +160,28 @@ function RunningProjectsFromXLSX({
                   const sideClass = side === "right" ? "side-card--right" : "side-card--left";
 
                   return (
-                    <Marker key={s.id} position={[s.lat, s.lng]}>
+                    <Marker
+                      key={s.id}
+                      position={[s.lat, s.lng]}
+                      eventHandlers={{
+                        mouseover: (e) => e.target.openTooltip(),  // 호버: 카드만
+                        mouseout:  (e) => e.target.closeTooltip(),
+                        click:     (e) => {                        // 클릭: 팝업만
+                          e.target.closeTooltip();
+                          e.target.openPopup();
+                        },
+                        popupopen: (e) => e.target.closeTooltip(),
+                      }}
+                    >
+                      {/* 옆으로 긴 카드형 툴팁 */}
                       <Tooltip
+                        interactive
                         direction={side}
                         offset={offset}
                         opacity={1}
                         className={`side-card ${sideClass}`}
                       >
-                        <div className="card">
+                        <div className="card animate-cardIn hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-200">
                           <div className="connector" />
                           <div className="dot" />
                           <div className="card-body">
@@ -166,16 +198,12 @@ function RunningProjectsFromXLSX({
                         </div>
                       </Tooltip>
 
-                      <Popup>
+                      {/* 모바일/클릭용 팝업(간단 정보) */}
+                      <Popup autoClose closeOnClick>
                         <div className="text-sm leading-tight">
-                          {s.contractorLogo ? (
-                            <img src={s.contractorLogo} alt={s.contractor} className="h-5 mb-2" />
-                          ) : (
-                            <div className="font-semibold mb-1">{s.contractor}</div>
-                          )}
-                          <div className="font-bold">{s.name}</div>
-                          <div className="text-gray-600">
-                            세대수: {Number(s.units).toLocaleString()}세대
+                          <div className="font-bold mb-1">{s.name}</div>
+                          <div className="text-gray-700">
+                            {s.contractor} · {Number(s.units).toLocaleString()}세대
                           </div>
                         </div>
                       </Popup>
@@ -185,8 +213,28 @@ function RunningProjectsFromXLSX({
               </MarkerClusterGroup>
             </MapContainer>
 
-            {/* 스타일(카드/연결선/클러스터) */}
+            {/* 하단 주석 */}
+            <div className="mt-2 text-right text-[11px] md:text-xs text-gray-500 select-none">
+              {note}
+            </div>
+
+            {/* 스타일(카드/연결선/클러스터/애니메이션/인터랙션) */}
             <style>{`
+              /* 타이틀 페이드+슬라이드 다운 */
+              @keyframes fadeDown {
+                from { opacity: 0; transform: translateY(-6px); }
+                to   { opacity: 1; transform: translateY(0); }
+              }
+              .animate-fadeDown { animation: fadeDown .45s ease-out both; }
+
+              /* 카드 등장 */
+              @keyframes cardIn {
+                from { opacity: 0; transform: translateY(4px); }
+                to   { opacity: 1; transform: translateY(0); }
+              }
+              .animate-cardIn { animation: cardIn .25s ease-out both; }
+
+              /* 클러스터 뱃지 */
               .cluster-icon { background: transparent; }
               .cluster-badge {
                 display: grid; place-items: center;
@@ -197,6 +245,8 @@ function RunningProjectsFromXLSX({
                 box-shadow: 0 2px 6px rgba(0,0,0,0.25);
                 border: 2px solid #fff;
               }
+
+              /* 카드형 툴팁 */
               .leaflet-tooltip.side-card { background: transparent; border: none; box-shadow: none; padding: 0; white-space: normal; }
               .side-card .card {
                 position: relative;
@@ -204,31 +254,39 @@ function RunningProjectsFromXLSX({
                 border: 1px solid #e5e7eb;
                 border-radius: 14px;
                 padding: 14px 16px;
-                min-width: 340px;
-                max-width: 420px;
-                box-shadow: 0 14px 28px rgba(0,0,0,.14);
+                min-width: 360px;
+                max-width: 460px;
+                box-shadow: 0 14px 28px rgba(0,0,0,.12);
               }
               .side-card .connector {
-                position: absolute;
-                top: 50%;
-                width: ${CONNECTOR_LEN_PX}px;
-                height: 2px;
-                background: #004A91;
-                transform: translateY(-50%);
+                position: absolute; top: 50%;
+                width: ${CONNECTOR_LEN_PX}px; height: 2px;
+                background: #004A91; transform: translateY(-50%);
               }
               .side-card--right .connector { left: -${CONNECTOR_LEN_PX}px; }
               .side-card--left  .connector { right: -${CONNECTOR_LEN_PX}px; }
+
               .side-card .dot {
-                position: absolute;
-                top: 50%;
-                width: 10px; height: 10px;
-                border-radius: 9999px;
-                background: #004A91;
-                transform: translateY(-50%);
+                position: absolute; top: 50%;
+                width: 10px; height: 10px; border-radius: 9999px;
+                background: #004A91; transform: translateY(-50%);
                 box-shadow: 0 0 0 2px #fff;
               }
               .side-card--right .dot { left: -${DOT_OUT_PX}px; }
               .side-card--left  .dot { right: -${DOT_OUT_PX}px; }
+
+              /* 컨트롤/마커 인터랙션 */
+              .leaflet-control-zoom a {
+                transition: transform .15s ease, box-shadow .15s ease;
+                border-radius: 10px !important;
+              }
+              .leaflet-control-zoom a:hover { transform: translateY(-1px); box-shadow: 0 6px 12px rgba(0,0,0,.08); }
+
+              .leaflet-marker-icon {
+                filter: drop-shadow(0 2px 4px rgba(0,0,0,.12));
+                transition: filter .15s ease;
+              }
+              .leaflet-marker-icon:hover { filter: brightness(1.1) drop-shadow(0 6px 10px rgba(0,0,0,.18)); }
             `}</style>
           </div>
         )}
