@@ -31,7 +31,7 @@ const SAMPLE_SITES = [
 function RunningProjectsSection({
   sites = SAMPLE_SITES,
   height = "70vh",
-  title = "공사/납품 진행중인 현장",
+  title = "진행 현장",
 }) {
   // 한국 중심/줌
   const center = useMemo(() => [36.5, 127.8], []);
