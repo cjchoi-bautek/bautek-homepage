@@ -12,23 +12,15 @@ import Products from "./pages/Products";
 import FrameGallery from "./pages/FrameGallery";
 import SupportPage from "./pages/SupportPage";
 
-/* ✅ 진행현장 지도용: react-leaflet v4 CSS & 아이콘 경로 fix */
-import "leaflet/dist/leaflet.css";
-import "./map/leafletIconFix";
 
-/* ✅ 네가 만든 진행현장 섹션 컴포넌트 임포트
-   ─ 실제 위치가 `src/pages/components/RunningProjectsSection.jsx`면 아래 경로 사용
-   ─ 만약 `src/components/RunningProjectsSection.jsx`라면 './components/RunningProjectsSection' 로 바꿔줘 */
-import RunningProjectsSection from "./pages/components/RunningProjectsSection";
+/* ✅ 이미지 지도 컴포넌트 임포트 (경로 확인) */
+import RunningProjectsImageMap from "./pages/components/RunningProjectsImageMap";
 
-// 라우터 내부에 위치하여 useLocation 훅을 사용할 수 있는 컴포넌트
 function AppLayout() {
-  // 내비게이션 바의 상태를 관리합니다. 기본값은 true(보임)
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
 
   return (
     <div className="font-pretendard">
-      {/* isNavbarVisible 상태에 따라 NavBar를 조건부 렌더링 */}
       {isNavbarVisible && <NavBar />}
 
       <Routes>
@@ -40,28 +32,47 @@ function AppLayout() {
               <section className="min-h-[100dvh] md:h-screen md:snap-start">
                 <HeroSection />
               </section>
+
               <section className="min-h-[100dvh] md:h-screen md:snap-start bg-white">
                 <ProductSlider />
               </section>
+
               <section className="min-h-[100dvh] md:h-screen md:snap-start bg-gradient-to-br from-gray-400 to-white via-gray-200 to-gray-500">
                 <KeyClient />
               </section>
 
-              {/* ✅ KeyClient ↔ MapSection 사이에 섹션 래퍼로 감싸서 삽입 (스냅/높이 유지) */}
-              <section id="running-projects" className="min-h-[100dvh] md:h-screen md:snap-start bg-white">
-                <RunningProjectsSection />
+              {/* ✅ 진행현장: 이미지 지도 버전 */}
+              <section
+                id="running-projects"
+                className="min-h-[100dvh] md:h-screen md:snap-start bg-white"
+              >
+                <div className="max-w-6xl mx-auto px-4 py-10 md:py-16">
+                  <h2 className="text-2xl md:text-3xl font-extrabold text-[#004A91] mb-2 text-center">
+                    진행 현장
+                  </h2>
+                  <p className="text-gray-600 text-center mb-8">
+                    전국 진행 중인 현장을 지도에서 확인하세요.
+                  </p>
+
+                  <RunningProjectsImageMap
+                    imageSrc="/maps/korea.svg"                // public/maps/korea.svg 에 파일 넣기
+                    bounds={[[33.0, 124.5], [39.6, 132.0]]}   // 필요시 조정
+                    height="70vh"
+                    sites={[
+                      { id:'s1', contractor:'GS건설', contractorLogo:'/logos/gs.png', name:'송도 A단지', units:1243, lat:37.382, lng:126.643 },
+                    ]}
+                  />
+                </div>
               </section>
 
               <section className="min-h-[100dvh] md:h-screen md:snap-start bg-[#F4F4F4]">
                 <MapSection />
               </section>
-			   
             </main>
           }
         />
 
         {/* 서브 페이지 */}
-        {/* Company 라우트에 내비게이션 바 상태를 변경하는 함수를 props로 전달 */}
         <Route
           path="/company"
           element={<Company setNavbarVisible={setIsNavbarVisible} />}
@@ -70,7 +81,6 @@ function AppLayout() {
         <Route path="/frame-gallery" element={<FrameGallery />} />
         <Route path="/support" element={<SupportPage />} />
       </Routes>
-      
     </div>
   );
 }
