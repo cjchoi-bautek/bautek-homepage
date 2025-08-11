@@ -51,7 +51,7 @@ export default function Company({ setNavbarVisible }) {
   return (
     <main
       ref={mainRef}
-      className="h-screen overflow-y-auto snap-y snap-proximity font-Pretendard"
+      className="h-screen overflow-y-auto overscroll-y-contain md:snap-y md:snap-proximity font-Pretendard"
     >
       {/* Greeting */}
       <section
