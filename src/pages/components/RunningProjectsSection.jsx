@@ -77,7 +77,7 @@ function RunningProjectsSection({
           style={{ height: "100%", width: "100%" }}
           preferCanvas
         >
-          <ImageOverlay url="/maps/korea.png" bounds={koreaBounds} opacity={1} />
+          <ImageOverlay url="/maps/korea.svg" bounds={koreaBounds} opacity={1} />
 
           <MarkerClusterGroup
             chunkedLoading
