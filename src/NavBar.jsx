@@ -11,176 +11,7 @@ export default function NavBar() {
 
   const isHome = location.pathname === "/";
 
-  /** ---------------- 공통 유틸: 스크롤 부모 찾기 ---------------- */
-  const getScrollParent = useCallback((el) => {
-    let node = el?.parentElement;
-    while (node) {
-      const style = getComputedStyle(node);
-      const canScrollY =
-        /(auto|scroll|overlay)/.test(style.overflowY) ||
-        node.scrollHeight > node.clientHeight;
-      if (canScrollY) return node;
-      node = node.parentElement;
-    }
-    return document.scrollingElement || document.documentElement;
-  }, []);
-
-  /** ---------------- 스냅/스크롤비헤이비어 임시 OFF 후, 스크롤 멈춤 감지로 복원 ---------------- */
-  const runWithSnapOff = useCallback((container, action) => {
-    if (!container) return;
-
-    const prevSnap = container.style.scrollSnapType;
-    const prevBehavior = container.style.scrollBehavior;
-
-    // 임시 비활성
-    container.style.scrollSnapType = "none";
-    container.style.scrollBehavior = "auto"; // 즉시 이동
-
-    let idleTimer = null;
-    const RESTORE_IDLE_MS = 150; // 스크롤이 멈춘 뒤 복원
-    const FALLBACK_MS = 600;     // 혹시 스크롤 이벤트가 거의 없을 때를 대비한 백업 복원
-
-    const restore = () => {
-      container.removeEventListener("scroll", onScroll);
-      // Company에서 history구간에 스냅 잠금이 걸린 경우 복원 금지
-      if (container?.dataset?.snapLock === "1") return;
-      container.style.scrollBehavior = prevBehavior;
-      container.style.scrollSnapType = prevSnap;
-    };
-
-    const onScroll = () => {
-      if (idleTimer) clearTimeout(idleTimer);
-      idleTimer = setTimeout(restore, RESTORE_IDLE_MS);
-    };
-
-    container.addEventListener("scroll", onScroll, { passive: true });
-
-    try {
-      action?.();
-    } finally {
-      // 이동이 아주 짧아 scroll 이벤트가 거의 없을 때를 대비
-      idleTimer = setTimeout(restore, FALLBACK_MS);
-    }
-  }, []);
-
-  /** ---------------- 네비 높이 보정 + 컨테이너 스크롤 ---------------- */
-  const scrollToElWithHeader = useCallback(
-    (el) => {
-      if (!el) return;
-      const container = getScrollParent(el);
-      const nav = document.getElementById("site-nav");
-      const navH = nav ? Math.ceil(nav.getBoundingClientRect().height) : 0;
-      const safeGap = 8;
-
-      if (
-        container === document.scrollingElement ||
-        container === document.documentElement
-      ) {
-        const y =
-          window.pageYOffset +
-          el.getBoundingClientRect().top -
-          navH -
-          safeGap;
-        // runWithSnapOff에서 scrollBehavior=auto로 바꿔줬으므로 즉시 이동
-        window.scrollTo({ top: y, behavior: "auto" });
-      } else {
-        const rect = el.getBoundingClientRect();
-        const cRect = container.getBoundingClientRect();
-        const target =
-          container.scrollTop + (rect.top - cRect.top) - navH - safeGap;
-        container.scrollTo({ top: target, behavior: "auto" });
-      }
-    },
-    [getScrollParent]
-  );
-
-  /** ---------------- 전체 컨테이너를 맨 위로 ---------------- */
-  const getScrollContainers = useCallback(() => {
-    const containers = [];
-    const win = document.scrollingElement || document.documentElement;
-    if (win) containers.push(win);
-
-    document.querySelectorAll("main, section, div").forEach((el) => {
-      const cs = getComputedStyle(el);
-      const canScrollY =
-        /(auto|scroll|overlay)/.test(cs.overflowY) &&
-        el.scrollHeight > el.clientHeight;
-      if (canScrollY) containers.push(el);
-    });
-    return containers;
-  }, []);
-
-  const scrollAllToTop = useCallback(() => {
-    const containers = getScrollContainers();
-    const win = document.scrollingElement || document.documentElement;
-
-    const prevSnap = containers.map((c) => c.style.scrollSnapType);
-    const prevBehavior = containers.map((c) => c.style.scrollBehavior);
-
-    containers.forEach((c) => {
-      c.style.scrollSnapType = "none";
-      c.style.scrollBehavior = "auto";
-    });
-
-    if (win) window.scrollTo({ top: 0, behavior: "auto" });
-    containers.forEach((c) => {
-      if (c !== win) c.scrollTo({ top: 0, behavior: "auto" });
-    });
-
-    // 스크롤 멈춤 감지로 복원
-    const RESTORE_IDLE_MS = 150;
-    const FALLBACK_MS = 600;
-    const onScroll = [];
-    containers.forEach((c, i) => {
-      let idleTimer = null;
-      const restore = () => {
-        c.removeEventListener("scroll", onScroll[i]);
-        if (c?.dataset?.snapLock === "1") return;
-        c.style.scrollBehavior = prevBehavior[i] || "";
-        c.style.scrollSnapType = prevSnap[i] || "";
-      };
-      onScroll[i] = () => {
-        if (idleTimer) clearTimeout(idleTimer);
-        idleTimer = setTimeout(restore, RESTORE_IDLE_MS);
-      };
-      c.addEventListener("scroll", onScroll[i], { passive: true });
-      // fallback 복원
-      setTimeout(restore, FALLBACK_MS);
-    });
-  }, [getScrollContainers]);
-
-  /** ---------------- 해시로 이동(재시도 + 스크롤멈춤기반 복원) ---------------- */
-  const tryScrollToHash = useCallback(
-    (hash) => {
-      if (!hash) return;
-      const id = hash.startsWith("#") ? hash.substring(1) : hash;
-
-      let attempts = 0;
-      const maxAttempts = 30; // ~1.5s
-      const interval = 50;
-
-      const tryOnce = () => {
-        attempts += 1;
-        const el = document.getElementById(id);
-        if (el) {
-          const container = getScrollParent(el);
-          runWithSnapOff(container, () => {
-            // 다음 프레임에 정확한 위치로 즉시 이동
-            requestAnimationFrame(() => scrollToElWithHeader(el));
-          });
-          return;
-        }
-        if (attempts < maxAttempts) {
-          setTimeout(tryOnce, interval);
-        }
-      };
-
-      tryOnce();
-    },
-    [getScrollParent, runWithSnapOff, scrollToElWithHeader]
-  );
-
-  /** ---------------- Hero 가시성(색상/배경 전환) ---------------- */
+  // Hero 가시성 (홈에서만 색상 전환)
   useEffect(() => {
     if (!isHome) {
       setIsHeroVisible(false);
@@ -197,22 +28,54 @@ export default function NavBar() {
     return () => observer.disconnect();
   }, [isHome]);
 
-  /** ---------------- 라우트/해시 변경 시 앵커 스크롤 ---------------- */
+  // 고정 헤더 높이 보정 스크롤
+  const scrollToIdWithHeader = useCallback((id) => {
+    const el = document.getElementById(id);
+    const nav = document.getElementById("site-nav");
+    if (!el) return;
+
+    const navH = nav ? Math.ceil(nav.getBoundingClientRect().height) : 0;
+    const safeGap = 8;
+    const y = window.pageYOffset + el.getBoundingClientRect().top - navH - safeGap;
+    window.scrollTo({ top: y, behavior: "smooth" });
+  }, []);
+
+  // 해시 스크롤 (요소 로딩 대기)
+  const tryScrollToHash = useCallback((hash) => {
+    if (!hash) return;
+    const id = hash.startsWith("#") ? hash.slice(1) : hash;
+
+    let attempts = 0;
+    const maxAttempts = 30;
+    const interval = 50;
+
+    const tick = () => {
+      attempts += 1;
+      const el = document.getElementById(id);
+      if (el) {
+        // 다음 프레임에 실제 위치로 스크롤
+        requestAnimationFrame(() => scrollToIdWithHeader(id));
+        return;
+      }
+      if (attempts < maxAttempts) setTimeout(tick, interval);
+    };
+    tick();
+  }, [scrollToIdWithHeader]);
+
+  // 라우트/해시 변경 시 처리
   useEffect(() => {
     if (location.hash) {
       tryScrollToHash(location.hash);
     } else if (!isHome) {
-      scrollAllToTop();
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
-  }, [location.pathname, location.hash, isHome, tryScrollToHash, scrollAllToTop]);
+  }, [location.pathname, location.hash, isHome, tryScrollToHash]);
 
-  /** ---------------- 스타일 클래스 ---------------- */
   const textColorClass = isHeroVisible ? "text-white" : "text-gray-900";
   const bgClass = isHeroVisible
     ? "bg-transparent"
     : "bg-white/80 backdrop-blur-md border-b border-gray-200 shadow-sm";
 
-  /** ---------------- 메뉴 ---------------- */
   const menuItems = [
     {
       label: "회사소개",
@@ -245,7 +108,6 @@ export default function NavBar() {
     },
   ];
 
-  /** ---------------- 로고 클릭 ---------------- */
   const handleLogoClick = useCallback(() => {
     if (isHome) {
       const hero = document.getElementById("hero-section");
@@ -255,19 +117,15 @@ export default function NavBar() {
     }
   }, [isHome, navigate]);
 
-  /** ---------------- 데스크톱 호버 ---------------- */
-  const handleMouseEnter = useCallback((idx) => {
+  const handleMouseEnter = useCallback((key) => {
     clearTimeout(timeoutRef.current);
-    setHoveredMenu(idx);
+    setHoveredMenu(key);
   }, []);
 
   const handleMouseLeave = useCallback(() => {
-    timeoutRef.current = setTimeout(() => {
-      setHoveredMenu(null);
-    }, 200);
+    timeoutRef.current = setTimeout(() => setHoveredMenu(null), 200);
   }, []);
 
-  /** ---------------- 서브메뉴 클릭 ---------------- */
   const handleSubmenuClick = useCallback(
     (path) => {
       const [pathname, hash] = path.split("#");
@@ -275,16 +133,12 @@ export default function NavBar() {
       setIsMobileMenuOpen(false);
 
       if (location.pathname === pathname) {
-        if (hash) {
-          tryScrollToHash(`#${hash}`);
-        } else {
-          scrollAllToTop();
-        }
+        hash ? tryScrollToHash(`#${hash}`) : window.scrollTo({ top: 0, behavior: "smooth" });
       } else {
         navigate(`${pathname}${hash ? `#${hash}` : ""}`);
       }
     },
-    [location.pathname, navigate, tryScrollToHash, scrollAllToTop]
+    [location.pathname, navigate, tryScrollToHash]
   );
 
   return (
@@ -349,9 +203,7 @@ export default function NavBar() {
                     {menu.label}
                   </button>
                   <button
-                    onClick={() =>
-                      setHoveredMenu(hoveredMenu === menu.label ? null : menu.label)
-                    }
+                    onClick={() => setHoveredMenu(hoveredMenu === menu.label ? null : menu.label)}
                     className="text-gray-600 text-sm"
                   >
                     {hoveredMenu === menu.label ? "▲" : "▼"}
