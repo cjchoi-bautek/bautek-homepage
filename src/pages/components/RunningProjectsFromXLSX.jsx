@@ -58,10 +58,10 @@ function RunningProjectsFromXLSX({
   const [sites, setSites] = useState([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState("");
-  const isMobile = useMemo(() => {
-    if (typeof window === 'undefined') return false;
-    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-  }, []);
+  const isMobile = useMemo(() => {
+    if (typeof window === 'undefined') return false;
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  }, []);
 
   useEffect(() => {
     let mounted = true;
@@ -108,7 +108,9 @@ function RunningProjectsFromXLSX({
         >
           {title}
         </h2>
-        
+        <p className="text-gray-600 text-center mt-2 mb-6 md:mb-8 opacity-90">
+          전국 진행 중인 현장을 지도에서 확인하세요.
+        </p>
 
         {loading && (
           <div className="text-center text-gray-500 py-8">현장 데이터를 불러오는 중…</div>
@@ -156,15 +158,13 @@ function RunningProjectsFromXLSX({
                     <Marker
                       key={s.id}
                       position={[s.lat, s.lng]}
-                      // 🚨 기기에 따라 이벤트 핸들러를 다르게 설정
                       eventHandlers={isMobile ? {
-                        click: (e) => e.target.openTooltip(), // 모바일: 클릭 시 툴팁 열기
+                        click: (e) => e.target.openTooltip(),
                       } : {
-                        mouseover: (e) => e.target.openTooltip(), // 데스크톱: 호버 시 툴팁 열기
-                        mouseout: (e) => e.target.closeTooltip() // 데스크톱: 호버 해제 시 툴팁 닫기
+                        mouseover: (e) => e.target.openTooltip(),
+                        mouseout: (e) => e.target.closeTooltip()
                       }}
                     >
-                      {/* 데스크톱과 모바일 모두 동일한 카드형 툴팁 사용 */}
                       <Tooltip
                         interactive
                         direction={side}
