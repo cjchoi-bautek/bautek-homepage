@@ -299,7 +299,7 @@ export default function NavBar() {
       {/* 모바일 메뉴 */}
       {isMobileMenuOpen && (
         <div className="absolute top-full left-0 w-full px-4 mt-2 md:hidden z-40">
-          <div className="bg-white/60 backdrop-blur-md max-w-[320px] mx-auto rounded-xl shadow-md transition-all duration-300 ease-in-out">
+          <div className="bg-white backdrop-blur-md max-w-[320px] mx-auto rounded-xl shadow-md transition-all duration-300 ease-in-out">
             {menuItems.map((menu) => (
               <div key={menu.label} className="border-b border-gray-200">
                 <div className="flex justify-between items-center px-4 py-3">

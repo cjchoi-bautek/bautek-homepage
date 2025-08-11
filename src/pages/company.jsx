@@ -3,17 +3,13 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import HistoryTimeline from './components/history';
 
-// Motion Variants (재사용 가능한 애니메이션 설정)
+// Motion Variants
 const sectionVariants = {
   hidden: { opacity: 0, y: 50 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: {
-      duration: 0.7,
-      ease: "easeOut",
-      staggerChildren: 0.2
-    }
+    transition: { duration: 0.7, ease: "easeOut", staggerChildren: 0.2 }
   },
 };
 
@@ -22,61 +18,42 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
 };
 
-// App.jsx에서 내비게이션 바 상태를 변경할 함수를 prop으로 받습니다.
 export default function Company({ setNavbarVisible }) {
   const [videoKey, setVideoKey] = useState(0);
-  const historyRef = useRef(null); // history 섹션의 ref를 생성합니다.
+  const historyRef = useRef(null);
+  const mainRef = useRef(null); // ✅ 스크롤 컨테이너 참조
 
   useEffect(() => {
-    // URL 해시(#)로 스크롤 이동하는 기존 로직
-    const hash = window.location.hash;
-    if (hash) {
-      const target = document.querySelector(hash);
-      if (target) {
-        setTimeout(() => {
-          target.scrollIntoView({ behavior: "smooth" });
-        }, 100);
-      }
-    }
+    // ❌ (삭제) 해시 스크롤은 NavBar가 전역에서 처리하므로 중복 방지
+    // const hash = window.location.hash;
+    // if (hash) { ...scrollIntoView... }
 
-    // Intersection Observer 설정
+    // ✅ history 섹션 진입 시 Navbar 토글 — 관찰 기준을 메인 스크롤 컨테이너로
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // history 섹션이 뷰포트 안에 들어왔을 때
-        if (entry.isIntersecting) {
-          setNavbarVisible(false); // 내비게이션 바 숨김
-        } else {
-          setNavbarVisible(true); // 내비게이션 바 표시
-        }
+        if (entry.isIntersecting) setNavbarVisible(false);
+        else setNavbarVisible(true);
       },
       {
-        root: null, // 뷰포트를 기준으로 관찰
-        threshold: 0.5, // 요소의 50%가 보이면 감지
+        root: mainRef.current ?? null, // ← 윈도우가 아니라 내부 스크롤 컨테이너 기준
+        threshold: 0.5,
       }
     );
 
-    // historyRef가 현재 존재하면, observer를 연결합니다.
-    if (historyRef.current) {
-      observer.observe(historyRef.current);
-    }
-
-    // 컴포넌트가 언마운트될 때 observer를 정리합니다.
-    return () => {
-      if (historyRef.current) {
-        observer.unobserve(historyRef.current);
-      }
-    };
-  }, [setNavbarVisible]); // setNavbarVisible이 변경될 때만 useEffect를 다시 실행
+    if (historyRef.current) observer.observe(historyRef.current);
+    return () => observer.disconnect();
+  }, [setNavbarVisible]);
 
   const handleVideoEnd = () => {
-    setTimeout(() => {
-      setVideoKey(prevKey => prevKey + 1);
-    }, 500);
+    setTimeout(() => setVideoKey((k) => k + 1), 500);
   };
 
   return (
-    <main className="h-screen overflow-y-auto snap-y snap-proximity font-Pretendard">
-      {/* Greeting Section (인사말) - 최종 버전 */}
+    <main
+      ref={mainRef}
+      className="h-screen overflow-y-auto snap-y snap-proximity font-Pretendard"
+    >
+      {/* Greeting */}
       <section
         id="greeting"
         className="snap-start min-h-screen relative flex flex-col items-start justify-center overflow-hidden font-Pretendard"
@@ -122,16 +99,12 @@ export default function Company({ setNavbarVisible }) {
             variants={itemVariants}
           >
             <span className="text-xl font-medium text-white text-shadow-lg">대표이사 백기한</span>
-            <img
-              src="/Company/signature.png"
-              alt="백기한 대표이사 서명"
-              className="h-10 object-contain drop-shadow-md"
-            />
+            <img src="/Company/signature.png" alt="백기한 대표이사 서명" className="h-10 object-contain drop-shadow-md" />
           </motion.div>
         </motion.div>
       </section>
 
-      {/* Core Capabilities Section (핵심역량) */}
+      {/* Core */}
       <section
         id="core"
         className="snap-start min-h-screen px-6 py-16 md:px-20 bg-white flex flex-col items-center justify-center text-gray-800"
@@ -145,6 +118,7 @@ export default function Company({ setNavbarVisible }) {
         >
           핵심역량
         </motion.h2>
+
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12 w-full max-w-7xl"
           initial="hidden"
@@ -156,41 +130,22 @@ export default function Company({ setNavbarVisible }) {
             {
               icon: "/Company/icon1.png",
               title: "신뢰 기반 납품 실적",
-              desc: (
-                <>
-                  여러 건설사와의 공동 프로젝트 및 납품을 통해 축적된 경험으로, <br />
-                  <strong className="font-semibold text-[#003A70]">납기·품질·시공성에서 높은 평가</strong>를 받고 있습니다.
-                </>
-              ),
+              desc: <>여러 건설사와의 공동 프로젝트 및 납품을 통해 축적된 경험으로, <br /><strong className="font-semibold text-[#004A91]">납기·품질·시공성에서 높은 평가</strong>를 받고 있습니다.</>,
             },
             {
               icon: "/Company/icon2.png",
               title: "품질 및 연구개발 시스템",
-              desc: (
-                <>
-                  자체 공장 및 연구소 운영을 통해 <br />생산 공정 전반에 걸친 철저한 품질 관리와 <strong className="font-semibold text-[#003A70]">지속적인 기술개발</strong>을 이어가고 있습니다.
-                </>
-              ),
+              desc: <>자체 공장 및 연구소 운영을 통해 <br />생산 공정 전반에 걸친 철저한 품질 관리와 <strong className="font-semibold text-[#004A91]">지속적인 기술개발</strong>을 이어가고 있습니다.</>,
             },
             {
               icon: "/Company/icon3.png",
               title: "기술력 & 생산 기반",
-              desc: (
-                <>
-                  <strong className="font-semibold text-[#003A70]">20년 이상 업력의 생산 기반</strong>과<br />고기능 시스템 창호 대응력으로 <br />
-                  <strong className="font-semibold text-[#003A70]">다양한 제품을 안정적으로 공급</strong>합니다.
-                </>
-              ),
+              desc: <><strong className="font-semibold text-[#004A91]">20년 이상 업력의 생산 기반</strong>과<br />고기능 시스템 창호 대응력으로 <br /><strong className="font-semibold text-[#004A91]">다양한 제품을 안정적으로 공급</strong>합니다.</>,
             },
             {
               icon: "/Company/icon4.png",
               title: "고객 중심 맞춤 설계",
-              desc: (
-                <>
-                  다양한 시공 환경에 유연하게 대응하며, <br />
-                  <strong className="font-semibold text-[#003A70]">프로젝트별 최적화 설계·금형 개발</strong>을 지원합니다.
-                </>
-              ),
+              desc: <>다양한 시공 환경에 유연하게 대응하며, <br /><strong className="font-semibold text-[#004A91]">프로젝트별 최적화 설계·금형 개발</strong>을 지원합니다.</>,
             },
           ].map((item, index) => (
             <motion.div
@@ -201,18 +156,14 @@ export default function Company({ setNavbarVisible }) {
               <div className="w-20 h-20 md:w-24 md:h-24 flex items-center justify-center mb-6">
                 <img src={item.icon} alt={item.title + " 아이콘"} className="w-full h-full object-contain" />
               </div>
-              <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 leading-snug break-keep">
-                {item.title}
-              </h3>
-              <p className="text-base text-gray-700 leading-relaxed break-keep">
-                {item.desc}
-              </p>
+              <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 leading-snug break-keep">{item.title}</h3>
+              <p className="text-base text-gray-700 leading-relaxed break-keep">{item.desc}</p>
             </motion.div>
           ))}
         </motion.div>
       </section>
 
-      {/* Vision & Mission Section */}
+      {/* Vision & Mission */}
       <section
         id="vision"
         className="snap-start min-h-screen px-6 py-16 md:px-20 bg-white flex flex-col items-center justify-center text-gray-800"
@@ -260,10 +211,8 @@ export default function Company({ setNavbarVisible }) {
               <strong className="text-bautek-blue font-semibold">기술력과 품질 경쟁력</strong>을 바탕으로, <strong className="font-semibold"><br />고객의 신뢰</strong>를 받는 고성능 건축자재를 생산하고 공급합니다.
             </p>
           </motion.div>
-
         </div>
 
-        {/* Our Core Values (핵심 가치) 수정된 부분 */}
         <motion.div
           className="w-full max-w-6xl p-4 flex flex-col items-center justify-center relative overflow-hidden"
           initial="hidden"
@@ -280,22 +229,10 @@ export default function Company({ setNavbarVisible }) {
 
           <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 w-full">
             {[
-              {
-                title: <span className="font-bold text-bautek-blue">기술 기반의 완성도</span>,
-                desc: <><strong className="font-semibold">기능성, 시공성, 디자인</strong>을 모두 고려한 제품 설계</>,
-              },
-              {
-                title: <span className="font-bold text-bautek-blue">고객 중심 설계 대응력</span>,
-                desc: <>현장 요구에 맞춘 <strong className="font-semibold">맞춤형 기술 적용</strong> 및 <strong className="font-semibold">유연한 커스터마이징</strong></>,
-              },
-              {
-                title: <span className="font-bold text-bautek-blue">품질을 뛰어넘는 신뢰</span>,
-                desc: <>납기·품질·협업의 <strong className="font-semibold">안정성까지 아우르는 실제 경험 기반 대응</strong></>,
-              },
-              {
-                title: <span className="font-bold text-bautek-blue">지속 가능한 혁신 역량</span>,
-                desc: <>끊임없는 <strong className="font-semibold">기술개발</strong>과 <strong className="font-semibold">생산 인프라 확장</strong>으로 미래 수요 대응</>,
-              },
+              { title: <span className="font-bold text-bautek-blue">기술 기반의 완성도</span>, desc: <> <strong className="font-semibold">기능성, 시공성, 디자인</strong>을 모두 고려한 제품 설계</> },
+              { title: <span className="font-bold text-bautek-blue">고객 중심 설계 대응력</span>, desc: <>현장 요구에 맞춘 <strong className="font-semibold">맞춤형 기술 적용</strong> 및 <strong className="font-semibold">유연한 커스터마이징</strong></> },
+              { title: <span className="font-bold text-bautek-blue">품질을 뛰어넘는 신뢰</span>, desc: <>납기·품질·협업의 <strong className="font-semibold">안정성까지 아우르는 실제 경험 기반 대응</strong></> },
+              { title: <span className="font-bold text-bautek-blue">지속 가능한 혁신 역량</span>, desc: <>끊임없는 <strong className="font-semibold">기술개발</strong>과 <strong className="font-semibold">생산 인프라 확장</strong>으로 미래 수요 대응</> },
             ].map((value, idx) => (
               <motion.div
                 key={`core-value-${idx}`}
@@ -316,13 +253,12 @@ export default function Company({ setNavbarVisible }) {
         </motion.div>
       </section>
 
-      {/* History Timeline Block (HistoryTimeline 컴포넌트) - ref와 id를 추가합니다. */}
-      {/* 이 div에 ref와 id를 연결하여 Observer가 감지하고, 기존 해시(#) 스크롤이 작동하도록 합니다. */}
-      <div ref={historyRef} id="history">
+      {/* ✅ History: div → section + snap-start + min-h-screen */}
+      <section id="history" ref={historyRef} className="snap-start min-h-screen bg-white">
         <HistoryTimeline />
-      </div>
+      </section>
 
-      {/* CI Section (CI / BI) - ELIV 로고 크기 재조정 */}
+      {/* CI / BI */}
       <section
         id="CI"
         className="snap-start relative min-h-screen px-6 py-16 md:px-20 bg-white flex flex-col items-center justify-center overflow-hidden"
@@ -369,11 +305,7 @@ export default function Company({ setNavbarVisible }) {
             >
               <h3 className="text-2xl font-bold text-white mb-8 text-shadow-sm">CI (Corporate Identity)</h3>
               <div className="flex justify-center mb-8 h-24 md:h-28 items-center w-full">
-                <img
-                  src="/Company/logo1.png"
-                  alt="바우텍 로고 풀버전"
-                  className="w-[200px] md:w-[300px] h-auto object-contain drop-shadow-md"
-                />
+                <img src="/Company/logo1.png" alt="바우텍 로고 풀버전" className="w-[200px] md:w-[300px] h-auto object-contain drop-shadow-md" />
               </div>
               <div className="flex flex-col gap-5 max-w-md mx-auto">
                 <div className="flex flex-col md:flex-row items-center md:items-start justify-center md:justify-start space-y-2 md:space-y-0 md:space-x-4 text-center md:text-left">
@@ -390,6 +322,7 @@ export default function Company({ setNavbarVisible }) {
                 </div>
               </div>
             </motion.div>
+
             <div className="flex-shrink-0 flex items-center justify-center">
               <motion.div
                 className="w-20 h-20 md:w-24 md:h-24 flex items-center justify-center text-white text-5xl md:text-6xl font-bold mx-auto"
@@ -400,6 +333,7 @@ export default function Company({ setNavbarVisible }) {
                 &
               </motion.div>
             </div>
+
             <motion.div
               className="w-full md:w-1/2 flex flex-col items-center text-center p-4 md:p-0"
               initial="hidden"
@@ -410,11 +344,7 @@ export default function Company({ setNavbarVisible }) {
             >
               <h3 className="text-2xl font-bold text-white mb-8 text-shadow-sm">BI (Brand Identity)</h3>
               <div className="flex justify-center mb-8 h-24 md:h-28 items-center w-full">
-                <img
-                  src="/Company/logo2.png"
-                  alt="엘리브 로고"
-                  className="w-[160px] md:w-[220px] h-auto object-contain drop-shadow-md"
-                />
+                <img src="/Company/logo2.png" alt="엘리브 로고" className="w-[160px] md:w-[220px] h-auto object-contain drop-shadow-md" />
               </div>
               <div className="flex flex-col gap-4 max-w-md mx-auto">
                 <p className="text-white text-base md:text-lg leading-relaxed text-left text-shadow-sm">
