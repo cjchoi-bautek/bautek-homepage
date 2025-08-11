@@ -50,10 +50,7 @@ function RunningProjectsSection({
         <h2 className="text-2xl md:text-3xl font-extrabold text-[#004A91] mb-2 text-center">
           {title}
         </h2>
-        <p className="text-gray-600 text-center mb-8">
-          전국 진행 중인 현장을 지도에서 확인하세요.
-        </p>
-
+      
         <div className="relative z-0 w-full" style={{ height }}>
           <MapContainer
             center={center}

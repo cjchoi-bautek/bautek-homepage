@@ -126,7 +126,7 @@ export default function Company({ setNavbarVisible }) {
               desc: (
                 <>
                   여러 건설사와의 공동 프로젝트 및 납품을 통해 축적된 경험으로, <br />
-                  <strong className="font-semibold text-[#003A70]">납기·품질·시공성에서 높은 평가</strong>를 받고 있습니다.
+                  <strong className="font-semibold text-[#004A91]">납기·품질·시공성에서 높은 평가</strong>를 받고 있습니다.
                 </>
               ),
             },
@@ -136,7 +136,7 @@ export default function Company({ setNavbarVisible }) {
               desc: (
                 <>
                   자체 공장 및 연구소 운영을 통해 <br />생산 공정 전반에 걸친 철저한 품질 관리와{" "}
-                  <strong className="font-semibold text-[#003A70]">지속적인 기술개발</strong>을 이어가고 있습니다.
+                  <strong className="font-semibold text-[#004A91]">지속적인 기술개발</strong>을 이어가고 있습니다.
                 </>
               ),
             },
@@ -145,10 +145,10 @@ export default function Company({ setNavbarVisible }) {
               title: "기술력 & 생산 기반",
               desc: (
                 <>
-                  <strong className="font-semibold text-[#003A70]">20년 이상 업력의 생산 기반</strong>과
+                  <strong className="font-semibold text-[#004A91]">20년 이상 업력의 생산 기반</strong>과
                   <br />
                   고기능 시스템 창호 대응력으로 <br />
-                  <strong className="font-semibold text-[#003A70]">다양한 제품을 안정적으로 공급</strong>합니다.
+                  <strong className="font-semibold text-[#004A91]">다양한 제품을 안정적으로 공급</strong>합니다.
                 </>
               ),
             },
@@ -158,7 +158,7 @@ export default function Company({ setNavbarVisible }) {
               desc: (
                 <>
                   다양한 시공 환경에 유연하게 대응하며, <br />
-                  <strong className="font-semibold text-[#003A70]">프로젝트별 최적화 설계·금형 개발</strong>을 지원합니다.
+                  <strong className="font-semibold text-[#004A91]">프로젝트별 최적화 설계·금형 개발</strong>을 지원합니다.
                 </>
               ),
             },
