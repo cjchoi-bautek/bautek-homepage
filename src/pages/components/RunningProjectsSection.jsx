@@ -1,14 +1,14 @@
 // src/pages/components/RunningProjectsSection.jsx
-import React, { memo, useMemo, useEffect } from "react";
-import { MapContainer, TileLayer, Marker, Tooltip, Popup, useMap } from "react-leaflet";
+import React, { memo, useEffect, useMemo, useState } from "react";
+import { MapContainer, TileLayer, Marker, Tooltip, Popup } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import L from "leaflet";
 
-/** ---------- 튜닝 포인트(길이/기준) ---------- */
-const KOREA_CENTER_LON = 127.8;     // 대한민국 중앙쯤 경도
-const CARD_OFFSET_PX   = 110;       // 마커 ↔ 카드 수평 간격(툴팁 offset)
-const CONNECTOR_LEN_PX = 90;        // 카드에서 마커로 나가는 선 길이
-const DOT_OUT_PX       = CONNECTOR_LEN_PX + 10; // 점 위치(선 끝)
+/** ---------- 카드/연결선 튜닝 포인트 ---------- */
+const KOREA_CENTER_LON = 127.8; // 중앙 경도
+const CARD_OFFSET_PX   = 140;   // 마커 ↔ 카드 수평 간격(px)
+const CONNECTOR_LEN_PX = 120;   // 카드에서 마커로 나가는 선 길이(px)
+const DOT_OUT_PX       = CONNECTOR_LEN_PX + 10; // 점 위치(px)
 
 /** 클러스터 뱃지 */
 const createClusterCustomIcon = (cluster) => {
@@ -21,82 +21,81 @@ const createClusterCustomIcon = (cluster) => {
   });
 };
 
+/** 기본 샘플 (xlsxUrl 없고 sites prop도 비어있을 때 사용) */
 const SAMPLE_SITES = [
-  { id:'s1', contractor:'GS건설', contractorLogo:'/KeyClient/GS.png',  name:'송도자이풍경채 그라노블 2단지 ', units:548, lat:37.378969, lng:126.680836},
-  { id:'s2', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
-  { id:'s3', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
-  { id:'s4', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
-  { id:'s5', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
-  { id:'s6', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
-  { id:'s7', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
-  { id:'s8', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
-  { id:'s9', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
-  { id:'s10', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
-  { id:'s11', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
-  { id:'s12', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
-  { id:'s13', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
-  { id:'s14', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
-  { id:'s15', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
-  { id:'s16', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
-  { id:'s17', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
-  { id:'s18', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
-  { id:'s19', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
-  { id:'s20', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
-  { id:'s21', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
-  { id:'s22', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
-  { id:'s23', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
-  { id:'s24', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
-  { id:'s25', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
-  { id:'s26', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
-  { id:'s27', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
-  { id:'s28', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
-  { id:'s29', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
-  { id:'s30', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
-  { id:'s31', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
-  { id:'s32', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
-  { id:'s33', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
-  { id:'s34', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
+  { id:'s1', contractor:'GS건설', contractorLogo:'/KeyClient/GS.png',  name:'송도 A단지', units:1243, lat:37.382, lng:126.643 },
+  { id:'s2', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'대구 B단지', units:980,  lat:35.8714, lng:128.6014 },
 ];
 
-/** ✅ 줌이 minZoom 이상일 때만 지명 라벨을 보이게 하는 오버레이 */
-function LabelsOnZoom({ minZoom = 9 }) {
-  const map = useMap();
-
-  useEffect(() => {
-    // 라벨 전용 pane 생성 (타일 위, 마커 아래)
-    if (!map.getPane("labels")) {
-      const pane = map.createPane("labels");
-      pane.style.zIndex = 450;            // tile(200)보다 높고, marker(600)/tooltip(650)보다 낮게
-      pane.style.pointerEvents = "none";  // 인터랙션 방해 금지
-    }
-
-    const labels = L.tileLayer(
-      "https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png",
-      { pane: "labels", opacity: 0, attribution: "&copy; OpenStreetMap & CARTO" }
-    ).addTo(map);
-
-    const update = () => labels.setOpacity(map.getZoom() >= minZoom ? 1 : 0);
-    update();
-    map.on("zoomend", update);
-
-    return () => {
-      map.off("zoomend", update);
-      map.removeLayer(labels);
-    };
-  }, [map, minZoom]);
-
-  return null;
-}
-
 function RunningProjectsSection({
-  sites = SAMPLE_SITES,
-  height = "70vh",
+  /** 데이터 */
+  sites = [],
+  xlsxUrl,                 // public 경로의 엑셀 파일 URL (예: "/data/sites.xlsx")
+
+  /** UI 옵션 */
   title = "진행 현장",
+  height = "70vh",
+  mapBg = "transparent",
+  fullBleed = false,
+
+  /** 인터랙션 잠금 */
   lockZoom = false,
   lockDrag = false,
-  fullBleed = false,
-  mapBg = "transparent",
 }) {
+  /** xlsx 로드용 상태 */
+  const [xlsxSites, setXlsxSites] = useState(null);
+  const [xlsxError, setXlsxError] = useState(null);
+
+  /** Excel(xlsx) 자동 로드 */
+  useEffect(() => {
+    let cancelled = false;
+    async function loadXlsx() {
+      if (!xlsxUrl) return;
+      try {
+        const [{ read, utils }] = await Promise.all([
+          import("xlsx"),
+        ]);
+        const resp = await fetch(xlsxUrl);
+        if (!resp.ok) throw new Error(`엑셀 로드 실패: ${resp.status}`);
+        const ab = await resp.arrayBuffer();
+        const wb = read(ab, { type: "array" });
+        const ws = wb.Sheets[wb.SheetNames[0]];
+        const rows = utils.sheet_to_json(ws, { defval: "" });
+
+        // 기대 컬럼: contractor, contractorLogo, name, units, lat, lng
+        const parsed = rows
+          .map((r, i) => {
+            const lat = Number(r.lat);
+            const lng = Number(r.lng);
+            const units = r.units !== "" ? Number(r.units) : "";
+            return {
+              id: r.id || `row_${i+1}`,
+              contractor: r.contractor || "",
+              contractorLogo: r.contractorLogo || "",
+              name: r.name || "",
+              units: Number.isFinite(units) ? units : "",
+              lat,
+              lng,
+            };
+          })
+          .filter((r) => Number.isFinite(r.lat) && Number.isFinite(r.lng));
+        if (!cancelled) setXlsxSites(parsed);
+      } catch (err) {
+        if (!cancelled) setXlsxError(err.message || "엑셀 파싱 중 오류");
+      }
+    }
+    loadXlsx();
+    return () => { cancelled = true; };
+  }, [xlsxUrl]);
+
+  /** 실제 렌더링에 쓸 데이터 선택 우선순위: xlsx → props.sites → SAMPLE */
+  const data = useMemo(() => {
+    if (xlsxSites && xlsxSites.length) return xlsxSites;
+    if (sites && sites.length) return sites;
+    return SAMPLE_SITES;
+  }, [xlsxSites, sites]);
+
+  /** 맵 기본 세팅 */
   const center = useMemo(() => [36.5, 127.8], []);
   const koreaBounds = useMemo(
     () => L.latLngBounds([[31.0, 121.0], [41.5, 134.5]]),
@@ -106,7 +105,16 @@ function RunningProjectsSection({
   return (
     <section id="running-projects" className="bg-white">
       <div className={`${fullBleed ? "max-w-none px-0" : "max-w-6xl px-4"} mx-auto py-10 md:py-16`}>
-        <h2 className="text-2xl md:text-3xl font-extrabold text-[#004A91] mb-2 text-center">{title}</h2>
+        <h2 className="text-2xl md:text-3xl font-extrabold text-[#004A91] mb-2 text-center">
+          {title}
+        </h2>
+
+        {/* xlsx 오류 메시지 (있을 때만) */}
+        {xlsxError && (
+          <p className="text-center text-sm text-red-600 mb-4">
+            {xlsxError}
+          </p>
+        )}
 
         <div className="relative z-0 w-full" style={{ height }}>
           <MapContainer
@@ -125,14 +133,11 @@ function RunningProjectsSection({
             preferCanvas
             style={{ height: "100%", width: "100%", background: mapBg }}
           >
-            {/* 베이스: 라벨 없는 밝은 타일 */}
+            {/* 라벨 없는 밝은 베이스맵 */}
             <TileLayer
               attribution="&copy; OpenStreetMap & CARTO"
               url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
             />
-
-            {/* ✅ 줌 9 이상에서만 지명 라벨 표시 */}
-            <LabelsOnZoom minZoom={9} />
 
             <MarkerClusterGroup
               chunkedLoading
@@ -140,8 +145,7 @@ function RunningProjectsSection({
               showCoverageOnHover={false}
               spiderfyOnEveryZoom={false}
             >
-              {sites.map((s) => {
-                // 🇰🇷 중앙 경도 기준: 왼쪽(<)이면 카드도 왼쪽, 오른쪽(>=)이면 카드도 오른쪽
+              {data.map((s) => {
                 const side = s.lng < KOREA_CENTER_LON ? "left" : "right";
                 const offset = side === "right" ? [CARD_OFFSET_PX, -10] : [-CARD_OFFSET_PX, -10];
                 const sideClass = side === "right" ? "side-card--right" : "side-card--left";
@@ -166,14 +170,16 @@ function RunningProjectsSection({
                             <div className="font-semibold mb-1">{s.contractor}</div>
                           )}
                           <div className="font-bold">{s.name}</div>
-                          <div className="text-gray-600 text-sm">
-                            세대수: {Number(s.units).toLocaleString()}세대
-                          </div>
+                          {s.units !== "" && (
+                            <div className="text-gray-600 text-sm">
+                              세대수: {Number(s.units).toLocaleString()}세대
+                            </div>
+                          )}
                         </div>
                       </div>
                     </Tooltip>
 
-                    {/* 클릭 팝업(원하면 유지) */}
+                    {/* 클릭 팝업(선택) */}
                     <Popup>
                       <div className="text-sm leading-tight">
                         {s.contractorLogo ? (
@@ -182,7 +188,11 @@ function RunningProjectsSection({
                           <div className="font-semibold mb-1">{s.contractor}</div>
                         )}
                         <div className="font-bold">{s.name}</div>
-                        <div className="text-gray-600">세대수: {Number(s.units).toLocaleString()}세대</div>
+                        {s.units !== "" && (
+                          <div className="text-gray-600">
+                            세대수: {Number(s.units).toLocaleString()}세대
+                          </div>
+                        )}
                       </div>
                     </Popup>
                   </Marker>
@@ -191,7 +201,7 @@ function RunningProjectsSection({
             </MarkerClusterGroup>
           </MapContainer>
 
-          {/* 스타일(카드/연결선/클러스터) — 길이 상수 반영 */}
+          {/* 스타일(클러스터/카드/연결선) */}
           <style>{`
             .cluster-icon { background: transparent; }
             .cluster-badge {
@@ -203,21 +213,24 @@ function RunningProjectsSection({
               box-shadow: 0 2px 6px rgba(0,0,0,0.25);
               border: 2px solid #fff;
             }
-            .leaflet-tooltip.side-card { background: transparent; border: none; box-shadow: none; padding: 0; white-space: normal; }
 
-            /* 더 길고 넓은 카드 */
+            .leaflet-tooltip.side-card {
+              background: transparent;
+              border: none;
+              box-shadow: none;
+              padding: 0;
+              white-space: normal;
+            }
             .side-card .card {
               position: relative;
               background: #fff;
               border: 1px solid #e5e7eb;
               border-radius: 14px;
               padding: 14px 16px;
-              min-width: 340px;
-              max-width: 420px;
+              min-width: 360px;
+              max-width: 460px;
               box-shadow: 0 14px 28px rgba(0,0,0,.14);
             }
-
-            /* 연결선(카드 기준 바깥쪽으로 길게) */
             .side-card .connector {
               position: absolute;
               top: 50%;
@@ -229,7 +242,6 @@ function RunningProjectsSection({
             .side-card--right .connector { left: -${CONNECTOR_LEN_PX}px; }
             .side-card--left  .connector { right: -${CONNECTOR_LEN_PX}px; }
 
-            /* 선 끝의 점(마커 쪽) */
             .side-card .dot {
               position: absolute;
               top: 50%;

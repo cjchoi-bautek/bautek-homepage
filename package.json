@@ -27,7 +27,8 @@
     "react-scroll": "^1.9.3",
     "react-tsparticles": "^2.12.2",
     "swiper": "^11.2.10",
-    "tsparticles": "^3.8.1"
+    "tsparticles": "^3.8.1",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.7.0",
