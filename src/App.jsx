@@ -16,7 +16,7 @@ import "leaflet/dist/leaflet.css";
 import "./leafletIconFix";
 
 /* 진행현장(Leaflet) 섹션 */
-import RunningProjectsSection from "./pages/components/RunningProjectsSection.jsx";
+import RunningProjectsFromXLSX from "./pages/components/RunningProjectsFromXLSX";
 
 function AppLayout() {
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
