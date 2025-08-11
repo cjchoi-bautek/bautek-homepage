@@ -14,7 +14,7 @@ import SupportPage from "./pages/SupportPage";
 
 /* ✅ Leaflet 복구: CSS + 아이콘 경로 fix */
 import "leaflet/dist/leaflet.css";
-import "./leafletIconFix";
+import "./leafletIconFix.js";
 
 /* ✅ 진행현장(Leaflet) 섹션 */
 import RunningProjectsSection from "./pages/components/RunningProjectsSection.jsx";
