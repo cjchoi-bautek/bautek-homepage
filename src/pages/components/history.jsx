@@ -41,7 +41,7 @@ const leftData = [
     items: [
       { month: "01월", text: "INNOBIZ 기술혁신형 인증기업" },
       { month: "07월", text: "유망중소기업 선정 (경기 중소기업청)" },
-      { month: "12월", text: "우수벤처기업 수상 (경기 중소기업청" },
+      { month: "12월", text: "우수벤처기업 수상 (경기 중소기업청)" },
     ],
   },
 ];
