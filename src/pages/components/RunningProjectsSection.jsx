@@ -77,8 +77,8 @@ function RunningProjectsSection({
           preferCanvas
         >
           <TileLayer
-            attribution="&copy; OpenStreetMap contributors"
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution="&copy; OpenStreetMap contributors &copy; CARTO"
+            url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
             /* 반복 지도 제거 + 범위 전달 */
             noWrap={true}
             bounds={koreaBounds}
