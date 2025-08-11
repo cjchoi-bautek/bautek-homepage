@@ -103,9 +103,9 @@ function RunningProjectsFromXLSX({
 
   return (
     <section id="running-projects" className="bg-white">
-      <div className={`${fullBleed ? "max-w-none px-0" : "max-w-6xl px-4"} mx-auto pt-6 md:pt-8 pb-12 md:pb-16`}>
+      <div className={`${fullBleed ? "max-w-none px-0" : "max-w-6xl px-4"} mx-auto pt-4 md:pt-6 pb-12 md:pb-16`}>
         <h2
-          className="text-2xl md:text-3xl font-extrabold text-[#004A91] text-center animate-fadeDown"
+          className="text-2xl md:text-3xl font-extrabold text-[#004A91] text-center animate-fadeDown mb-6 md:mb-10"
           style={{ letterSpacing: "-0.02em" }}
         >
           {title}
