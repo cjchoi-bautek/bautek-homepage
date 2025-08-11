@@ -52,7 +52,7 @@ export default function Company({ setNavbarVisible }) {
         className="snap-start min-h-screen relative flex flex-col items-start justify-center overflow-hidden"
       >
         <img
-          src="/Company/factory.jpg"
+          src="/Company/factory1.jpg"
           alt="바우텍 공장 전경"
           className="absolute inset-0 w-full h-full object-cover object-center z-0"
         />
