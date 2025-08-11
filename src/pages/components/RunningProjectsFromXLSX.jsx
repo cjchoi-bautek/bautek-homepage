@@ -142,10 +142,7 @@ function RunningProjectsFromXLSX({
                 attribution="&copy; OpenStreetMap & CARTO"
                 url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
               />
-              {/* 라벨 오버레이(확대 시 지명 보이게) */}
-              <Pane name="labels" style={{ zIndex: 650, pointerEvents: "none" }}>
-                <TileLayer url="https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png" />
-              </Pane>
+             
 
               <MarkerClusterGroup
                 chunkedLoading
