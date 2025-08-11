@@ -25,16 +25,42 @@ export default function NavBar() {
     return document.scrollingElement || document.documentElement;
   }, []);
 
-  /** ---------------- 스냅 일시 해제 (컨테이너 대상) ---------------- */
-  const disableSnapTemporarily = useCallback((container) => {
-    if (!container) return () => {};
-    const prev = container.style.scrollSnapType; // 클래스는 유지, inline만 조절
+  /** ---------------- 스냅/스크롤비헤이비어 임시 OFF 후, 스크롤 멈춤 감지로 복원 ---------------- */
+  const runWithSnapOff = useCallback((container, action) => {
+    if (!container) return;
+
+    const prevSnap = container.style.scrollSnapType;
+    const prevBehavior = container.style.scrollBehavior;
+
+    // 임시 비활성
     container.style.scrollSnapType = "none";
-    return () => {
-      // ✅ 잠금이 걸려 있으면 복원 금지
+    container.style.scrollBehavior = "auto"; // 즉시 이동
+
+    let idleTimer = null;
+    const RESTORE_IDLE_MS = 150; // 스크롤이 멈춘 뒤 복원
+    const FALLBACK_MS = 600;     // 혹시 스크롤 이벤트가 거의 없을 때를 대비한 백업 복원
+
+    const restore = () => {
+      container.removeEventListener("scroll", onScroll);
+      // Company에서 history구간에 스냅 잠금이 걸린 경우 복원 금지
       if (container?.dataset?.snapLock === "1") return;
-      container.style.scrollSnapType = prev;
+      container.style.scrollBehavior = prevBehavior;
+      container.style.scrollSnapType = prevSnap;
     };
+
+    const onScroll = () => {
+      if (idleTimer) clearTimeout(idleTimer);
+      idleTimer = setTimeout(restore, RESTORE_IDLE_MS);
+    };
+
+    container.addEventListener("scroll", onScroll, { passive: true });
+
+    try {
+      action?.();
+    } finally {
+      // 이동이 아주 짧아 scroll 이벤트가 거의 없을 때를 대비
+      idleTimer = setTimeout(restore, FALLBACK_MS);
+    }
   }, []);
 
   /** ---------------- 네비 높이 보정 + 컨테이너 스크롤 ---------------- */
@@ -46,14 +72,23 @@ export default function NavBar() {
       const navH = nav ? Math.ceil(nav.getBoundingClientRect().height) : 0;
       const safeGap = 8;
 
-      if (container === document.scrollingElement || container === document.documentElement) {
-        const y = window.pageYOffset + el.getBoundingClientRect().top - navH - safeGap;
-        window.scrollTo({ top: y, behavior: "smooth" });
+      if (
+        container === document.scrollingElement ||
+        container === document.documentElement
+      ) {
+        const y =
+          window.pageYOffset +
+          el.getBoundingClientRect().top -
+          navH -
+          safeGap;
+        // runWithSnapOff에서 scrollBehavior=auto로 바꿔줬으므로 즉시 이동
+        window.scrollTo({ top: y, behavior: "auto" });
       } else {
         const rect = el.getBoundingClientRect();
         const cRect = container.getBoundingClientRect();
-        const target = container.scrollTop + (rect.top - cRect.top) - navH - safeGap;
-        container.scrollTo({ top: target, behavior: "smooth" });
+        const target =
+          container.scrollTop + (rect.top - cRect.top) - navH - safeGap;
+        container.scrollTo({ top: target, behavior: "auto" });
       }
     },
     [getScrollParent]
@@ -68,7 +103,8 @@ export default function NavBar() {
     document.querySelectorAll("main, section, div").forEach((el) => {
       const cs = getComputedStyle(el);
       const canScrollY =
-        /(auto|scroll|overlay)/.test(cs.overflowY) && el.scrollHeight > el.clientHeight;
+        /(auto|scroll|overlay)/.test(cs.overflowY) &&
+        el.scrollHeight > el.clientHeight;
       if (canScrollY) containers.push(el);
     });
     return containers;
@@ -79,57 +115,69 @@ export default function NavBar() {
     const win = document.scrollingElement || document.documentElement;
 
     const prevSnap = containers.map((c) => c.style.scrollSnapType);
-    containers.forEach((c) => (c.style.scrollSnapType = "none"));
+    const prevBehavior = containers.map((c) => c.style.scrollBehavior);
 
-    if (win) window.scrollTo({ top: 0, behavior: "smooth" });
+    containers.forEach((c) => {
+      c.style.scrollSnapType = "none";
+      c.style.scrollBehavior = "auto";
+    });
+
+    if (win) window.scrollTo({ top: 0, behavior: "auto" });
     containers.forEach((c) => {
       if (c !== win) c.scrollTo({ top: 0, behavior: "auto" });
     });
 
-    setTimeout(() => {
-      containers.forEach((c, i) => {
-        // ✅ 잠금이 걸려 있으면 복원 금지
+    // 스크롤 멈춤 감지로 복원
+    const RESTORE_IDLE_MS = 150;
+    const FALLBACK_MS = 600;
+    const onScroll = [];
+    containers.forEach((c, i) => {
+      let idleTimer = null;
+      const restore = () => {
+        c.removeEventListener("scroll", onScroll[i]);
         if (c?.dataset?.snapLock === "1") return;
+        c.style.scrollBehavior = prevBehavior[i] || "";
         c.style.scrollSnapType = prevSnap[i] || "";
-      });
-    }, 300);
+      };
+      onScroll[i] = () => {
+        if (idleTimer) clearTimeout(idleTimer);
+        idleTimer = setTimeout(restore, RESTORE_IDLE_MS);
+      };
+      c.addEventListener("scroll", onScroll[i], { passive: true });
+      // fallback 복원
+      setTimeout(restore, FALLBACK_MS);
+    });
   }, [getScrollContainers]);
 
-  /** ---------------- 해시로 이동(재시도 + 컨테이너 스냅 임시 해제) ---------------- */
+  /** ---------------- 해시로 이동(재시도 + 스크롤멈춤기반 복원) ---------------- */
   const tryScrollToHash = useCallback(
     (hash) => {
       if (!hash) return;
       const id = hash.startsWith("#") ? hash.substring(1) : hash;
 
       let attempts = 0;
-      const maxAttempts = 30; // ~1.5s (50ms * 30)
+      const maxAttempts = 30; // ~1.5s
       const interval = 50;
-      let restoreSnap = null;
 
       const tryOnce = () => {
         attempts += 1;
         const el = document.getElementById(id);
         if (el) {
           const container = getScrollParent(el);
-          if (!restoreSnap) {
-            restoreSnap = disableSnapTemporarily(container);
-          }
-          requestAnimationFrame(() => {
-            scrollToElWithHeader(el);
-            setTimeout(() => restoreSnap && restoreSnap(), 300);
+          runWithSnapOff(container, () => {
+            // 다음 프레임에 정확한 위치로 즉시 이동
+            requestAnimationFrame(() => scrollToElWithHeader(el));
           });
           return;
         }
         if (attempts < maxAttempts) {
           setTimeout(tryOnce, interval);
-        } else {
-          if (restoreSnap) restoreSnap();
         }
       };
 
       tryOnce();
     },
-    [getScrollParent, disableSnapTemporarily, scrollToElWithHeader]
+    [getScrollParent, runWithSnapOff, scrollToElWithHeader]
   );
 
   /** ---------------- Hero 가시성(색상/배경 전환) ---------------- */
@@ -201,7 +249,7 @@ export default function NavBar() {
   const handleLogoClick = useCallback(() => {
     if (isHome) {
       const hero = document.getElementById("hero-section");
-      if (hero) hero.scrollIntoView({ behavior: "smooth" });
+      hero?.scrollIntoView({ behavior: "smooth" });
     } else {
       navigate("/");
     }
