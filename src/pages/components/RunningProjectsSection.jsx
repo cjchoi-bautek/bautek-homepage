@@ -1,14 +1,14 @@
-// src/components/RunningProjectsSection.jsx
+// src/pages/components/RunningProjectsSection.jsx
 import React, { memo, useMemo } from "react";
 import { MapContainer, TileLayer, Marker, Tooltip, Popup } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import L from "leaflet";
 
 /**
- * ⚠️ 전제:
- * - App.jsx 등 상위에서 한 번만 아래를 임포트해 주세요.
+ * 전제:
+ * - App.jsx 등 상위에서 한 번만 아래를 임포트
  *   import 'leaflet/dist/leaflet.css';
- *   import './map/leafletIconFix';
+ *   import './leafletIconFix';
  */
 
 // 클러스터 아이콘(원형 배지)
@@ -23,17 +23,24 @@ const createClusterCustomIcon = (cluster) => {
   });
 };
 
-
+// 예시 데이터
 const SAMPLE_SITES = [
   // { id: 's1', contractor: 'GS건설', contractorLogo: '/logos/gs.png', name: '송도 A단지', units: 1243, lat: 37.382, lng: 126.643 },
-  // { id: 's2', contractor: '현대건설', contractorLogo: '/logos/hdec.png', name: '수서 B주택', units: 812, lat: 37.487, lng: 127.106 },
-  // { id: 's3', contractor: '대우건설', contractorLogo: '/logos/daewoo.png', name: '부산 C현장', units: 532, lat: 35.159, lng: 129.06 },
 ];
 
-function RunningProjectsSection({ sites = SAMPLE_SITES, height = "70vh", title = "진행 현장" }) {
+function RunningProjectsSection({
+  sites = SAMPLE_SITES,
+  height = "70vh",
+  title = "공사/납품 진행중인 현장",
+}) {
   // 한국 중심/줌
   const center = useMemo(() => [36.5, 127.8], []);
-  const zoom = 7;
+
+  // 🇰🇷 한국 영역(제주~독도 대략 범위)
+  const koreaBounds = useMemo(
+    () => L.latLngBounds([[33.0, 124.5], [39.6, 132.0]]),
+    []
+  );
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-10 md:py-16">
@@ -47,16 +54,34 @@ function RunningProjectsSection({ sites = SAMPLE_SITES, height = "70vh", title =
       <div className="w-full" style={{ height }}>
         <MapContainer
           center={center}
-          zoom={zoom}
-          minZoom={5}
-          maxZoom={18}
+          zoom={7}
+          /* 🔒 줌 완전 고정 (원하면 min/max 조절해서 약간의 줌 허용 가능) */
+          minZoom={7}
+          maxZoom={7}
+          zoomControl={false}
+          scrollWheelZoom={false}
+          doubleClickZoom={false}
+          touchZoom={false}
+          boxZoom={false}
+          keyboard={false}
+
+          /* 🌍 한국 영역 밖으로 못 나가게 */
+          maxBounds={koreaBounds}
+          maxBoundsViscosity={1.0}  // 1.0 = 바깥으로 못 나감
+
+          /* (선택) 패닝까지 막으려면 ↓ 주석 해제
+          dragging={false}
+          */
+
           style={{ height: "100%", width: "100%" }}
           preferCanvas
-          scrollWheelZoom
         >
           <TileLayer
             attribution="&copy; OpenStreetMap contributors"
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            /* 반복 지도 제거 + 범위 전달 */
+            noWrap={true}
+            bounds={koreaBounds}
           />
 
           <MarkerClusterGroup
