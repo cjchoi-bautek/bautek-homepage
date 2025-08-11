@@ -56,7 +56,7 @@ export default function Company({ setNavbarVisible }) {
           alt="바우텍 공장 전경"
           className="absolute inset-0 w-full h-full object-cover object-center z-0"
         />
-        <div className="absolute inset-0 bg-black opacity-60 z-0" />
+        <div className="absolute inset-0 bg-black opacity-80 z-0" />
         <motion.div
           className="relative z-10 w-full max-w-4xl p-6 md:p-12 md:ml-32"
           initial="hidden"
