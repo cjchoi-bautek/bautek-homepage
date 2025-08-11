@@ -44,11 +44,12 @@ function AppLayout() {
               </section>
 
               {/* 진행 현장 (xlsx 자동 로드 사용 예시) */}
-              <RunningProjectsSection
+              <RunningProjectsFromXLSX
+			    src="/data/sites.xlsx"
                 height="70vh"
-                // lockZoom // 줌 고정 원하면 주석 해제
-                // lockDrag // 패닝 잠금 원하면 주석 해제
-                xlsxUrl="/data/sites.xlsx"  // public/data/sites.xlsx 에 파일 두면 자동 로드
+                lockZoom={true}
+				lockDrag={true}
+                
               />
 
               <section className="min-h-[100dvh] md:h-screen md:snap-start bg-[#F4F4F4]">
