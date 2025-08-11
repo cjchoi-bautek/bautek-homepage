@@ -1,16 +1,25 @@
 // App.jsx
-import React, { useState } from "react"; // useState 임포트
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom"; // useLocation 임포트
+import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import NavBar from "./NavBar";
 import HeroSection from "./HeroSection";
 import ProductSlider from "./ProductSlider";
 import KeyClient from "./KeyClient";
 import MapSection from "./map";
 import Footer from "./Footer";
-import Company from "./pages/company"; // Company 컴포넌트 임포트 확인
+import Company from "./pages/company";
 import Products from "./pages/Products";
 import FrameGallery from "./pages/FrameGallery";
 import SupportPage from "./pages/SupportPage";
+
+/* ✅ 진행현장 지도용: react-leaflet v4 CSS & 아이콘 경로 fix */
+import "leaflet/dist/leaflet.css";
+import "./map/leafletIconFix";
+
+/* ✅ 네가 만든 진행현장 섹션 컴포넌트 임포트
+   ─ 실제 위치가 `src/pages/components/RunningProjectsSection.jsx`면 아래 경로 사용
+   ─ 만약 `src/components/RunningProjectsSection.jsx`라면 './components/RunningProjectsSection' 로 바꿔줘 */
+import RunningProjectsSection from "./pages/components/RunningProjectsSection";
 
 // 라우터 내부에 위치하여 useLocation 훅을 사용할 수 있는 컴포넌트
 function AppLayout() {
@@ -37,6 +46,12 @@ function AppLayout() {
               <section className="min-h-[100dvh] md:h-screen md:snap-start bg-gradient-to-br from-gray-400 to-white via-gray-200 to-gray-500">
                 <KeyClient />
               </section>
+
+              {/* ✅ KeyClient ↔ MapSection 사이에 섹션 래퍼로 감싸서 삽입 (스냅/높이 유지) */}
+              <section id="running-projects" className="min-h-[100dvh] md:h-screen md:snap-start bg-white">
+                <RunningProjectsSection />
+              </section>
+
               <section className="min-h-[100dvh] md:h-screen md:snap-start bg-[#F4F4F4]">
                 <MapSection />
               </section>
