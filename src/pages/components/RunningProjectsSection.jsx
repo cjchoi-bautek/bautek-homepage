@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker, Tooltip, Popup } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import L from "leaflet";
 // 이 부분을 추가하세요. 파일 경로는 프로젝트 구조에 맞게 조정해야 합니다.
-import '../../leafletIconFix'; 
+import '../../../leafletIconFix'; 
 
 /* 클러스터 뱃지 */
 const createClusterCustomIcon = (cluster) => {
