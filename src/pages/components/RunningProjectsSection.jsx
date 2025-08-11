@@ -30,7 +30,7 @@ const SAMPLE_SITES = [
   // { id: 's3', contractor: '대우건설', contractorLogo: '/logos/daewoo.png', name: '부산 C현장', units: 532, lat: 35.159, lng: 129.06 },
 ];
 
-function RunningProjectsSection({ sites = SAMPLE_SITES, height = "70vh", title = "공사/납품 진행중인 현장" }) {
+function RunningProjectsSection({ sites = SAMPLE_SITES, height = "70vh", title = "진행 현장" }) {
   // 한국 중심/줌
   const center = useMemo(() => [36.5, 127.8], []);
   const zoom = 7;
