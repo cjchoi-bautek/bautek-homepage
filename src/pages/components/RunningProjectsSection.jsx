@@ -22,7 +22,7 @@ const createClusterCustomIcon = (cluster) => {
 };
 
 const SAMPLE_SITES = [
-  { id:'s1', contractor:'GS건설', contractorLogo:'/KeyClient/GS.png',  name:'송도자이풍경채 그라노블 2단지 ', units:548, lat:37.378969, lng:127.680836},
+  { id:'s1', contractor:'GS건설', contractorLogo:'/KeyClient/GS.png',  name:'송도자이풍경채 그라노블 2단지 ', units:548, lat:37.378969, lng:126.680836},
   { id:'s2', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
   { id:'s3', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
   { id:'s4', contractor:'DL 이앤씨', contractorLogo:'/KeyClient/DLE&C.png', name:'송도 B단지', units:2341, lat:36.382, lng:127.643 },
