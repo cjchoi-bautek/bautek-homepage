@@ -14,7 +14,7 @@ import SupportPage from "./pages/SupportPage";
 
 
 /* ✅ 이미지 지도 컴포넌트 임포트 (경로 확인) */
-import RunningProjectsImageMap from "./pages/components/RunningProjectsImageMap";
+import RunningProjectsSection from "./pages/components/RunningProjectsSection";
 
 function AppLayout() {
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
