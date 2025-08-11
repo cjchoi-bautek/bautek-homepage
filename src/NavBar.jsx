@@ -13,7 +13,6 @@ export default function NavBar() {
 
   /** ---------------- 공통 유틸: 스크롤 부모 찾기 ---------------- */
   const getScrollParent = useCallback((el) => {
-    // 가장 가까운 수직 스크롤 가능한 조상 요소를 찾음
     let node = el?.parentElement;
     while (node) {
       const style = getComputedStyle(node);
@@ -23,7 +22,6 @@ export default function NavBar() {
       if (canScrollY) return node;
       node = node.parentElement;
     }
-    // 윈도우 스크롤로 폴백
     return document.scrollingElement || document.documentElement;
   }, []);
 
@@ -33,6 +31,8 @@ export default function NavBar() {
     const prev = container.style.scrollSnapType; // 클래스는 유지, inline만 조절
     container.style.scrollSnapType = "none";
     return () => {
+      // ✅ 잠금이 걸려 있으면 복원 금지
+      if (container?.dataset?.snapLock === "1") return;
       container.style.scrollSnapType = prev;
     };
   }, []);
@@ -47,11 +47,9 @@ export default function NavBar() {
       const safeGap = 8;
 
       if (container === document.scrollingElement || container === document.documentElement) {
-        // 윈도우 스크롤
         const y = window.pageYOffset + el.getBoundingClientRect().top - navH - safeGap;
         window.scrollTo({ top: y, behavior: "smooth" });
       } else {
-        // 내부 컨테이너 스크롤
         const rect = el.getBoundingClientRect();
         const cRect = container.getBoundingClientRect();
         const target = container.scrollTop + (rect.top - cRect.top) - navH - safeGap;
@@ -67,7 +65,6 @@ export default function NavBar() {
     const win = document.scrollingElement || document.documentElement;
     if (win) containers.push(win);
 
-    // 화면 내 주요 컨테이너에서 스크롤 가능한 것만 수집 (과도한 탐색 방지)
     document.querySelectorAll("main, section, div").forEach((el) => {
       const cs = getComputedStyle(el);
       const canScrollY =
@@ -81,19 +78,20 @@ export default function NavBar() {
     const containers = getScrollContainers();
     const win = document.scrollingElement || document.documentElement;
 
-    // 스냅 잠시 해제
     const prevSnap = containers.map((c) => c.style.scrollSnapType);
     containers.forEach((c) => (c.style.scrollSnapType = "none"));
 
-    // 윈도우는 부드럽게, 내부 컨테이너는 즉시 0으로 (주소창/스냅 간섭 최소화)
     if (win) window.scrollTo({ top: 0, behavior: "smooth" });
     containers.forEach((c) => {
       if (c !== win) c.scrollTo({ top: 0, behavior: "auto" });
     });
 
-    // 복원
     setTimeout(() => {
-      containers.forEach((c, i) => (c.style.scrollSnapType = prevSnap[i] || ""));
+      containers.forEach((c, i) => {
+        // ✅ 잠금이 걸려 있으면 복원 금지
+        if (c?.dataset?.snapLock === "1") return;
+        c.style.scrollSnapType = prevSnap[i] || "";
+      });
     }, 300);
   }, [getScrollContainers]);
 
@@ -156,7 +154,6 @@ export default function NavBar() {
     if (location.hash) {
       tryScrollToHash(location.hash);
     } else if (!isHome) {
-      // 해시 없는 경우에도 실제 스크롤 컨테이너까지 0으로
       scrollAllToTop();
     }
   }, [location.pathname, location.hash, isHome, tryScrollToHash, scrollAllToTop]);
@@ -233,11 +230,9 @@ export default function NavBar() {
         if (hash) {
           tryScrollToHash(`#${hash}`);
         } else {
-          // 해시가 없을 땐 모든 컨테이너 최상단 정렬
           scrollAllToTop();
         }
       } else {
-        // 라우팅 후 useEffect에서 tryScrollToHash/scrollAllToTop 동작
         navigate(`${pathname}${hash ? `#${hash}` : ""}`);
       }
     },
@@ -251,18 +246,11 @@ export default function NavBar() {
     >
       {/* 로고 */}
       <div onClick={handleLogoClick} className="cursor-pointer flex items-center">
-        <img
-          src="/logo2.png"
-          alt="BAUTEK Logo"
-          className="h-4 md:h-10 object-contain"
-        />
+        <img src="/logo2.png" alt="BAUTEK Logo" className="h-4 md:h-10 object-contain" />
       </div>
 
       {/* 햄버거 메뉴 버튼 (모바일) */}
-      <button
-        className="md:hidden"
-        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-      >
+      <button className="md:hidden" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
         <img src="/Navbar/navbar.png" alt="Menu" className="h-10 w-10" />
       </button>
 
