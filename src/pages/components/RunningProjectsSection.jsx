@@ -3,6 +3,7 @@ import React, { memo, useMemo } from "react";
 import { MapContainer, TileLayer, Marker, Tooltip, Popup } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import L from "leaflet";
+import { ImageOverlay } from "react-leaflet";
 
 /**
  * 전제:
@@ -76,13 +77,7 @@ function RunningProjectsSection({
           style={{ height: "100%", width: "100%" }}
           preferCanvas
         >
-          <TileLayer
-            attribution="&copy; OpenStreetMap contributors &copy; CARTO"
-            url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
-            /* 반복 지도 제거 + 범위 전달 */
-            noWrap={true}
-            bounds={koreaBounds}
-          />
+          <ImageOverlay url="/maps/korea.png" bounds={koreaBounds} opacity={1} />
 
           <MarkerClusterGroup
             chunkedLoading
