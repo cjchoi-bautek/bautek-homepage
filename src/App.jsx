@@ -48,10 +48,7 @@ function AppLayout() {
               <RunningProjectsSection
                 height="70vh"
                 // lockZoom={true} // 줌 고정 원하면 주석 해제
-                sites={[
-                  
-                  { id:'s1', contractor:'GS건설', contractorLogo:'/logos/gs.png', name:'송도 A단지', units:1243, lat:37.382, lng:126.643 },
-                ]}
+                
               />
 
               <section className="min-h-[100dvh] md:h-screen md:snap-start bg-[#F4F4F4]">
