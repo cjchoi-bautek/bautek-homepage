@@ -119,13 +119,16 @@ const renderTimeline = (data) => {
                   </div>
                   {entry.items.map((item, i) => (
                     <div key={i} className="mb-0.5">
-                      <div className={`border border-gray-300 shadow-sm p-1 text-xs leading-tight rounded-md`}>
+                      <div className="border border-gray-300 shadow-sm p-1 text-xs leading-tight rounded-md">
                         <span>
                           <span className="text-[10px] font-semibold text-gray-700 bg-gray-200 px-1 py-0.5 rounded mr-1">
                             {item.month}
                           </span>
-                          {/* 볼드 처리 로직 재추가 */}
-                          {item.text.includes("설립") || item.text.includes("인증") || item.text.includes("출시") || item.text.includes("개발") || item.text.includes("대상")
+                          {(item.text.includes("설립") ||
+                            item.text.includes("인증") ||
+                            item.text.includes("출시") ||
+                            item.text.includes("개발") ||
+                            item.text.includes("대상"))
                             ? <strong>{item.text}</strong>
                             : item.text}
                         </span>
@@ -145,10 +148,8 @@ const renderTimeline = (data) => {
 
 export default function HistoryTimeline() {
   return (
-    <section
-      id="history"
-      className="snap-start min-h-screen pt-12 pb-6 px-4 bg-white"
-    >
+    // ✅ 여기서는 id/snap/min-h-screen 제거 (앵커/스냅은 Company.jsx의 바깥 래퍼가 담당)
+    <div className="pt-12 pb-6 px-4 bg-white">
       <h2 className="text-2xl md:text-4xl font-bold text-center text-[#004A91] mb-4">
         회사연혁
       </h2>
@@ -167,6 +168,6 @@ export default function HistoryTimeline() {
           {renderTimeline(rightData)}
         </div>
       </div>
-    </section>
+    </div>
   );
 }

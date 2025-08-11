@@ -254,7 +254,7 @@ export default function Company({ setNavbarVisible }) {
       </section>
 
       {/* ✅ History: div → section + snap-start + min-h-screen */}
-      <section id="history" ref={historyRef} className="snap-start min-h-screen bg-white">
+      <section id="history" ref={historyRef} className="snap-none min-h-screen bg-white">
         <HistoryTimeline />
       </section>
 
