@@ -21,12 +21,12 @@ const SAMPLE_SITES = [
 function RunningProjectsSection({
   sites = SAMPLE_SITES,
   height = "70vh",
-  title = "공사/납품 진행중인 현장",
+  title = "진행 현장",
   lockZoom = false,               // true면 줌 고정
 }) {
   const center = useMemo(() => [36.5, 127.8], []);
   const koreaBounds = useMemo(
-    () => L.latLngBounds([[33.0, 124.5], [39.6, 132.0]]), // 제주~독도 포함 대략 경계
+    () => L.latLngBounds([[33.0, 124.5], [39.6, 130.0]]), // 제주~독도 포함 대략 경계
     []
   );
 
