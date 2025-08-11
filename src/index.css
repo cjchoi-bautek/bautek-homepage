@@ -10,8 +10,8 @@ body {
   padding: 0;
   height: 100%;
   overflow-x: hidden;
-  overflow-y: hidden;
-  scroll-behavior: smooth;
+  overflow-y: auto;
+  scroll-behavior: auto;
   font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, system-ui, Roboto,
     'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR',
     'Malgun Gothic', sans-serif;
@@ -21,7 +21,7 @@ body {
 #root {
   height: 100%;
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: hidden;
 }
 
 /* ★★★ 스크롤 시 내비게이션 바에 콘텐츠가 가려지는 문제 해결 ★★★ */
