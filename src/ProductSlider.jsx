@@ -79,13 +79,17 @@ export default function ProductSlider() {
         .swiper-pagination { bottom: 40px !important; }
         .swiper-pagination-bullet { background: #cbd5e1; opacity: 1; }
         .swiper-pagination-bullet-active { background: #2563eb; }
-		
-		
-		.no-cjk-break-sm,
+        .no-cjk-break-sm,
         .no-cjk-break-sm * {
           word-break: keep-all;
           overflow-wrap: break-word;
           white-space: normal;
+        }
+
+        /* 이 부분이 추가되었습니다 */
+        .product-desc {
+          word-break: keep-all;
+          overflow-wrap: break-word;
         }
       `}</style>
 
@@ -155,7 +159,7 @@ export default function ProductSlider() {
                   <h2 className="text-3xl md:text-4xl font-bold text-bautek-blue mb-3">
                     {item.name}
                   </h2>
-                  <p className="text-base md:text-lg text-gray-700 mb-6 whitespace-pre-line leading-relaxed">
+                  <p className="text-base md:text-lg text-gray-700 mb-6 whitespace-pre-line leading-relaxed product-desc">
                     {item.desc}
                   </p>
 
