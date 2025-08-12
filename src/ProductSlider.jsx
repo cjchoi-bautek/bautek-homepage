@@ -79,6 +79,14 @@ export default function ProductSlider() {
         .swiper-pagination { bottom: 40px !important; }
         .swiper-pagination-bullet { background: #cbd5e1; opacity: 1; }
         .swiper-pagination-bullet-active { background: #2563eb; }
+		
+		
+		.no-cjk-break-sm,
+        .no-cjk-break-sm * {
+          word-break: keep-all;
+          overflow-wrap: break-word;
+          white-space: normal;
+        }
       `}</style>
 
       {/* div에 있던 패딩을 제거하고, h2에 마진을 추가 */}
