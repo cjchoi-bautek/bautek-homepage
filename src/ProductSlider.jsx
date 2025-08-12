@@ -79,8 +79,15 @@ export default function ProductSlider() {
         .swiper-pagination { bottom: 40px !important; }
         .swiper-pagination-bullet { background: #cbd5e1; opacity: 1; }
         .swiper-pagination-bullet-active { background: #2563eb; }
+
+        /* 이 부분이 수정되었습니다. */
+        .product-desc {
+          word-break: keep-all;
+          overflow-wrap: break-word;
+        }
       `}</style>
 
+      {/* div에 있던 패딩을 제거하고, h2에 마진을 추가 */}
       <div className="w-full text-center relative z-10">
         <h2 className="text-2xl md:text-3xl font-bold text-bautek-blue mt-14 md:mt-24 mb-4">주요 제품</h2>
       </div>
@@ -106,12 +113,14 @@ export default function ProductSlider() {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.6 }}
               >
+                {/* 이미지 + 모바일 버튼 */}
                 <motion.div
                   className="w-full md:w-1/2 flex justify-center items-center relative py-4"
                   initial={{ x: 100, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
                   transition={{ duration: 0.8 }}
                 >
+                  {/* 모바일 버튼 (좌우) */}
                   <div
                     ref={prevRef}
                     className="md:hidden absolute left-0 top-1/2 -translate-y-1/2 z-10 cursor-pointer bg-white/70 backdrop-blur p-1 rounded-full shadow-md hover:scale-105 transition w-8 h-8 flex items-center justify-center"
@@ -131,6 +140,7 @@ export default function ProductSlider() {
                   </div>
                 </motion.div>
 
+                {/* 텍스트 */}
                 <motion.div
                   className="w-full md:w-1/2 p-4 md:p-8"
                   initial={{ y: 40, opacity: 0 }}
@@ -143,9 +153,12 @@ export default function ProductSlider() {
                   <h2 className="text-3xl md:text-4xl font-bold text-bautek-blue mb-3">
                     {item.name}
                   </h2>
-                  <p className="text-base md:text-lg text-gray-700 mb-6 leading-relaxed break-word-keep-all">
+                  {/* 이 부분이 변경되었습니다: whitespace-pre-line 클래스 제거 */}
+                  <p className="text-base md:text-lg text-gray-700 mb-6 leading-relaxed product-desc">
                     {item.desc}
                   </p>
+
+                  {/* 특징 리스트 */}
                   {currentFeatures && (
                     <motion.ul
                       className="list-none p-0 m-0 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4"
@@ -188,6 +201,7 @@ export default function ProductSlider() {
           );
         })}
 
+        {/* 데스크탑 내비게이션 버튼 */}
         <div
           ref={prevRef}
           className="swiper-button-prev hidden md:flex absolute top-1/2 left-4 -translate-y-1/2 z-20 cursor-pointer bg-white/70 backdrop-blur p-2 rounded-full shadow-md hover:scale-105 transition flex items-center justify-center w-10 h-10"
