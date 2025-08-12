@@ -117,7 +117,7 @@ export default function ProductSlider() {
           return (
             <SwiperSlide key={`product-slide-${item.id}`}>
               <motion.div
-                className="w-full h-full flex flex-col md:flex-row items-center justify-center px-4 md:px-24 py-8 md:py-14"
+                className="w-full h-full flex flex-col md:flex-row items-center justify-center px-4 md:px-24 py-8 md:py-14 min-w-0"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.6 }}
