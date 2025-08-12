@@ -1,11 +1,6 @@
 // src/pages/components/RunningProjectsFromXLSX.jsx
 import React, {
-  useEffect,
-  useMemo,
-  useState,
-  useRef,
-  useCallback,
-  memo,
+  useEffect, useMemo, useState, useRef, useCallback, memo,
 } from "react";
 import { MapContainer, TileLayer, Marker, Tooltip } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
@@ -88,6 +83,12 @@ function RunningProjectsFromXLSX({
   const [selectedRegions, setSelectedRegions] = useState(new Set());
   const [selectedContractors, setSelectedContractors] = useState(new Set());
 
+  // 드롭다운
+  const [regionOpen, setRegionOpen] = useState(false);
+  const [contractorOpen, setContractorOpen] = useState(false);
+  const regionRef = useRef(null);
+  const contractorRef = useRef(null);
+
   // 기기 감지(툴팁 열림 방식 분기)
   const isMobile = useMemo(() => {
     if (typeof window === "undefined") return false;
@@ -150,28 +151,30 @@ function RunningProjectsFromXLSX({
   }, [sites]);
 
   // 옵션 변경 시 기본값: 모두 선택
+  useEffect(() => { setSelectedRegions(new Set(regionOptions)); }, [regionOptions]);
+  useEffect(() => { setSelectedContractors(new Set(contractorOptions)); }, [contractorOptions]);
+
+  // 드롭다운 외부 클릭 닫기
   useEffect(() => {
-    setSelectedRegions(new Set(regionOptions));
-  }, [regionOptions]);
-  useEffect(() => {
-    setSelectedContractors(new Set(contractorOptions));
-  }, [contractorOptions]);
+    const onDown = (e) => {
+      if (regionRef.current && !regionRef.current.contains(e.target)) setRegionOpen(false);
+      if (contractorRef.current && !contractorRef.current.contains(e.target)) setContractorOpen(false);
+    };
+    document.addEventListener("mousedown", onDown);
+    return () => document.removeEventListener("mousedown", onDown);
+  }, []);
 
   // 토글/전체선택/해제
-  const toggleRegion = (r) => {
-    setSelectedRegions((prev) => {
-      const next = new Set(prev);
-      next.has(r) ? next.delete(r) : next.add(r);
-      return next;
-    });
-  };
-  const toggleContractor = (c) => {
-    setSelectedContractors((prev) => {
-      const next = new Set(prev);
-      next.has(c) ? next.delete(c) : next.add(c);
-      return next;
-    });
-  };
+  const toggleRegion = (r) => setSelectedRegions((prev) => {
+    const next = new Set(prev);
+    next.has(r) ? next.delete(r) : next.add(r);
+    return next;
+  });
+  const toggleContractor = (c) => setSelectedContractors((prev) => {
+    const next = new Set(prev);
+    next.has(c) ? next.delete(c) : next.add(c);
+    return next;
+  });
   const selectAllRegions = () => setSelectedRegions(new Set(regionOptions));
   const clearAllRegions = () => setSelectedRegions(new Set());
   const selectAllContractors = () => setSelectedContractors(new Set(contractorOptions));
@@ -198,16 +201,10 @@ function RunningProjectsFromXLSX({
     }
   }, []);
 
-  const center = useMemo(() => [36.5, 127.8], []);
-  const koreaBounds = useMemo(
-    () => L.latLngBounds([[31.0, 121.0], [41.5, 134.5]]),
-    []
-  );
-
   return (
     <section id="running-projects" className="bg-white">
-      {/* 타이틀: 위로 살짝, 지도와 간격 넉넉히 */}
-      <div className={`${fullBleed ? "max-w-none px-0" : "max-w-6xl px-4"} mx-auto pt-4 md:pt-6 pb-12 md:pb-16`}>
+      {/* 타이틀: 지도와 간격 넉넉히 */}
+      <div className={`${fullBleed ? "max-w-none px-0" : "max-w-6xl px-4"} mx-auto pt-6 md:pt-8 pb-12 md:pb-16`}>
         <h2
           className="text-2xl md:text-3xl font-extrabold text-[#004A91] text-center animate-fadeDown mb-6 md:mb-8"
           style={{ letterSpacing: "-0.02em" }}
@@ -215,98 +212,90 @@ function RunningProjectsFromXLSX({
           {title}
         </h2>
 
-        {/* ✅ 지역 체크박스 필터 */}
-        <div className="mb-2 md:mb-4 animate-barIn">
-          <div className="flex items-center justify-between mb-2">
-            <div className="text-sm font-semibold text-gray-800">지역</div>
-            <div className="flex gap-2">
-              <button
-                onClick={selectAllRegions}
-                className="px-2.5 py-1.5 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 active:bg-gray-100 transition text-xs"
-              >
-                전체선택
-              </button>
-              <button
-                onClick={clearAllRegions}
-                className="px-2.5 py-1.5 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 active:bg-gray-100 transition text-xs"
-              >
-                전체해제
-              </button>
-            </div>
+        {/* 🔽 필터 바: 드롭다운 2개 */}
+        <div className="relative z-[5] mb-3 md:mb-4 flex flex-wrap items-center gap-3">
+          {/* 지역 드롭다운 */}
+          <div className="relative" ref={regionRef}>
+            <button
+              onClick={() => { setRegionOpen((v) => !v); setContractorOpen(false); }}
+              className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 active:bg-gray-100 transition text-sm"
+            >
+              지역
+              <span className="text-xs text-gray-500">
+                ({selectedRegions.size}/{regionOptions.length})
+              </span>
+              <svg width="14" height="14" viewBox="0 0 20 20"><path d="M5 7l5 6 5-6" fill="none" stroke="currentColor" strokeWidth="2"/></svg>
+            </button>
+            {regionOpen && (
+              <div className="absolute mt-2 w-72 max-h-72 overflow-auto rounded-xl border border-gray-200 bg-white shadow-xl p-3 z-[10]">
+                <div className="flex justify-end gap-2 mb-2">
+                  <button onClick={selectAllRegions} className="px-2 py-1 text-xs rounded border">전체선택</button>
+                  <button onClick={clearAllRegions} className="px-2 py-1 text-xs rounded border">전체해제</button>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  {regionOptions.map((r) => (
+                    <label key={r} className="flex items-center gap-2 px-2 py-1 rounded hover:bg-gray-50 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        className="accent-[#004A91]"
+                        checked={selectedRegions.has(r)}
+                        onChange={() => toggleRegion(r)}
+                      />
+                      <span className="text-sm">{r}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
-          <div className="flex flex-wrap items-center gap-2">
-            {regionOptions.map((r) => (
-              <label
-                key={r}
-                className={`inline-flex items-center gap-2 px-3 py-2 rounded-full border transition cursor-pointer
-                  ${selectedRegions.has(r)
-                    ? "border-[#004A91] bg-[#004A91]/5 text-[#004A91]"
-                    : "border-gray-300 bg-white text-gray-700 hover:bg-gray-50"}`}
-              >
-                <input
-                  type="checkbox"
-                  className="accent-[#004A91]"
-                  checked={selectedRegions.has(r)}
-                  onChange={() => toggleRegion(r)}
-                />
-                <span className="text-sm font-medium">{r}</span>
-              </label>
-            ))}
-          </div>
-        </div>
 
-        {/* ✅ 건설사 체크박스 필터 (멀티 선택) */}
-        <div className="mb-4 md:mb-6 animate-barIn" style={{ animationDelay: ".05s" }}>
-          <div className="flex items-center justify-between mb-2">
-            <div className="text-sm font-semibold text-gray-800">건설사</div>
-            <div className="flex gap-2">
-              <button
-                onClick={selectAllContractors}
-                className="px-2.5 py-1.5 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 active:bg-gray-100 transition text-xs"
-              >
-                전체선택
-              </button>
-              <button
-                onClick={clearAllContractors}
-                className="px-2.5 py-1.5 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 active:bg-gray-100 transition text-xs"
-              >
-                전체해제
-              </button>
-            </div>
+          {/* 건설사 드롭다운 */}
+          <div className="relative" ref={contractorRef}>
+            <button
+              onClick={() => { setContractorOpen((v) => !v); setRegionOpen(false); }}
+              className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 active:bg-gray-100 transition text-sm"
+            >
+              건설사
+              <span className="text-xs text-gray-500">
+                ({selectedContractors.size}/{contractorOptions.length})
+              </span>
+              <svg width="14" height="14" viewBox="0 0 20 20"><path d="M5 7l5 6 5-6" fill="none" stroke="currentColor" strokeWidth="2"/></svg>
+            </button>
+            {contractorOpen && (
+              <div className="absolute mt-2 w-[22rem] max-h-72 overflow-auto rounded-xl border border-gray-200 bg-white shadow-xl p-3 z-[10]">
+                <div className="flex justify-end gap-2 mb-2">
+                  <button onClick={selectAllContractors} className="px-2 py-1 text-xs rounded border">전체선택</button>
+                  <button onClick={clearAllContractors} className="px-2 py-1 text-xs rounded border">전체해제</button>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                  {contractorOptions.map((c) => (
+                    <label key={c} className="flex items-center gap-2 px-2 py-1 rounded hover:bg-gray-50 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        className="accent-emerald-600"
+                        checked={selectedContractors.has(c)}
+                        onChange={() => toggleContractor(c)}
+                      />
+                      <span className="text-sm truncate max-w-[140px]" title={c}>{c}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
-          <div className="flex flex-wrap items-center gap-2 max-h-36 overflow-auto pr-1">
-            {contractorOptions.map((c) => (
-              <label
-                key={c}
-                className={`inline-flex items-center gap-2 px-3 py-2 rounded-full border transition cursor-pointer
-                  ${selectedContractors.has(c)
-                    ? "border-emerald-600 bg-emerald-600/5 text-emerald-700"
-                    : "border-gray-300 bg-white text-gray-700 hover:bg-gray-50"}`}
-                title={c}
-              >
-                <input
-                  type="checkbox"
-                  className="accent-emerald-600"
-                  checked={selectedContractors.has(c)}
-                  onChange={() => toggleContractor(c)}
-                />
-                <span className="text-sm font-medium truncate max-w-[180px]">{c}</span>
-              </label>
-            ))}
-          </div>
-        </div>
 
-        {/* 개수 & 전체목록 버튼 */}
-        <div className="mb-2 flex items-center justify-between text-sm text-gray-600">
-          <div>
-            선택 결과: <span className="font-semibold text-gray-800">{filtered.length}</span> 건
+          {/* 개수 & 전체목록 버튼 */}
+          <div className="ml-auto flex items-center gap-3 text-sm text-gray-600">
+            <div>
+              선택 결과: <span className="font-semibold text-gray-800">{filtered.length}</span> 건
+            </div>
+            <button
+              onClick={() => setOpenList((v) => !v)}
+              className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 active:bg-gray-100 transition animate-bounceOnce"
+            >
+              {openList ? "목록 닫기" : "전체목록 보기"}
+            </button>
           </div>
-          <button
-            onClick={() => setOpenList((v) => !v)}
-            className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 active:bg-gray-100 transition animate-bounceOnce"
-          >
-            {openList ? "목록 닫기" : "전체목록 보기"}
-          </button>
         </div>
 
         {/* 지도/에러/로딩 */}
@@ -407,14 +396,15 @@ function RunningProjectsFromXLSX({
               {note}
             </div>
 
-            {/* 전체목록 패널 (오른쪽 사이드) */}
+            {/* ✅ 전체목록 패널: 화면 위에 확실히 뜨도록 z-index 강화 */}
             <div
-              className={`pointer-events-auto fixed md:absolute top-[72px] md:top-6 right-4 md:right-6 w-[88%] md:w-[360px] max-h-[70vh] md:max-h-[calc(100%-60px)]
-                          bg-white/95 backdrop-blur rounded-2xl shadow-xl border border-gray-200 overflow-hidden
+              className={`fixed md:fixed z-[1000] right-3 md:right-6 bottom-3 md:top-28 md:bottom-auto
+                          w-[92%] md:w-[360px] max-h-[70vh] md:max-h-[calc(100dvh-140px)]
+                          bg-white/95 backdrop-blur rounded-2xl shadow-2xl border border-gray-200 overflow-hidden
                           transition-all duration-300 ${openList ? "opacity-100 translate-y-0" : "opacity-0 pointer-events-none translate-y-2"}`}
               aria-hidden={!openList}
             >
-              <div className="flex items-center justify-between px-4 py-3 border-b">
+              <div className="flex items-center justify-between px-4 py-3 border-b bg-white/80">
                 <div className="font-semibold text-gray-900">전체목록</div>
                 <button
                   onClick={() => setOpenList(false)}
