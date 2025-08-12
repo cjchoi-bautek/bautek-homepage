@@ -630,7 +630,7 @@ export default function SupportPage() {
           viewport={{ once: true }}
         >
           <h2 className="text-2xl sm:text-3xl font-bold text-[#004A91] mb-6">
-            자사 쇼핑몰
+            자사 쇼핑몰 (추후 업데이트 예정)
           </h2>
           <p className="text-sm md:text-lg text-gray-700 mb-6">
             바우텍 쇼핑몰에서 필요한 부품을 구매하신 후, 누구나 직접 교체하실 수 있습니다.
