@@ -472,8 +472,8 @@ function RunningProjectsFromXLSX({
                 border: 1px solid #e5e7eb;
                 border-radius: 12px;
                 padding: 12px 14px;     /* 카드 안 패딩도 살짝 축소 */
-                min-width: 300px;       /* 360 → 340 */
-                max-width: 360px;       /* 460 → 440 */
+                min-width: 220px;       /* 360 → 340 */
+                max-width: 280px;       /* 460 → 440 */
                 box-shadow: 0 12px 24px rgba(0,0,0,.11);
                 transition: transform .2s ease, box-shadow .2s ease;
               }
