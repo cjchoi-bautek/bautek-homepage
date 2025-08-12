@@ -49,9 +49,7 @@ function AppLayout() {
                 //height="70vh"
                 //lockZoom={true}
 				//lockDrag={true}
-                
-             
-
+  
               <section className="min-h-[100dvh] md:h-screen md:snap-start bg-[#F4F4F4]">
                 <MapSection />
               </section>
