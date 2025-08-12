@@ -65,8 +65,8 @@ function mapRowToSite(row, idx) {
 
 function RunningProjectsFromXLSX({
   src = "/data/sites.xlsx",   // public/data/sites.xlsx
-  sheetName,                  // 지정 안 하면 첫 번째 시트
-  height = "70vh",
+  sheetName,
+  height = "64vh",            // ↓ 70vh → 64vh로 살짝 축소
   title = "진행 현장",
   note = "※ 25년 8월 기준",
   lockZoom = false,
@@ -99,7 +99,7 @@ function RunningProjectsFromXLSX({
 
   // 지도 & 마커 참조
   const mapRef = useRef(null);
-  const markersRef = useRef({}); // id -> Leaflet.Marker
+  const markersRef = useRef({});
   const [selectedId, setSelectedId] = useState(null);
   const [openList, setOpenList] = useState(false);
 
@@ -203,22 +203,22 @@ function RunningProjectsFromXLSX({
 
   return (
     <section id="running-projects" className="bg-white">
-      {/* 타이틀: 지도와 간격 넉넉히 */}
-      <div className={`${fullBleed ? "max-w-none px-0" : "max-w-6xl px-4"} mx-auto pt-6 md:pt-8 pb-12 md:pb-16`}>
+      {/* 타이틀/여백 살짝 축소: pt-3 / pb-8 */}
+      <div className={`${fullBleed ? "max-w-none px-0" : "max-w-6xl px-4"} mx-auto pt-3 md:pt-4 pb-8 md:pb-10`}>
         <h2
-          className="text-2xl md:text-3xl font-extrabold text-[#004A91] text-center animate-fadeDown mb-6 md:mb-8"
+          className="text-2xl md:text-3xl font-extrabold text-[#004A91] text-center animate-fadeDown mb-3 md:mb-4"
           style={{ letterSpacing: "-0.02em" }}
         >
           {title}
         </h2>
 
-        {/* 🔽 필터 바: 드롭다운 2개 */}
-        <div className="relative z-[5] mb-3 md:mb-4 flex flex-wrap items-center gap-3">
+        {/* 🔽 필터 바: 드롭다운 2개 (여백 축소) */}
+        <div className="relative z-[5] mb-2 md:mb-3 flex flex-wrap items-center gap-2">
           {/* 지역 드롭다운 */}
           <div className="relative" ref={regionRef}>
             <button
               onClick={() => { setRegionOpen((v) => !v); setContractorOpen(false); }}
-              className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 active:bg-gray-100 transition text-sm"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 active:bg-gray-100 transition text-sm"
             >
               지역
               <span className="text-xs text-gray-500">
@@ -227,7 +227,7 @@ function RunningProjectsFromXLSX({
               <svg width="14" height="14" viewBox="0 0 20 20"><path d="M5 7l5 6 5-6" fill="none" stroke="currentColor" strokeWidth="2"/></svg>
             </button>
             {regionOpen && (
-              <div className="absolute mt-2 w-72 max-h-72 overflow-auto rounded-xl border border-gray-200 bg-white shadow-xl p-3 z-[10]">
+              <div className="absolute mt-2 w-72 max-h-64 overflow-auto rounded-xl border border-gray-200 bg-white shadow-xl p-3 z-[10]">
                 <div className="flex justify-end gap-2 mb-2">
                   <button onClick={selectAllRegions} className="px-2 py-1 text-xs rounded border">전체선택</button>
                   <button onClick={clearAllRegions} className="px-2 py-1 text-xs rounded border">전체해제</button>
@@ -253,7 +253,7 @@ function RunningProjectsFromXLSX({
           <div className="relative" ref={contractorRef}>
             <button
               onClick={() => { setContractorOpen((v) => !v); setRegionOpen(false); }}
-              className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 active:bg-gray-100 transition text-sm"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 active:bg-gray-100 transition text-sm"
             >
               건설사
               <span className="text-xs text-gray-500">
@@ -262,7 +262,7 @@ function RunningProjectsFromXLSX({
               <svg width="14" height="14" viewBox="0 0 20 20"><path d="M5 7l5 6 5-6" fill="none" stroke="currentColor" strokeWidth="2"/></svg>
             </button>
             {contractorOpen && (
-              <div className="absolute mt-2 w-[22rem] max-h-72 overflow-auto rounded-xl border border-gray-200 bg-white shadow-xl p-3 z-[10]">
+              <div className="absolute mt-2 w-[22rem] max-h-64 overflow-auto rounded-xl border border-gray-200 bg-white shadow-xl p-3 z-[10]">
                 <div className="flex justify-end gap-2 mb-2">
                   <button onClick={selectAllContractors} className="px-2 py-1 text-xs rounded border">전체선택</button>
                   <button onClick={clearAllContractors} className="px-2 py-1 text-xs rounded border">전체해제</button>
@@ -285,13 +285,13 @@ function RunningProjectsFromXLSX({
           </div>
 
           {/* 개수 & 전체목록 버튼 */}
-          <div className="ml-auto flex items-center gap-3 text-sm text-gray-600">
+          <div className="ml-auto flex items-center gap-2 text-sm text-gray-600">
             <div>
               선택 결과: <span className="font-semibold text-gray-800">{filtered.length}</span> 건
             </div>
             <button
               onClick={() => setOpenList((v) => !v)}
-              className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 active:bg-gray-100 transition animate-bounceOnce"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 active:bg-gray-100 transition animate-bounceOnce"
             >
               {openList ? "목록 닫기" : "전체목록 보기"}
             </button>
@@ -300,7 +300,7 @@ function RunningProjectsFromXLSX({
 
         {/* 지도/에러/로딩 */}
         {loading && (
-          <div className="text-center text-gray-500 py-8">현장 데이터를 불러오는 중…</div>
+          <div className="text-center text-gray-500 py-6">현장 데이터를 불러오는 중…</div>
         )}
         {err && (
           <div className="text-center text-red-600 py-4">오류: {err}</div>
@@ -323,10 +323,9 @@ function RunningProjectsFromXLSX({
               maxBoundsViscosity={0.85}
               preferCanvas
               whenCreated={(map) => (mapRef.current = map)}
-              style={{ height: "100%", width: "100%", background: mapBg, borderRadius: 14 }}
-              className="shadow-lg hover:shadow-xl transition-shadow duration-300"
+              style={{ height: "100%", width: "100%", background: mapBg, borderRadius: 12 }}
+              className="shadow-md hover:shadow-lg transition-shadow duration-300"
             >
-              {/* 라벨 없는 타일(영문 지명 제거) */}
               <TileLayer
                 attribution="&copy; OpenStreetMap & CARTO"
                 url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
@@ -358,7 +357,6 @@ function RunningProjectsFromXLSX({
                             }
                       }
                     >
-                      {/* 옆으로 길게 나오는 카드형 툴팁 (연결선/점 포함) */}
                       <Tooltip
                         interactive
                         direction={side}
@@ -391,20 +389,20 @@ function RunningProjectsFromXLSX({
               </MarkerClusterGroup>
             </MapContainer>
 
-            {/* 좌하단 노트 */}
-            <div className="mt-2 text-right text-[11px] md:text-xs text-gray-500 select-none">
+            {/* 좌하단 노트 (여백 축소) */}
+            <div className="mt-1 text-right text-[11px] md:text-xs text-gray-500 select-none">
               {note}
             </div>
 
-            {/* ✅ 전체목록 패널: 화면 위에 확실히 뜨도록 z-index 강화 */}
+            {/* 전체목록 패널 */}
             <div
-              className={`fixed md:fixed z-[1000] right-3 md:right-6 bottom-3 md:top-28 md:bottom-auto
-                          w-[92%] md:w-[360px] max-h-[70vh] md:max-h-[calc(100dvh-140px)]
+              className={`fixed z-[1000] right-3 md:right-6 bottom-3 md:top-24 md:bottom-auto
+                          w-[92%] md:w-[340px] max-h-[66vh] md:max-h-[calc(100dvh-120px)]
                           bg-white/95 backdrop-blur rounded-2xl shadow-2xl border border-gray-200 overflow-hidden
                           transition-all duration-300 ${openList ? "opacity-100 translate-y-0" : "opacity-0 pointer-events-none translate-y-2"}`}
               aria-hidden={!openList}
             >
-              <div className="flex items-center justify-between px-4 py-3 border-b bg-white/80">
+              <div className="flex items-center justify-between px-4 py-2.5 border-b bg-white/80">
                 <div className="font-semibold text-gray-900">전체목록</div>
                 <button
                   onClick={() => setOpenList(false)}
@@ -413,7 +411,7 @@ function RunningProjectsFromXLSX({
                   닫기
                 </button>
               </div>
-              <div className="p-3 overflow-auto" style={{ maxHeight: "60vh" }}>
+              <div className="p-3 overflow-auto" style={{ maxHeight: "56vh" }}>
                 {filtered.length === 0 && (
                   <div className="text-sm text-gray-500 py-8 text-center">
                     선택한 조건에 현장이 없습니다.
@@ -424,7 +422,7 @@ function RunningProjectsFromXLSX({
                     <li key={s.id}>
                       <button
                         onClick={() => { setOpenList(false); focusSite(s); }}
-                        className={`w-full text-left rounded-xl border px-3 py-2.5 transition
+                        className={`w-full text-left rounded-xl border px-3 py-2 transition
                           ${selectedId === s.id ? "border-[#004A91] bg-[#004A91]/5" : "border-gray-200 hover:bg-gray-50"}`}
                       >
                         <div className="text-xs text-gray-500">{s.region || "기타"}</div>
@@ -440,13 +438,10 @@ function RunningProjectsFromXLSX({
               </div>
             </div>
 
-            {/* 애니메이션 & 스타일 (클러스터/카드/커넥터 등) */}
+            {/* 애니메이션 & 스타일 */}
             <style>{`
               @keyframes fadeDown { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
               .animate-fadeDown { animation: fadeDown .45s ease-out both; }
-
-              @keyframes barIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
-              .animate-barIn { animation: barIn .3s ease-out both .2s; }
 
               @keyframes cardIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
               .animate-cardIn { animation: cardIn .25s ease-out both; }
@@ -475,11 +470,11 @@ function RunningProjectsFromXLSX({
                 position: relative;
                 background: #fff;
                 border: 1px solid #e5e7eb;
-                border-radius: 14px;
-                padding: 14px 16px;
-                min-width: 360px;
-                max-width: 460px;
-                box-shadow: 0 14px 28px rgba(0,0,0,.12);
+                border-radius: 12px;
+                padding: 12px 14px;     /* 카드 안 패딩도 살짝 축소 */
+                min-width: 340px;       /* 360 → 340 */
+                max-width: 440px;       /* 460 → 440 */
+                box-shadow: 0 12px 24px rgba(0,0,0,.11);
                 transition: transform .2s ease, box-shadow .2s ease;
               }
               .side-card .connector {
