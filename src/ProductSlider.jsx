@@ -163,9 +163,7 @@ export default function ProductSlider() {
                     {item.name}
                   </h2>
                   <p 
-				    className="text-base md:text-lg text-gray-700 mb-6 leading-relaxed"
-                    style={{ wordBreak: 'keep-all', overflowWrap: 'anywhere', whiteSpace: 'normal'}}
-					>
+				    className="text-base md:text-lg text-gray-700 mb-6 leading-relaxed product-desc no-cjk-break">
                     {item.desc}
                   </p>
 
@@ -198,11 +196,7 @@ export default function ProductSlider() {
                               {feature.title}
                             </h4>
                             {feature.subtitle.map((line, i) => (
-                              <p 
-							    key={`subtitle-${feature.id}-${i}`} 
-								className="text-base md:text-lg text-gray-700 leading-relaxed"
-								style={{ wordBreak: 'keep-all', overflowwrap: 'anywhere', whiteSpace: 'normal'}}
-								>
+                              <p key={`subtitle-${feature.id}-${i}`} className="text-base md:text-lg text-gray-700 leading-relaxed">
                                 {line}
                               </p>
                             ))}
