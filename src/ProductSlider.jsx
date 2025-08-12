@@ -124,7 +124,7 @@ export default function ProductSlider() {
               >
                 {/* 이미지 + 모바일 버튼 */}
                 <motion.div
-                  className="w-full md:w-1/2 min-w-0 flex justify-center items-center relative py-4"
+                  className="w-full md:w-1/2 min-w-0 basis-0 flex justify-center items-center relative py-4"
                   initial={{ x: 100, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
                   transition={{ duration: 0.8 }}
@@ -151,7 +151,7 @@ export default function ProductSlider() {
 
                 {/* 텍스트 */}
                 <motion.div
-                  className="w-full md:w-1/2 min-w-0 p-4 md:p-8"
+                  className="w-full md:w-1/2 min-w-0 basis-0 p-4 md:p-8"
                   initial={{ y: 40, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ duration: 0.8, delay: 0.2 }}
@@ -162,7 +162,10 @@ export default function ProductSlider() {
                   <h2 className="text-3xl md:text-4xl font-bold text-bautek-blue mb-3">
                     {item.name}
                   </h2>
-                  <p className="text-base md:text-lg text-gray-700 mb-6 leading-relaxed product-desc no-cjk-break">
+                  <p 
+				    className="text-base md:text-lg text-gray-700 mb-6 leading-relaxed"
+                    style={{ wordBreak: 'keep-all', overflowWrap: 'anywhere', whiteSpace: 'normal'}}
+					>
                     {item.desc}
                   </p>
 
@@ -195,7 +198,11 @@ export default function ProductSlider() {
                               {feature.title}
                             </h4>
                             {feature.subtitle.map((line, i) => (
-                              <p key={`subtitle-${feature.id}-${i}`} className="text-base md:text-lg text-gray-700 leading-relaxed">
+                              <p 
+							    key={`subtitle-${feature.id}-${i}`} 
+								className="text-base md:text-lg text-gray-700 leading-relaxed"
+								style={{ wordBreak: 'keep-all', overflowwrap: 'anywhere', whiteSpace: 'normal'}}
+								>
                                 {line}
                               </p>
                             ))}
