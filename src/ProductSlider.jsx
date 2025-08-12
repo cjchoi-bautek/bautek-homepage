@@ -159,7 +159,7 @@ export default function ProductSlider() {
                   <h2 className="text-3xl md:text-4xl font-bold text-bautek-blue mb-3">
                     {item.name}
                   </h2>
-                  <p className="text-base md:text-lg text-gray-700 mb-6 whitespace-pre-line leading-relaxed product-desc">
+                  <p className="text-base md:text-lg text-gray-700 mb-6 leading-relaxed product-desc">
                     {item.desc}
                   </p>
 
