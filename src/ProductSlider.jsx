@@ -74,24 +74,27 @@ export default function ProductSlider() {
   return (
     <section className="snap-start min-h-screen flex flex-col relative overflow-hidden bg-white font-Pretendard">
       <style>{`
-        .swiper-button-prev::after,
-        .swiper-button-next::after { display: none !important; }
-        .swiper-pagination { bottom: 40px !important; }
-        .swiper-pagination-bullet { background: #cbd5e1; opacity: 1; }
-        .swiper-pagination-bullet-active { background: #2563eb; }
-        .no-cjk-break-sm,
-        .no-cjk-break-sm * {
-          word-break: keep-all;
-          overflow-wrap: break-word;
-          white-space: normal;
-        }
+		.swiper-button-prev::after,
+		.swiper-button-next::after { display: none !important; }
+		.swiper-pagination { bottom: 40px !important; }
+		.swiper-pagination-bullet { background: #cbd5e1; opacity: 1; }
+		.swiper-pagination-bullet-active { background: #2563eb; }
 
-        /* 이 부분이 추가되었습니다 */
-        .product-desc {
-          word-break: keep-all;
-          overflow-wrap: break-word;
-        }
-      `}</style>
+		/* ✅ 한글은 단어 중간 금지, 영어/긴 토큰은 자연스럽게 줄바꿈 */
+		.no-cjk-break,
+		.no-cjk-break * {
+			word-break: keep-all !important;
+			overflow-wrap: anywhere !important;  /* ← 이게 핵심 */
+			white-space: normal !important;
+			hyphens: auto;
+						}
+
+		/* 기존 클래스도 보강 (desc 전용) */
+		.product-desc {
+			word-break: keep-all;
+			overflow-wrap: anywhere;   /* ← 추가 */
+						}
+`}</style>
 
       {/* div에 있던 패딩을 제거하고, h2에 마진을 추가 */}
       <div className="w-full text-center relative z-10">
@@ -159,7 +162,7 @@ export default function ProductSlider() {
                   <h2 className="text-3xl md:text-4xl font-bold text-bautek-blue mb-3">
                     {item.name}
                   </h2>
-                  <p className="text-base md:text-lg text-gray-700 mb-6 leading-relaxed product-desc">
+                  <p className="text-base md:text-lg text-gray-700 mb-6 leading-relaxed product-desc no-cjk-break">
                     {item.desc}
                   </p>
 

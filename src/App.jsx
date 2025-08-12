@@ -44,13 +44,13 @@ function AppLayout() {
               </section>
 
               {/* 진행 현장 (xlsx 자동 로드 사용 예시) */}
-              <RunningProjectsFromXLSX
-			    src="/data/sites.xlsx"
-                height="70vh"
+              //<RunningProjectsFromXLSX
+			    //src="/data/sites.xlsx"
+                //height="70vh"
                 //lockZoom={true}
 				//lockDrag={true}
                 
-              />
+              ///>
 
               <section className="min-h-[100dvh] md:h-screen md:snap-start bg-[#F4F4F4]">
                 <MapSection />
