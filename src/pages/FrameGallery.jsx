@@ -26,7 +26,7 @@ export default function FrameGallery() {
       <div className="py-16 px-4 sm:px-8 lg:px-16 min-h-screen bg-white">
         <motion.h2
           id="frame-section"
-          className="text-center text-xl sm:text-2xl font-extrabold text-[#004A91] mb-10 sm:mb-16 scroll-mt-24"
+          className="text-center text-xl sm:text-2xl font-extrabold text-[#004A91] mb-10 sm:mb-16 scroll-mt-24 pt-20"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
