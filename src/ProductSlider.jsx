@@ -124,7 +124,7 @@ export default function ProductSlider() {
               >
                 {/* 이미지 + 모바일 버튼 */}
                 <motion.div
-                  className="w-full md:w-1/2 flex justify-center items-center relative py-4"
+                  className="w-full md:w-1/2 min-w-0 flex justify-center items-center relative py-4"
                   initial={{ x: 100, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
                   transition={{ duration: 0.8 }}
@@ -151,7 +151,7 @@ export default function ProductSlider() {
 
                 {/* 텍스트 */}
                 <motion.div
-                  className="w-full md:w-1/2 p-4 md:p-8"
+                  className="w-full md:w-1/2 min-w-0 p-4 md:p-8"
                   initial={{ y: 40, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ duration: 0.8, delay: 0.2 }}
