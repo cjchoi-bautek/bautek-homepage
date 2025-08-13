@@ -1,4 +1,3 @@
-// src/Company.jsx
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import HistoryTimeline from "./components/history";
@@ -23,8 +22,62 @@ export default function Company({ setNavbarVisible }) {
   const historySectionRef = useRef(null);
   const mainRef = useRef(null);
 
+  // 실제 네비 높이 측정(우선순위: DOM → CSS 변수 → 0)
+  const getNavHeight = () => {
+    const el =
+      document.querySelector('[data-navbar]') ||
+      document.getElementById("navbar") ||
+      document.querySelector("nav");
+    const byEl = el ? Math.round(el.getBoundingClientRect().height) : 0;
+    const byVar =
+      parseInt(
+        getComputedStyle(document.documentElement).getPropertyValue("--nav-h")
+      ) || 0;
+    return byEl || byVar || 0;
+  };
+
+  // main 컨테이너 기준으로 #hash 스크롤
   useEffect(() => {
-    // history 섹션이 보이면 Navbar 숨김 (메인 스크롤 컨테이너 기준 관찰)
+    const main = mainRef.current;
+    if (!main) return;
+
+    const scrollToHash = () => {
+      const id = window.location.hash?.replace("#", "");
+      if (!id) return;
+      const target = document.getElementById(id);
+      if (!target) return;
+
+      const navH = getNavHeight();
+
+      // main 내부 좌표로 변환한 뒤 navH 만큼 보정
+      const top =
+        target.getBoundingClientRect().top -
+        main.getBoundingClientRect().top +
+        main.scrollTop -
+        navH;
+
+      // 레이아웃 확정 후 스크롤(이미지 로딩 타이밍 대비)
+      requestAnimationFrame(() => {
+        main.scrollTo({ top, behavior: "smooth" });
+      });
+    };
+
+    // 최초 진입 + 해시 변경 시 처리
+    scrollToHash();
+    window.addEventListener("hashchange", scrollToHash);
+    // 창 크기/회전 변경 시 네비 높이 재계산해서 재적용
+    window.addEventListener("resize", scrollToHash);
+    window.addEventListener("orientationchange", scrollToHash);
+
+    return () => {
+      window.removeEventListener("hashchange", scrollToHash);
+      window.removeEventListener("resize", scrollToHash);
+      window.removeEventListener("orientationchange", scrollToHash);
+    };
+  }, []);
+
+  // history 섹션 보이면 Navbar 숨김 (main 기준 관찰)
+  useEffect(() => {
     const main = mainRef.current;
     const target = historySectionRef.current;
     if (!main || !target) return;
@@ -42,14 +95,17 @@ export default function Company({ setNavbarVisible }) {
   return (
     <main
       ref={mainRef}
-      className="h-screen overflow-y-auto overscroll-y-contain snap-y snap-proximity font-Pretendard"
-      /* NavBar에서 설정한 --nav-h 를 사용해 고정 헤더 높이 보정 */
-      style={{ scrollPaddingTop: "var(--nav-h, 0px)" }}
+      // 동적뷰포트 + 자체 스크롤 + 부드러운 스냅
+      className="h-[100dvh] overflow-y-auto overscroll-y-auto font-Pretendard snap-y snap-proximity"
+      // scroll-padding-top은 0으로 두고, 섹션별 scroll-margin-top으로 보정
+      style={{ scrollPaddingTop: "0px" }}
     >
       {/* Greeting Section (인사말) */}
       <section
         id="greeting"
-        className="snap-start min-h-screen relative flex flex-col items-start justify-center overflow-hidden"
+        className="snap-start min-h-[100dvh] relative flex flex-col items-start justify-center overflow-hidden"
+        // 모든 섹션에 네비 높이만큼 margin 보정
+        style={{ scrollMarginTop: "var(--nav-h, 0px)" }}
       >
         <img
           src="/Company/factory1.jpg"
@@ -97,10 +153,11 @@ export default function Company({ setNavbarVisible }) {
         </motion.div>
       </section>
 
-      {/* Core Capabilities Section (핵심역량) */}
+      {/* Core Capabilities Section */}
       <section
         id="core"
-        className="snap-start min-h-screen px-6 py-16 md:px-20 bg-white flex flex-col items-center justify-center text-gray-800"
+        className="snap-start min-h-[100dvh] px-6 py-16 md:px-20 bg-white flex flex-col items-center justify-center text-gray-800"
+        style={{ scrollMarginTop: "var(--nav-h, 0px)" }}
       >
         <motion.h2
           className="text-2xl md:text-4xl font-bold text-bautek-blue mb-10 md:mb-16"
@@ -181,7 +238,8 @@ export default function Company({ setNavbarVisible }) {
       {/* Vision & Mission Section */}
       <section
         id="vision"
-        className="snap-start min-h-screen px-6 py-16 md:px-20 bg-white flex flex-col items-center justify-center text-gray-800"
+        className="snap-start min-h-[100dvh] px-6 py-16 md:px-20 bg-white flex flex-col items-center justify-center text-gray-800"
+        style={{ scrollMarginTop: "var(--nav-h, 0px)" }}
       >
         <motion.h2
           className="text-2xl md:text-4xl font-bold text-bautek-blue mb-10 md:mb-16"
@@ -309,22 +367,23 @@ export default function Company({ setNavbarVisible }) {
         </motion.div>
       </section>
 
-      {/* History — 이 섹션 자체는 main의 snap 대상이 되지 않고, 내부 div가 스크롤을 담당합니다. */}
-      {/* 이 섹션은 스냅을 제거하여 내부 스크롤 컨테이너가 자유롭게 스크롤 되도록 합니다. */}
-      <section id="history" ref={historySectionRef} className="min-h-screen bg-white">
-        {/*
-          ✅ 이 div가 HistoryTimeline의 내용을 감싸고 스크롤을 처리합니다.
-          섹션의 전체 높이를 차지하면서 오버플로우를 처리합니다.
-        */}
+      {/* History — 섹션은 스냅 대상 아님, 내부 div가 스크롤 */}
+      <section
+        id="history"
+        ref={historySectionRef}
+        className="min-h-[100dvh] bg-white"
+        style={{ scrollMarginTop: "var(--nav-h, 0px)" }}
+      >
         <div className="w-full h-full overflow-y-auto overscroll-y-contain">
           <HistoryTimeline />
         </div>
       </section>
 
-      {/* CI / BI — 이 섹션은 main의 snap 대상이 됩니다. */}
+      {/* CI / BI — 모바일 하단 안전영역 보정 + 데스크탑 풀스크린 */}
       <section
         id="CI"
-        className="snap-start relative min-h-screen px-6 py-16 md:px-20 bg-white flex flex-col items-center justify-center overflow-hidden"
+        className="snap-end md:snap-start relative min-h-[100dvh] md:h-[100vh] px-6 py-16 md:px-20 bg-white flex flex-col items-center justify-center pb-[env(safe-area-inset-bottom)]"
+        style={{ scrollMarginTop: "var(--nav-h, 0px)" }}
       >
         <motion.video
           key={videoKey}
@@ -410,7 +469,7 @@ export default function Company({ setNavbarVisible }) {
               transition={{ delay: 0.2 }}
               viewport={{ once: true, amount: 0.3 }}
             >
-              <h3 className="text-2xl font-bold text-white mb-8">BI (Brand Identity)</h3>
+              <h3 className="text-2xl font-bold text:white mb-8">BI (Brand Identity)</h3>
               <div className="flex justify-center mb-8 h-24 md:h-28 items-center w-full">
                 <img
                   src="/Company/logo2.png"
