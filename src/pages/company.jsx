@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import HistoryTimeline from "./components/history";
+import { Helmet } from "react-helmet";
 
 // Motion Variants
 const sectionVariants = {
@@ -22,7 +23,15 @@ export default function Company({ setNavbarVisible }) {
   const historySectionRef = useRef(null);
   const mainRef = useRef(null);
 
-  // 실제 네비 높이 측정(우선순위: DOM → CSS 변수 → 0)
+  // ✅ 추가: 진입 시 무조건 맨 위로 스크롤 (특히 모바일)
+  useEffect(() => {
+    const main = mainRef.current;
+    if (main) {
+      main.scrollTo({ top: 0, behavior: "auto" });
+    }
+  }, []);
+
+  // 네비게이션 높이 측정
   const getNavHeight = () => {
     const el =
       document.querySelector('[data-navbar]') ||
@@ -36,7 +45,7 @@ export default function Company({ setNavbarVisible }) {
     return byEl || byVar || 0;
   };
 
-  // main 컨테이너 기준으로 #hash 스크롤
+  // 해시 스크롤 처리
   useEffect(() => {
     const main = mainRef.current;
     if (!main) return;
@@ -48,24 +57,19 @@ export default function Company({ setNavbarVisible }) {
       if (!target) return;
 
       const navH = getNavHeight();
-
-      // main 내부 좌표로 변환한 뒤 navH 만큼 보정
       const top =
         target.getBoundingClientRect().top -
         main.getBoundingClientRect().top +
         main.scrollTop -
         navH;
 
-      // 레이아웃 확정 후 스크롤(이미지 로딩 타이밍 대비)
       requestAnimationFrame(() => {
         main.scrollTo({ top, behavior: "smooth" });
       });
     };
 
-    // 최초 진입 + 해시 변경 시 처리
     scrollToHash();
     window.addEventListener("hashchange", scrollToHash);
-    // 창 크기/회전 변경 시 네비 높이 재계산해서 재적용
     window.addEventListener("resize", scrollToHash);
     window.addEventListener("orientationchange", scrollToHash);
 
@@ -93,11 +97,18 @@ export default function Company({ setNavbarVisible }) {
   const handleVideoEnd = () => setTimeout(() => setVideoKey((k) => k + 1), 500);
 
   return (
-    <main
+    
+	<>
+   <Helmet>
+    <title>회사소개 | BAUTEK</title>
+    <meta name="description" content="바우텍은 PVC 터닝도어, 시스템 루버 등 고기능성 건축자재를 제조하는 기업으로, 독자적인 기술과 품질을 바탕으로 국내 1군 건설사와 협업하고 있습니다." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://www.greenbautek.com/company" />
+   </Helmet>
+	
+	<main
       ref={mainRef}
-      // 동적뷰포트 + 자체 스크롤 + 부드러운 스냅
       className="h-[100dvh] overflow-y-auto overscroll-y-auto font-Pretendard snap-y snap-proximity"
-      // scroll-padding-top은 0으로 두고, 섹션별 scroll-margin-top으로 보정
       style={{ scrollPaddingTop: "0px" }}
     >
       {/* Greeting Section (인사말) */}
@@ -105,7 +116,8 @@ export default function Company({ setNavbarVisible }) {
         id="greeting"
         className="snap-start min-h-[100dvh] relative flex flex-col items-start justify-center overflow-hidden"
         // 모든 섹션에 네비 높이만큼 margin 보정
-        style={{ scrollMarginTop: "var(--nav-h, 0px)" }}
+        style={{ scrollMarginTop: "var(--nav-h, 0px)",
+		         paddingTop: "var(--nav-h,0px)", }}
       >
         <img
           src="/Company/factory1.jpg"
@@ -469,7 +481,7 @@ export default function Company({ setNavbarVisible }) {
               transition={{ delay: 0.2 }}
               viewport={{ once: true, amount: 0.3 }}
             >
-              <h3 className="text-2xl font-bold text:white mb-8">BI (Brand Identity)</h3>
+              <h3 className="text-2xl font-bold text-white mb-8">BI (Brand Identity)</h3>
               <div className="flex justify-center mb-8 h-24 md:h-28 items-center w-full">
                 <img
                   src="/Company/logo2.png"
@@ -492,5 +504,6 @@ export default function Company({ setNavbarVisible }) {
         </div>
       </section>
     </main>
+	</>
   );
 }

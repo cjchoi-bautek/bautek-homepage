@@ -1,0 +1,57 @@
+DirectoryIndex index.html index.php
+Options -Indexes +FollowSymLinks
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # 0) ✅ 삭제된 경로는 정확히 404
+  RewriteCond %{REQUEST_URI} ^/(contents|about-bautek|system-louver/(mixed-type|fixed-type|sliding-type|single-open-type|double-open-type|ventilation-louver-type)|pr-and-installation-video|about-bautek/company-info|portfolio-item/(sliding-type|double-open-type-handle|ventilation-louver-type|fixed-type-handle-lever|double-open-type-outside|ventilation-louver-type-handle)|general-product/(evacuation-window|sound-proofing-and-heat-insulation-door)|louver-technology/energy-performance|louver-tecnology/pvc-system-louver)(/.*)?$ [NC]
+  RewriteRule ^ - [R=404,L]
+
+  # 1) 인증서 파일 예외 (.well-known 폴더)
+  RewriteRule ^\.well-known/ - [L]
+
+  # 2) robots.txt, sitemap.xml 예외 (리다이렉트/재작성 제외)
+  RewriteCond %{REQUEST_URI} ^/robots\.txt$ [NC,OR]
+  RewriteCond %{REQUEST_URI} ^/sitemap\.xml$ [NC]
+  RewriteRule ^ - [L]
+
+  # 3) ✅ (변경) HTTPS 강제 + non-www 통일을 한 번에
+  #    - HTTPS가 아니거나, www.greenbautek.com으로 들어오면 →
+  #      https://greenbautek.com 로 301
+  RewriteCond %{HTTPS} !=on [OR]
+  RewriteCond %{HTTP_HOST} ^www\.greenbautek\.com$ [NC]
+  RewriteRule ^ https://greenbautek.com%{REQUEST_URI} [R=301,L]
+
+  # 4) 실제 파일/폴더는 그대로 전달
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # 5) SPA 라우팅 대응 (React 등)
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+# GZIP 압축
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json image/svg+xml
+</IfModule>
+
+# 캐시 설정
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 7 days"
+  ExpiresByType application/javascript "access plus 7 days"
+  ExpiresByType image/svg+xml "access plus 30 days"
+  ExpiresByType image/webp "access plus 30 days"
+  ExpiresByType image/png "access plus 30 days"
+  ExpiresByType image/jpeg "access plus 30 days"
+  ExpiresByType image/x-icon "access plus 30 days"
+</IfModule>
+
+# (선택) HSTS: HTTPS만 사용하도록 브라우저 고정
+# 적용 전, 서브도메인/프리로드 전략을 꼭 확인하세요.
+# <IfModule mod_headers.c>
+#   Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+# </IfModule>

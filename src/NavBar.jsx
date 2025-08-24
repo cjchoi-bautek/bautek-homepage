@@ -306,9 +306,13 @@ export default function NavBar() {
       className={`fixed top-0 left-0 w-full px-3 py-2 md:py-5 flex justify-between items-center z-50 transition-all duration-300 ${textColorClass} ${bgClass}`}
     >
       {/* 로고 */}
-      <div onClick={handleLogoClick} className="cursor-pointer flex items-center">
-        <img src="/logo2.png" alt="BAUTEK Logo" className="h-4 md:h-10 object-contain" />
-      </div>
+		<div onClick={handleLogoClick} className="cursor-pointer flex items-center">
+		<img
+			src={isHeroVisible ? "/color2.png" : "/logo2.png"}
+			alt="BAUTEK Logo"
+			className="h-6 md:h-10 object-contain transition-all duration-300"
+			/>
+		</div>
 
       {/* 햄버거 메뉴 버튼 (모바일) */}
       <button className="md:hidden" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>

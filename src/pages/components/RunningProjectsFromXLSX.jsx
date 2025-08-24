@@ -1,4 +1,4 @@
-// src/pages/components/RunningProjectsFromXLSX.jsx
+/* // src/pages/components/RunningProjectsFromXLSX.jsx
 import React, {
   useEffect, useMemo, useState, useRef, useCallback, memo,
 } from "react";
@@ -8,7 +8,7 @@ import * as XLSX from "xlsx";
 import L from "leaflet";
 
 /** ---------- 튜닝 포인트(길이/기준) ---------- */
-const KOREA_CENTER_LON = 127.8;
+/*const KOREA_CENTER_LON = 127.8;
 const CARD_OFFSET_PX   = 130;
 const CONNECTOR_LEN_PX = 110;
 const DOT_OUT_PX       = CONNECTOR_LEN_PX + 10;
@@ -18,7 +18,7 @@ const DEFAULT_REGION_ORDER = [
 ];
 
 /** 클러스터 뱃지 */
-const createClusterCustomIcon = (cluster) => {
+/*const createClusterCustomIcon = (cluster) => {
   const count = cluster.getChildCount();
   const size = count < 10 ? 30 : count < 50 ? 36 : 42;
   return L.divIcon({
@@ -29,7 +29,7 @@ const createClusterCustomIcon = (cluster) => {
 };
 
 /** 위경도로 대략 지역 추정 (엑셀에 지역이 없을 때만 사용) */
-function inferRegion(lat, lng) {
+/*function inferRegion(lat, lng) {
   if (lat < 34.2 && lng > 125 && lng < 127.5) return "제주";
   if (lng >= 127.5 && lat >= 37.0) return "강원권";
   if (lng >= 128.0) return "영남권";
@@ -40,7 +40,7 @@ function inferRegion(lat, lng) {
 }
 
 /** 행 → 사이트 객체 매핑 */
-function mapRowToSite(row, idx) {
+/*function mapRowToSite(row, idx) {
   const lat = parseFloat(row.lat ?? row.Lat ?? row.위도);
   const lng = parseFloat(row.lng ?? row.Lng ?? row.Long ?? row.경도);
   if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
@@ -201,10 +201,10 @@ function RunningProjectsFromXLSX({
     }
   }, []);
 
-  return (
+  /*return (
     <section id="running-projects" className="bg-white">
       {/* 타이틀/여백 살짝 축소: pt-3 / pb-8 */}
-      <div className={`${fullBleed ? "max-w-none px-0" : "max-w-6xl px-4"} mx-auto pt-3 md:pt-4 pb-8 md:pb-10`}>
+      /*<div className={`${fullBleed ? "max-w-none px-0" : "max-w-6xl px-4"} mx-auto pt-3 md:pt-4 pb-8 md:pb-10`}>
         <h2
           className="text-2xl md:text-3xl font-extrabold text-[#004A91] text-center animate-fadeDown mb-3 md:mb-4"
           style={{ letterSpacing: "-0.02em" }}
@@ -213,9 +213,9 @@ function RunningProjectsFromXLSX({
         </h2>
 
         {/* 🔽 필터 바: 드롭다운 2개 (여백 축소) */}
-        <div className="relative z-[5] mb-2 md:mb-3 flex flex-wrap items-center gap-2">
+      /*  <div className="relative z-[5] mb-2 md:mb-3 flex flex-wrap items-center gap-2">
           {/* 지역 드롭다운 */}
-          <div className="relative" ref={regionRef}>
+         /* <div className="relative" ref={regionRef}>
             <button
               onClick={() => { setRegionOpen((v) => !v); setContractorOpen(false); }}
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 active:bg-gray-100 transition text-sm"
@@ -250,7 +250,7 @@ function RunningProjectsFromXLSX({
           </div>
 
           {/* 건설사 드롭다운 */}
-          <div className="relative" ref={contractorRef}>
+          /*<div className="relative" ref={contractorRef}>
             <button
               onClick={() => { setContractorOpen((v) => !v); setRegionOpen(false); }}
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 active:bg-gray-100 transition text-sm"
@@ -285,7 +285,7 @@ function RunningProjectsFromXLSX({
           </div>
 
           {/* 개수 & 전체목록 버튼 */}
-          <div className="ml-auto flex items-center gap-2 text-sm text-gray-600">
+          /*<div className="ml-auto flex items-center gap-2 text-sm text-gray-600">
             <div>
               선택 결과: <span className="font-semibold text-gray-800">{filtered.length}</span> 건
             </div>
@@ -299,7 +299,7 @@ function RunningProjectsFromXLSX({
         </div>
 
         {/* 지도/에러/로딩 */}
-        {loading && (
+        /*{loading && (
           <div className="text-center text-gray-500 py-6">현장 데이터를 불러오는 중…</div>
         )}
         {err && (
@@ -390,12 +390,12 @@ function RunningProjectsFromXLSX({
             </MapContainer>
 
             {/* 좌하단 노트 (여백 축소) */}
-            <div className="mt-1 text-right text-[11px] md:text-xs text-gray-500 select-none">
+            /*<div className="mt-1 text-right text-[11px] md:text-xs text-gray-500 select-none">
               {note}
             </div>
 
             {/* 전체목록 패널 */}
-            <div
+            /*<div
               className={`fixed z-[1000] right-3 md:right-6 bottom-3 md:top-24 md:bottom-auto
                           w-[92%] md:w-[340px] max-h-[66vh] md:max-h-[calc(100dvh-120px)]
                           bg-white/95 backdrop-blur rounded-2xl shadow-2xl border border-gray-200 overflow-hidden
@@ -439,7 +439,7 @@ function RunningProjectsFromXLSX({
             </div>
 
             {/* 애니메이션 & 스타일 */}
-            <style>{`
+            /*<style>{`
               @keyframes fadeDown { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
               .animate-fadeDown { animation: fadeDown .45s ease-out both; }
 
@@ -472,12 +472,12 @@ function RunningProjectsFromXLSX({
                 border: 1px solid #e5e7eb;
                 border-radius: 12px;
                 padding: 12px 14px;     /* 카드 안 패딩도 살짝 축소 */
-                min-width: 220px;       /* 360 → 340 */
-                max-width: 280px;       /* 460 → 440 */
-                box-shadow: 0 12px 24px rgba(0,0,0,.11);
-                transition: transform .2s ease, box-shadow .2s ease;
-              }
-              .side-card .connector {
+                /*min-width: 220px;       /* 360 → 340 */
+               // max-width: 280px;       /* 460 → 440 */
+                //box-shadow: 0 12px 24px rgba(0,0,0,.11);
+                //transition: transform .2s ease, box-shadow .2s ease;
+              //}
+              /*.side-card .connector {
                 position: absolute; top: 50%;
                 width: ${CONNECTOR_LEN_PX}px; height: 2px;
                 background: #004A91; transform: translateY(-50%);
@@ -508,3 +508,4 @@ function RunningProjectsFromXLSX({
 }
 
 export default memo(RunningProjectsFromXLSX);
+*/

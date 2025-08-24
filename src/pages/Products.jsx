@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Modal } from 'react-responsive-modal';
 import 'react-responsive-modal/styles.css';
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 // 데이터를 객체 배열로 통일하여 관리합니다.
 const productCategories = {
@@ -102,6 +103,7 @@ const productCategories = {
     images: [
       { src: "/Products/louver/product1.jpg", alt: "시스템루버 이미지 1" },
       { src: "/Products/louver/product2.jpg", alt: "시스템루버 이미지 2" },
+	  { src: "/Products/louver/product3.jpg", alt: "시스템루버 이미지 3" },
     ],
     detailedFeatures: [
       {
@@ -383,7 +385,18 @@ export default function Products() {
   const productCategoryArray = Object.values(productCategories);
 
     return (
-      <main className="lg:h-screen lg:snap-y lg:snap-proximity lg:overflow-y-scroll scroll-smooth font-Pretendard">
+		<>
+		<Helmet>
+			<title>제품소개 | BAUTEK</title>
+			<meta
+			 name="description"
+			 content="바우텍은 터닝도어, 시스템루버, BBG 등 고기능성 건축자재를 자체 금형으로 생산하여 에너지 효율과 실내 환경을 개선하는 혁신 제품을 제공합니다."
+			/>
+			<meta name="robots" content="index, follow" />
+			<link rel="canonical" href="https://www.greenbautek.com/products" />
+		</Helmet>
+
+		<main className="lg:h-screen lg:snap-y lg:snap-proximity lg:overflow-y-scroll scroll-smooth font-Pretendard">
         {/* Hero Section */}
         <section
           id="hero-section"
@@ -684,5 +697,6 @@ export default function Products() {
           <img src={selectedImage} alt={selectedImageAlt} className="max-w-full max-h-[80vh]" />
         </Modal>
       </main>
+	  </>
     );
 }

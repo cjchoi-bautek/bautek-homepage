@@ -3,14 +3,30 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Particles } from "@tsparticles/react";
 import { loadAll } from "@tsparticles/all";
+import { Helmet } from "react-helmet"; // ✅ 인덱싱을 위한 JSON-LD 주입
+
+const ORIGIN = "https://www.greenbautek.com"; // ✅ 절대경로 기준
 
 export default function HeroSection() {
   const [videoIndex, setVideoIndex] = useState(0);
   const [isFading, setIsFading] = useState(false); // 페이드 전환 상태 관리
 
+  // ✅ 각 비디오에 썸네일(png/jpg) 절대 URL 추가
   const videoList = [
-    { id: "video-main-1", src: "/HeroSection/video/video5.mp4" },
-    { id: "video-main-2", src: "/HeroSection/video/video6.mp4" },
+    {
+      id: "video-main-1",
+      src: `${ORIGIN}/HeroSection/video/video5.mp4`,
+      poster: `${ORIGIN}/HeroSection/video/video5-thumb.png`, // ← PNG 사용 가능
+      name: "Bautek Hero Video 1",
+      desc: "바우텍 회사 소개 HeroSection 영상 1"
+    },
+    {
+      id: "video-main-2",
+      src: `${ORIGIN}/HeroSection/video/video6.mp4`,
+      poster: `${ORIGIN}/HeroSection/video/video6-thumb.png`,
+      name: "Bautek Hero Video 2",
+      desc: "바우텍 회사 소개 HeroSection 영상 2"
+    },
   ];
 
   const particlesInit = useCallback(async (engine) => {
@@ -19,7 +35,6 @@ export default function HeroSection() {
 
   const handleVideoEnd = () => {
     setIsFading(true); // 페이드 아웃 시작
-
     setTimeout(() => {
       const nextIndex = (videoIndex + 1) % videoList.length;
       setVideoIndex(nextIndex);
@@ -30,11 +45,32 @@ export default function HeroSection() {
     setIsFading(false); // 페이드 인 시작
   };
 
+  const current = videoList[videoIndex];
+
   return (
     <section
       id="hero-section"
       className="snap-start h-[100dvh] relative flex flex-col justify-center items-center bg-black overflow-hidden transition-transform duration-700 ease-in-out"
     >
+      {/* ✅ VideoObject 구조화 데이터 (인덱싱용) */}
+      <Helmet>
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "VideoObject",
+            "name": current.name,
+            "description": current.desc,
+            "thumbnailUrl": current.poster,   // ★ 필수
+            "uploadDate": "2025-08-14",      // 실제 날짜로 교체 가능
+            "contentUrl": current.src,
+            "embedUrl": ORIGIN + "/"          // 해당 비디오가 노출되는 페이지 URL
+          })}
+        </script>
+        {/* 선택: 사전 로딩 */}
+        <link rel="preload" as="image" href={current.poster} />
+        <link rel="preload" as="video" href={current.src} />
+      </Helmet>
+
       {/* 입자 배경 */}
       <Particles
         id="tsparticles"
@@ -58,23 +94,20 @@ export default function HeroSection() {
             size: { value: 2 },
           },
           interactivity: {
-            events: {
-              onHover: { enable: true, mode: "repulse" },
-            },
-            modes: {
-              repulse: { distance: 100 },
-            },
+            events: { onHover: { enable: true, mode: "repulse" } },
+            modes: { repulse: { distance: 100 } },
           },
           detectRetina: true,
         }}
       />
 
-      {/* 배경 비디오 */}
+      {/* 배경 비디오 (✅ poster 추가만) */}
       <video
-        key={videoList[videoIndex].src}
+        key={current.src}
         className="absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-1000"
         style={{ opacity: isFading ? 0 : 1 }}
-        src={videoList[videoIndex].src}
+        src={current.src}
+        poster={current.poster}    // ★ 썸네일 제공
         autoPlay
         muted
         playsInline

@@ -1,5 +1,5 @@
 // App.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import NavBar from "./NavBar";
 import HeroSection from "./HeroSection";
@@ -10,18 +10,33 @@ import Company from "./pages/company";
 import Products from "./pages/Products";
 import FrameGallery from "./pages/FrameGallery";
 import SupportPage from "./pages/SupportPage";
+import NotFound from "./pages/NotFound"; // ✅ 404 페이지 추가
 
-/* Leaflet 필수: CSS + 아이콘 경로 fix (딱 한 번만) */
+
 import "leaflet/dist/leaflet.css";
 import "./leafletIconFix";
-
-/* 진행현장(Leaflet) 섹션 */
-import RunningProjectsFromXLSX from "./pages/components/RunningProjectsFromXLSX";
 
 function AppLayout() {
   const [isNavbarVisible, setIsNavbarVisible] = useState(true);
 
-  return (
+ 
+ // ✅ MarkerClustering.js 동적 로딩
+  useEffect(() => {
+    const existingScript = document.querySelector('script[src="/MarkerClustering.js"]');
+    if (!existingScript) {
+      const script = document.createElement("script");
+      script.src = "/MarkerClustering.js";
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  }, []);
+
+
+
+
+
+
+ return (
     <div className="font-pretendard">
       {isNavbarVisible && <NavBar />}
 
@@ -42,9 +57,9 @@ function AppLayout() {
               <section className="min-h-[100dvh] md:h-screen md:snap-start bg-white">
                 <KeyClient />
               </section>
-
-          
-			  <section className="min-h-[100dvh] md:h-screen md:snap-start bg-[#F4F4F4]">
+			   
+			 
+              <section className="min-h-[100dvh] md:h-screen md:snap-start bg-[#F4F4F4]">
                 <MapSection />
               </section>
             </main>
@@ -56,6 +71,9 @@ function AppLayout() {
         <Route path="/products" element={<Products />} />
         <Route path="/frame-gallery" element={<FrameGallery />} />
         <Route path="/support" element={<SupportPage />} />
+
+        {/* ✅ 404 페이지 처리 (항상 마지막에!) */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
   );

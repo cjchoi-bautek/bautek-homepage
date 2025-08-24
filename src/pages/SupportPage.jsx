@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { Helmet } from "react-helmet";
 
 
 // FileDownloadButton 컴포넌트는 그대로 사용합니다.
@@ -100,6 +101,19 @@ export default function SupportPage() {
   const scrollTo = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
+  
+    // 🔵 쇼핑몰 팝업 모달 상태
+  const [isShopModalOpen, setIsShopModalOpen] = useState(false);
+  
+  // ESC로 모달 닫기
+  useEffect(() => {
+    if (!isShopModalOpen) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") setIsShopModalOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isShopModalOpen]);
     
   // 탭 상태 관리를 위한 useState 훅 3개 (자료실 섹션 주석 처리로 인해 사용되지 않음)
   /*
@@ -153,9 +167,21 @@ export default function SupportPage() {
     // 모든 필수 필드가 채워졌으면 실제 폼 제출
     form.submit();
   };
+  
 
   return (
-    <main className="font-Pretendard overflow-y-scroll h-screen md:snap-y md:snap-proximity md:scroll-smooth">
+    <>
+	<Helmet>
+		<title>고객지원 | BAUTEK</title>
+			<meta
+			name="description"
+			content="바우텍 고객지원센터에서 제품 상담, A/S 요청, 쇼핑몰 이용 및 각종 문의를 간편하게 해결하세요."
+			/>
+			<meta name="robots" content="index, follow" />
+			<link rel="canonical" href="https://www.greenbautek.com/support" />
+	</Helmet>
+		
+	<main className="font-Pretendard overflow-y-scroll h-screen md:snap-y md:snap-proximity md:scroll-smooth">
       {/* 🔵 Hero Landing Section */}
       <section className="min-h-screen bg-white flex flex-col justify-center items-center px-4 py-10 md:py-20 md:snap-start">
         <motion.div
@@ -459,13 +485,13 @@ export default function SupportPage() {
             <h3 className="text-sm md:text-md font-bold text-gray-900 mb-2">
               <span className="font-extrabold text-[#004A91]">전화 문의</span>
             </h3>
-            <p className="text-[10px] md:text-[10px] text-gray-600 mb-2">
+            <p className="text-xs md:text-xs text-gray-600 mb-2">
               긴급한 문의사항이나 전화 상담을 원하시면 아래 번호로 연락 주시기 바랍니다.
             </p>
-            <div className="text-[10px] md:text-[10px] font-bold text-[#004A91]">
+            <div className="text-xs md:text-xs font-bold text-[#004A91]">
               대표번호: 031-351-0178
             </div>
-            <div className="text-[10px] md:text-[10px] text-gray-500 mt-2">
+            <div className="text-xs md:text-xs text-gray-500 mt-2">
               운영 시간: <span className="font-semibold">평일 09:00 ~ 17:30</span> (점심시간 12:30 ~ 13:30 제외) | 토,일요일 및 공휴일 휴무
             </div>
           </div>
@@ -616,35 +642,95 @@ export default function SupportPage() {
       </section>
       */}
 
-
       {/* 🔵 자사 쇼핑몰 Section */}
-      <section
-        id="shoppingmall"
-        className="min-h-screen bg-white py-10 px-4 flex flex-col justify-center items-center md:snap-start"
-      >
-        <motion.div
-          className="max-w-4xl w-full text-center"
-          variants={fadeInVariants}
-          initial="initial"
-          whileInView="animate"
-          viewport={{ once: true }}
+        <section
+          id="shoppingmall"
+          className="min-h-screen bg-white py-10 px-4 flex flex-col justify-center items-center md:snap-start"
         >
-          <h2 className="text-2xl sm:text-3xl font-bold text-[#004A91] mb-6">
-            자사 쇼핑몰 (추후 업데이트 예정)
-          </h2>
-          <p className="text-sm md:text-lg text-gray-700 mb-6">
-            바우텍 쇼핑몰에서 필요한 부품을 구매하신 후, 누구나 직접 교체하실 수 있습니다.
-          </p>
-          <a
-            href="https://greenbautekmall.co.kr"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 bg-[#004A91] hover:bg-[#003A70] text-white font-semibold px-6 py-3 rounded-full transition"
+          <motion.div
+            className="max-w-4xl w-full text-center"
+            variants={fadeInVariants}
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true }}
           >
-            쇼핑몰 바로가기
-          </a>
-        </motion.div>
-      </section>
-    </main>
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#004A91] mb-6">
+              자사 쇼핑몰 (업데이트 예정)
+            </h2>
+            <p className="text-sm md:text-lg text-gray-700 mb-6">
+              바우텍 쇼핑몰에서 필요한 부품을 구매하신 후, 누구나 직접 교체하실 수 있습니다.
+            </p>
+
+            {/* ✅ 팝업 열기 버튼 */}
+            <button
+              onClick={() => setIsShopModalOpen(true)}
+              className="inline-flex items-center gap-3 bg-[#004A91] hover:bg-[#003A70] text-white font-semibold px-6 py-3 rounded-full transition"
+            >
+              쇼핑몰 바로가기
+            </button>
+          </motion.div>
+        </section>
+
+        {/* ✅ 쇼핑몰 안내 모달 */}
+        {isShopModalOpen && (
+          <div
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="shop-modal-title"
+            onClick={() => setIsShopModalOpen(false)} // 배경 클릭 닫기
+          >
+            <div
+              className="bg-white/80 backdrop-blur-md rounded-4xl shadow-lg max-w-4xl w-full p-10 text-center relative"
+              onClick={(e) => e.stopPropagation()} // 콘텐츠 클릭 전파 방지
+            >
+              <button
+                onClick={() => setIsShopModalOpen(false)}
+                className="absolute top-5 right-5 text-gray-500 hover:text-gray-800 text-2xl"
+                aria-label="모달 닫기"
+              >
+                ✕
+              </button>
+
+              <h3
+                id="shop-modal-title"
+                className="text-2xl font-bold text-[#004A91] mb-6"
+              >
+                바우텍 부자재 몰 (네이버스토어)
+              </h3>
+
+              <p className="text-base text-gray-700 mb-6 leading-relaxed">
+                창호 및 도어 A/S용 부자재는 바우텍 제품 부자재 구매몰(㈜휴코 운영)에서 구입하실 수 있습니다.
+              </p>
+
+              <div className="text-left text-base text-gray-600 mb-8">
+                <p className="font-semibold mb-2">[안내 사항]</p>
+                <ol className="list-decimal pl-6 space-y-2">
+                  <li>바우텍 제품의 부자재 판매는 ㈜휴코에서 운영·관리하고 있습니다.</li>
+                  <li>다만, 제품 관련 문의 및 A/S 지원은 바우텍 고객센터를 통해 진행됩니다.</li>
+                  <li>
+                    바우텍은 제품 품질 보증과 함께, 안정적인 부자재 공급을 위해 휴코와 협력하여 서비스를 제공하고 있습니다.
+                  </li>
+                </ol>
+              </div>
+
+              {/* ✅ 큰 CTA 버튼 */}
+              <a
+                href="https://smartstore.naver.com/hucomall"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block bg-[#004A91] hover:bg-[#003A70] text-white font-bold py-4 rounded-full mb-3"
+              >
+                바우텍 부자재 몰 바로가기
+              </a>
+
+              <p className="text-sm text-gray-500">
+                새 창으로 이동합니다.
+              </p>
+            </div>
+          </div>
+        )}
+      </main>
+	</>
   );
 }
